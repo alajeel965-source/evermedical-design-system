@@ -22,6 +22,9 @@ import AIAgent from "./pages/AIAgent";
 import AIAgentSources from "./pages/AIAgentSources";
 import AIAgentReview from "./pages/AIAgentReview";
 import { SpecialtyLanding } from "./pages/SpecialtyLanding";
+import { ProfileMedicalPersonnel } from "./pages/ProfileMedicalPersonnel";
+import { ProfileMedicalInstitute } from "./pages/ProfileMedicalInstitute";
+import { ProfileMedicalSeller } from "./pages/ProfileMedicalSeller";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +55,9 @@ const App = () => (
           <Route path="/design-system" element={<DesignSystem />} />
           <Route path="/specialty/:slug" element={<SpecialtyLanding />} />
           <Route path="/ar/specialty/:slug" element={<SpecialtyLanding />} />
+          <Route path="/profile/medical-personnel" element={<ProfileMedicalPersonnel />} />
+          <Route path="/profile/medical-institute" element={<ProfileMedicalInstitute />} />
+          <Route path="/profile/medical-seller" element={<ProfileMedicalSeller />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
