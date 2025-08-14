@@ -2,41 +2,85 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* EverMedical Design System - Clinical, trusted, generous spacing */
 
 @layer base {
   :root {
+    /* Core Medical Brand Colors */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    --foreground: 217 32% 17%;
+    
+    /* Medical Primary - Professional Blue */
+    --primary: 216 87% 60%;        /* #2563EB */
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 215 89% 69%;   /* #60A5FA */
+    
+    /* Medical Sky - Hero Background */
+    --sky: 191 100% 94%;            /* #E0F2FE */
+    --sky-foreground: 217 32% 17%;
+    
+    /* Text Hierarchy */
+    --heading: 217 32% 5%;          /* #0F172A */
+    --body: 215 25% 27%;            /* #334155 */
+    --muted: 215 20% 65%;           /* #64748B */
+    --muted-foreground: 215 14% 71%; /* #94A3B8 */
+    
+    /* Cards & Surfaces */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 217 32% 17%;
+    --surface: 210 20% 98%;         /* #F8FAFC */
+    
+    /* Interactive Elements */
+    --border: 220 13% 91%;          /* #E5E7EB */
+    --input: 220 13% 91%;
+    --ring: 216 87% 60%;
+    
+    /* Status Colors */
+    --success: 158 64% 52%;         /* #10B981 */
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;          /* #F59E0B */
+    --warning-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;       /* #EF4444 */
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Accent & Secondary */
+    --accent: 210 40% 96%;
+    --accent-foreground: 217 32% 17%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 217 32% 17%;
+    
+    /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --popover-foreground: 217 32% 17%;
+    
+    /* Medical Design Tokens */
+    --radius-sm: 0.75rem;           /* rounded-xl inputs */
+    --radius-md: 1rem;              /* rounded-2xl cards */
+    --radius-lg: 9999px;            /* rounded-full pills */
+    
+    /* Spacing Scale */
+    --space-xs: 0.5rem;            /* 8px */
+    --space-sm: 0.75rem;           /* 12px */
+    --space-md: 1rem;              /* 16px */
+    --space-lg: 1.5rem;            /* 24px */
+    --space-xl: 2rem;              /* 32px */
+    --space-2xl: 3rem;             /* 48px */
+    
+    /* Shadows - Soft Medical */
+    --shadow-soft: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-medium: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-large: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    
+    /* Typography Scale */
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
 
     --sidebar-background: 0 0% 98%;
 
