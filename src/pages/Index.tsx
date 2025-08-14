@@ -33,55 +33,62 @@ const Index = () => {
       {/* Hero Section */}
       <HeroSection />
 
-      {/* Two-Column Layout: Live Quote + Sign Up */}
-      <section className="py-2xl bg-gradient-to-b from-sky/30 to-transparent">
+      {/* Quick RFQ Preview + Live RFQs Section */}
+      <section className="py-2xl bg-gradient-to-b from-background to-sky/10">
         <div className="container mx-auto px-lg">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-xl items-start">
-            {/* Left Column: Live Quote Component (RFQAssistant in LTR, right in RTL) */}
+            {/* Left Column: Quick RFQ Preview (left in LTR, right in RTL) */}
             <div className="order-1 lg:order-1 rtl:lg:order-2 w-full">
-              <div className="backdrop-blur-sm bg-card/80 border border-border shadow-medical rounded-medical-md p-lg h-full min-h-[600px] flex flex-col">
+              <div className="backdrop-blur-sm bg-card/80 border border-border shadow-medical rounded-medical-md p-lg h-full">
                 <div className="mb-lg">
-                  <h2 className="text-heading font-bold text-medical-2xl mb-md">
-                    Quick Quote Request
+                  <h2 className="text-heading font-bold text-medical-xl mb-sm">
+                    Quick RFQ Preview
                   </h2>
-                  <p className="text-body text-medical-base">
-                    Get instant quotes from verified suppliers worldwide
+                  <p className="text-body text-medical-sm">
+                    Create and submit your request for quotes instantly
                   </p>
                 </div>
-                <div className="flex-1">
-                  <RFQAssistant />
-                </div>
+                <RFQAssistant />
               </div>
             </div>
 
-            {/* Right Column: Sign Up Component (right in LTR, left in RTL) */}
-            <div className="order-2 lg:order-2 rtl:lg:order-1 w-full flex justify-center lg:justify-start rtl:lg:justify-end">
-              <div className="w-full max-w-md">
-                <SignupRegister 
-                  onSubmit={async (formData) => {
-                    // Placeholder API integration
-                    console.log('Form submitted:', formData);
-                    // In real implementation: await registerUser(formData);
-                  }}
-                  onOAuth={async (provider) => {
-                    // Placeholder OAuth integration
-                    console.log('OAuth login:', provider);
-                    // In real implementation: await signInWithOAuth(provider);
-                  }}
-                  onSuccess={(next) => {
-                    // Handle post-registration actions
-                    console.log('Registration success, next:', next);
-                    // In real implementation: navigate based on 'next' action
-                  }}
-                  locale="en"
-                  redirectUrls={{
-                    verifyEmail: '/verify-email',
-                    browseEvents: '/events',
-                    completeProfile: '/profile',
-                    payment: '/payment'
-                  }}
-                />
-              </div>
+            {/* Right Column: Live RFQs (right in LTR, left in RTL) */}
+            <div className="order-2 lg:order-2 rtl:lg:order-1 w-full">
+              <LiveRFQsWidget />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sign Up Section */}
+      <section className="py-2xl bg-gradient-to-b from-sky/30 to-transparent">
+        <div className="container mx-auto px-lg">
+          <div className="flex justify-center">
+            <div className="w-full max-w-md">
+              <SignupRegister 
+                onSubmit={async (formData) => {
+                  // Placeholder API integration
+                  console.log('Form submitted:', formData);
+                  // In real implementation: await registerUser(formData);
+                }}
+                onOAuth={async (provider) => {
+                  // Placeholder OAuth integration
+                  console.log('OAuth login:', provider);
+                  // In real implementation: await signInWithOAuth(provider);
+                }}
+                onSuccess={(next) => {
+                  // Handle post-registration actions
+                  console.log('Registration success, next:', next);
+                  // In real implementation: navigate based on 'next' action
+                }}
+                locale="en"
+                redirectUrls={{
+                  verifyEmail: '/verify-email',
+                  browseEvents: '/events',
+                  completeProfile: '/profile',
+                  payment: '/payment'
+                }}
+              />
             </div>
           </div>
         </div>
@@ -118,10 +125,8 @@ const Index = () => {
             </section>
           </div>
 
-          {/* Right Column - Live RFQs and Trust Indicators */}
+          {/* Right Column - Trust Indicators */}
           <div className="space-y-lg">
-            <LiveRFQsWidget />
-            
             {/* Trust Indicators */}
             <aside 
               className="bg-card border border-border rounded-medical-md p-lg shadow-soft"
