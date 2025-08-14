@@ -1,79 +1,104 @@
-import { Clock, MapPin, DollarSign } from "lucide-react";
+import { MapPin, DollarSign, Clock, ExternalLink, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const liveRFQs = [
   {
     id: 1,
-    title: "Digital X-Ray Machines",
-    location: "Dubai, UAE",
+    title: "Portable X-Ray Systems",
+    location: "UAE, Dubai",
     budget: "$50K - $75K",
-    timeLeft: "2h left",
+    timeLeft: "2 days",
     urgency: "high"
   },
   {
     id: 2,
-    title: "Ultrasound Equipment",
-    location: "Riyadh, SA",
-    budget: "$25K - $40K", 
-    timeLeft: "6h left",
+    title: "ICU Ventilators",
+    location: "Saudi Arabia",
+    budget: "$120K - $180K", 
+    timeLeft: "5 days",
     urgency: "medium"
-  },
-  {
-    id: 3,
-    title: "MRI Contrast Agents",
-    location: "Cairo, EG",
-    budget: "$15K - $20K",
-    timeLeft: "1d left",
-    urgency: "low"
   }
 ];
 
 export function LiveRFQsWidget() {
   return (
-    <Card className="border-border shadow-medical">
+    <Card className="rounded-2xl border-border/50 shadow-medical-lg hover:shadow-medical-xl transition-all duration-300">
       <CardHeader className="pb-md">
-        <CardTitle className="text-heading text-medical-lg flex items-center justify-between">
+        <CardTitle className="text-heading text-medical-lg flex items-center space-x-sm">
           <span>Live RFQs</span>
-          <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
+          <div className="w-2 h-2 bg-success rounded-full animate-pulse" aria-label="Live indicator" />
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-md">
-        {liveRFQs.map((rfq) => (
-          <div key={rfq.id} className="bg-surface rounded-medical-sm p-md hover:bg-accent transition-colors cursor-pointer group">
-            <div className="space-y-sm">
-              <div className="flex items-start justify-between">
+      <CardContent className="space-y-lg">
+        {/* RFQ Cards */}
+        <div className="space-y-md">
+          {liveRFQs.map((rfq) => (
+            <div
+              key={rfq.id}
+              className="bg-surface border border-border/50 rounded-medical-md p-lg hover:bg-surface/80 hover:border-primary/30 transition-all duration-200 cursor-pointer group"
+              role="button"
+              tabIndex={0}
+              aria-label={`View RFQ for ${rfq.title}`}
+            >
+              <div className="space-y-sm">
                 <h4 className="text-heading font-medium text-medical-sm group-hover:text-primary transition-colors">
                   {rfq.title}
                 </h4>
-                <Badge 
-                  variant={rfq.urgency === "high" ? "destructive" : rfq.urgency === "medium" ? "default" : "secondary"}
-                  className="text-xs"
-                >
-                  {rfq.urgency}
-                </Badge>
-              </div>
-              
-              <div className="space-y-xs">
-                <div className="flex items-center text-muted text-medical-xs">
-                  <MapPin className="h-3 w-3 mr-1" />
-                  {rfq.location}
-                </div>
-                <div className="flex items-center text-muted text-medical-xs">
-                  <DollarSign className="h-3 w-3 mr-1" />
-                  {rfq.budget}
-                </div>
-                <div className="flex items-center text-muted text-medical-xs">
-                  <Clock className="h-3 w-3 mr-1" />
-                  {rfq.timeLeft}
+                <div className="space-y-xs text-medical-xs">
+                  <div className="flex items-center text-muted">
+                    <MapPin className="h-3 w-3 mr-xs" />
+                    <span>{rfq.location}</span>
+                  </div>
+                  <div className="flex items-center text-muted">
+                    <DollarSign className="h-3 w-3 mr-xs" />
+                    <span>{rfq.budget}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center text-muted">
+                      <Clock className="h-3 w-3 mr-xs" />
+                      <span>{rfq.timeLeft}</span>
+                    </div>
+                    <Badge 
+                      variant={rfq.urgency === "high" ? "destructive" : rfq.urgency === "medium" ? "warning" : "secondary"}
+                      className="text-medical-2xs"
+                    >
+                      {rfq.urgency}
+                    </Badge>
+                  </div>
                 </div>
               </div>
             </div>
+          ))}
+        </div>
+
+        {/* Login Required Message */}
+        <div className="bg-warning/10 border border-warning/20 rounded-medical-md p-md text-center">
+          <div className="flex items-center justify-center space-x-sm text-warning mb-sm">
+            <Lock className="h-4 w-4" />
+            <span className="text-medical-sm font-medium">Login Required</span>
           </div>
-        ))}
-        
-        <Button variant="outline" className="w-full mt-lg">
+          <p className="text-muted text-medical-xs mb-md">
+            Sign in to view complete RFQ details and submit quotes
+          </p>
+          <Button 
+            size="sm" 
+            variant="outline" 
+            className="hover-scale"
+            aria-label="Sign in to access full RFQ details"
+          >
+            Sign In
+          </Button>
+        </div>
+
+        {/* View All Button */}
+        <Button 
+          variant="outline" 
+          className="w-full hover-scale" 
+          aria-label="View all available RFQs"
+        >
+          <ExternalLink className="h-4 w-4 mr-sm" />
           View All RFQs
         </Button>
       </CardContent>

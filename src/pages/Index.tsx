@@ -11,19 +11,19 @@ const Index = () => {
 
   const features = [
     {
-      icon: <Stethoscope className="h-6 w-6" />,
-      title: "Medical Equipment Marketplace",
-      description: "Access thousands of verified medical devices from trusted suppliers worldwide."
-    },
-    {
       icon: <ShieldCheck className="h-6 w-6" />,
       title: "Verified Suppliers",
-      description: "All suppliers are thoroughly vetted with ISO certifications and quality compliance."
+      description: "All suppliers are thoroughly vetted with ISO certifications, regulatory compliance, and quality assurance documentation."
     },
     {
       icon: <Zap className="h-6 w-6" />,
-      title: "AI-Powered Matching",
-      description: "Get instantly matched with the best suppliers for your specific requirements."
+      title: "AI Matching",
+      description: "Advanced AI algorithms instantly match your requirements with the most suitable suppliers based on location, price, and specifications."
+    },
+    {
+      icon: <Award className="h-6 w-6" />,
+      title: "QR-Verifiable CME",
+      description: "Continuing Medical Education credits with blockchain-verified certificates and QR code authentication for professional development."
     }
   ];
 
