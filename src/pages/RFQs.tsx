@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { PageLayout } from "@/components/templates/PageLayout";
+import { AppShell } from "@/components/shared/AppShell";
 import { RFQCard } from "@/components/templates/cards/RFQCard";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Pagination } from "@/components/ui/pagination";
 import { EmptyState } from "@/components/shared/EmptyState";
-import { Plus } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Search, Filter, Grid, List, Plus } from "lucide-react";
 
 export default function RFQs() {
   const [activeTab, setActiveTab] = useState("browse");
@@ -92,95 +95,154 @@ export default function RFQs() {
   ];
 
   return (
-    <PageLayout
-      title="Request for Quotations"
-      subtitle="Submit and respond to Request for Quotations in real-time"
-      tabs={tabs}
-      activeTab={activeTab}
-      onTabChange={setActiveTab}
-      searchPlaceholder="Search RFQs by title, category, or description..."
-      searchValue={searchValue}
-      onSearchChange={setSearchValue}
-      filters={filters}
-      selectedFilters={selectedFilters}
-      onFilterChange={handleFilterChange}
-      view={view}
-      onViewChange={setView}
-    >
-      <div className="flex gap-lg">
-        <div className="flex-1">
-          {rfqs.length === 0 ? (
-            <EmptyState
-              title="No RFQs found"
-              description="Try adjusting your filters or search terms"
-              action={
-                <Button variant="outline" onClick={() => setSelectedFilters({})}>
-                  Clear filters
-                </Button>
-              }
-            />
-          ) : view === "grid" ? (
+    <AppShell>
+      <div className="min-h-screen bg-surface">
+        <div className="border-b border-border bg-card">
+          <div className="container mx-auto px-lg py-xl">
             <div className="space-y-lg">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-lg">
-                {rfqs.map((rfq) => (
-                  <RFQCard key={rfq.id} {...rfq} />
-                ))}
+              <div className="text-center lg:text-left">
+                <h1 className="text-heading font-bold text-medical-4xl">Request for Quotations</h1>
+                <p className="text-body text-medical-lg mt-sm max-w-2xl mx-auto lg:mx-0">
+                  Submit and respond to Request for Quotations in real-time
+                </p>
               </div>
-              <div className="flex justify-center">
-                <Pagination />
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-lg">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>RFQ Title</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Budget</TableHead>
-                    <TableHead>Deadline</TableHead>
-                    <TableHead>Responses</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {rfqs.map((rfq) => (
-                    <TableRow key={rfq.id}>
-                      <TableCell className="font-medium">{rfq.title}</TableCell>
-                      <TableCell>{rfq.category}</TableCell>
-                      <TableCell>{rfq.budget}</TableCell>
-                      <TableCell>{rfq.deadline}</TableCell>
-                      <TableCell>{rfq.responseCount}</TableCell>
-                      <TableCell>{rfq.isPublic ? "Public" : "Private"}</TableCell>
-                    </TableRow>
+              
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList className="grid w-full lg:w-auto grid-cols-4 lg:inline-flex">
+                  {tabs.map((tab) => (
+                    <TabsTrigger key={tab.value} value={tab.value}>
+                      {tab.label}
+                    </TabsTrigger>
                   ))}
-                </TableBody>
-              </Table>
-              <div className="flex justify-center">
-                <Pagination />
+                </TabsList>
+              </Tabs>
+              
+              {/* Search and View Controls */}
+              <div className="flex flex-col lg:flex-row gap-md">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search RFQs by title, category, or description..."
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                <div className="flex gap-md">
+                  <Button variant="outline" size="sm">
+                    <Filter className="h-4 w-4 mr-2" />
+                    Filters
+                  </Button>
+                  <div className="flex border border-border rounded-md">
+                    <Button
+                      variant={view === "grid" ? "default" : "ghost"}
+                      size="sm"
+                      onClick={() => setView("grid")}
+                      className="rounded-r-none"
+                    >
+                      <Grid className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant={view === "table" ? "default" : "ghost"}
+                      size="sm"
+                      onClick={() => setView("table")}
+                      className="rounded-l-none"
+                    >
+                      <List className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
-          )}
+          </div>
         </div>
         
-        {/* Right rail */}
-        <div className="hidden lg:block w-80">
-          <div className="sticky top-24">
-            <Card className="rounded-medical-md shadow-soft">
-              <CardContent className="p-lg space-y-md">
-                <h3 className="font-semibold text-heading text-medical-lg">Create New RFQ</h3>
-                <p className="text-body text-medical-sm">
-                  Submit a request for quotation to connect with verified suppliers.
-                </p>
-                <Button className="w-full" size="lg">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create RFQ
-                </Button>
-              </CardContent>
-            </Card>
+        <div className="container mx-auto px-lg py-lg">
+          <div className="flex gap-lg">
+            <div className="flex-1">
+              {rfqs.length === 0 ? (
+                <EmptyState
+                  title="No RFQs found"
+                  description="Try adjusting your filters or search terms"
+                  action={
+                    <Button variant="outline" onClick={() => setSelectedFilters({})}>
+                      Clear filters
+                    </Button>
+                  }
+                />
+              ) : view === "grid" ? (
+                <div className="space-y-lg">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-lg">
+                    {rfqs.map((rfq) => (
+                      <RFQCard key={rfq.id} {...rfq} />
+                    ))}
+                  </div>
+                  <div className="flex justify-center">
+                    <Pagination />
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-lg">
+                  <Card className="rounded-medical-md shadow-soft">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>RFQ Title</TableHead>
+                          <TableHead>Category</TableHead>
+                          <TableHead>Budget</TableHead>
+                          <TableHead>Deadline</TableHead>
+                          <TableHead>Responses</TableHead>
+                          <TableHead>Status</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {rfqs.map((rfq) => (
+                          <TableRow key={rfq.id}>
+                            <TableCell className="font-medium">{rfq.title}</TableCell>
+                            <TableCell>
+                              <Badge variant="secondary">{rfq.category}</Badge>
+                            </TableCell>
+                            <TableCell>{rfq.budget}</TableCell>
+                            <TableCell>{rfq.deadline}</TableCell>
+                            <TableCell>{rfq.responseCount}</TableCell>
+                            <TableCell>
+                              <Badge variant={rfq.isPublic ? "default" : "outline"}>
+                                {rfq.isPublic ? "Public" : "Private"}
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Card>
+                  <div className="flex justify-center">
+                    <Pagination />
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* Right rail */}
+            <div className="hidden lg:block w-80">
+              <div className="sticky top-24">
+                <Card className="rounded-medical-md shadow-soft">
+                  <CardContent className="p-lg space-y-md">
+                    <h3 className="font-semibold text-heading text-medical-lg">Create New RFQ</h3>
+                    <p className="text-body text-medical-sm">
+                      Submit a request for quotation to connect with verified suppliers.
+                    </p>
+                    <Button className="w-full" size="lg">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create RFQ
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </PageLayout>
+    </AppShell>
   );
 }
