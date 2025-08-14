@@ -48,8 +48,8 @@ export function Footer({ language = "en" }: FooterProps) {
           <div className="space-y-lg">
             <h3 className="text-heading font-semibold text-medical-base">Services</h3>
             <div className="space-y-sm">
-              <Button variant="link" className="h-auto p-0 text-body hover:text-heading justify-start">
-                Live RFQs
+              <Button variant="link" className="h-auto p-0 text-body hover:text-heading justify-start" asChild>
+                <a href="/rfqs">Request for Quotations</a>
               </Button>
               <Button variant="link" className="h-auto p-0 text-body hover:text-heading justify-start">
                 Events & Trade Shows
