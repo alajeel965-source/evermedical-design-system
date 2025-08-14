@@ -1,34 +1,34 @@
-import { useState } from "react";
 import { Stethoscope, ShieldCheck, Zap, Users, Building2, Award } from "lucide-react";
 import { AppShell } from "@/components/shared/AppShell";
+import { useTranslation } from "@/lib/i18n";
 import { HeroSection } from "@/components/shared/HeroSection";
 import { FeatureTile } from "@/components/shared/FeatureTile";
 import { RFQAssistant } from "@/components/shared/RFQAssistant";
 import { LiveRFQsWidget } from "@/components/shared/LiveRFQsWidget";
 
 const Index = () => {
-  const [language, setLanguage] = useState<"en" | "ar">("en");
+  const { t } = useTranslation();
 
   const features = [
     {
       icon: <ShieldCheck className="h-6 w-6" />,
-      title: "Verified Suppliers",
-      description: "All suppliers are thoroughly vetted with ISO certifications, regulatory compliance, and quality assurance documentation."
+      title: t("pages.home.features.verifiedSuppliers.title"),
+      description: t("pages.home.features.verifiedSuppliers.description")
     },
     {
       icon: <Zap className="h-6 w-6" />,
-      title: "AI Matching",
-      description: "Advanced AI algorithms instantly match your requirements with the most suitable suppliers based on location, price, and specifications."
+      title: t("pages.home.features.aiMatching.title"),
+      description: t("pages.home.features.aiMatching.description")
     },
     {
       icon: <Award className="h-6 w-6" />,
-      title: "QR-Verifiable CME",
-      description: "Continuing Medical Education credits with blockchain-verified certificates and QR code authentication for professional development."
+      title: t("pages.home.features.qrCme.title"),
+      description: t("pages.home.features.qrCme.description")
     }
   ];
 
   return (
-    <AppShell language={language} onLanguageChange={setLanguage}>
+    <AppShell>
       {/* Hero Section */}
       <HeroSection />
 
@@ -74,19 +74,19 @@ const Index = () => {
               </h3>
               <div className="space-y-sm text-medical-sm">
                 <div className="flex justify-between">
-                  <span className="text-body">Active Suppliers</span>
+                  <span className="text-body">{t("pages.home.stats.suppliers")}</span>
                   <span className="text-heading font-semibold">15,000+</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-body">Equipment Categories</span>
+                  <span className="text-body">{t("pages.home.stats.categories")}</span>
                   <span className="text-heading font-semibold">500+</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-body">Global Reach</span>
+                  <span className="text-body">{t("pages.home.stats.globalReach")}</span>
                   <span className="text-heading font-semibold">120 Countries</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-body">Monthly RFQs</span>
+                  <span className="text-body">{t("pages.home.stats.monthlyRfqs")}</span>
                   <span className="text-heading font-semibold">10,000+</span>
                 </div>
               </div>

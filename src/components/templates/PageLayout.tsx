@@ -24,8 +24,6 @@ interface PageLayoutProps {
   showFilters?: boolean;
   view?: "grid" | "table";
   onViewChange?: (view: "grid" | "table") => void;
-  language?: "en" | "ar";
-  onLanguageChange?: (lang: "en" | "ar") => void;
 }
 
 export function PageLayout({
@@ -45,11 +43,9 @@ export function PageLayout({
   showFilters = true,
   view = "grid",
   onViewChange,
-  language,
-  onLanguageChange,
 }: PageLayoutProps) {
   return (
-    <AppShell language={language} onLanguageChange={onLanguageChange}>
+    <AppShell>
       <div className="min-h-screen bg-surface">
         <SearchHeader
           title={title}

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { AppShell } from "@/components/shared/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,16 +23,8 @@ import {
 } from "lucide-react";
 
 export default function Styleguide() {
-  const [language, setLanguage] = useState<"en" | "ar">("en");
-
-  const toggleLanguage = () => {
-    setLanguage(prev => prev === "en" ? "ar" : "en");
-    document.documentElement.dir = language === "en" ? "rtl" : "ltr";
-    document.documentElement.lang = language === "en" ? "ar" : "en";
-  };
-
   return (
-    <AppShell language={language} onLanguageChange={setLanguage}>
+    <AppShell>
       <div className="container mx-auto p-lg space-y-2xl">
         {/* Header */}
         <div className="text-center space-y-md">
@@ -41,9 +32,6 @@ export default function Styleguide() {
           <p className="text-body text-medical-lg max-w-2xl mx-auto">
             Comprehensive showcase of the EverMedical design system components and tokens.
           </p>
-          <Button onClick={toggleLanguage} variant="outline">
-            Toggle RTL ({language === "en" ? "English" : "العربية"})
-          </Button>
         </div>
 
         {/* Color Palette */}
