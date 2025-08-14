@@ -90,14 +90,14 @@ export function Footer({ language = "en" }: FooterProps) {
               © 2024 EverMedical. All rights reserved.
             </p>
             <div className="flex items-center space-x-lg">
-              <Button variant="link" className="h-auto p-0 text-muted hover:text-body text-medical-sm">
-                Privacy Policy
+              <Button variant="link" className="h-auto p-0 text-muted hover:text-body text-medical-sm" asChild>
+                <a href="/legal/privacy">Privacy Policy</a>
               </Button>
-              <Button variant="link" className="h-auto p-0 text-muted hover:text-body text-medical-sm">
-                Terms of Service
+              <Button variant="link" className="h-auto p-0 text-muted hover:text-body text-medical-sm" asChild>
+                <a href="/legal/terms">Terms of Service</a>
               </Button>
-              <Button variant="link" className="h-auto p-0 text-muted hover:text-body text-medical-sm">
-                Cookie Policy
+              <Button variant="link" className="h-auto p-0 text-muted hover:text-body text-medical-sm" asChild>
+                <a href="/legal/privacy#cookies">Cookie Policy</a>
               </Button>
             </div>
           </div>

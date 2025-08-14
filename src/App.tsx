@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { I18nProvider } from "@/lib/i18n";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import Index from "./pages/Index";
 import Marketplace from "./pages/Marketplace";
 import Events from "./pages/Events";
@@ -21,7 +22,8 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
     <I18nProvider>
       <TooltipProvider>
         <Toaster />
@@ -46,6 +48,7 @@ const App = () => (
       </TooltipProvider>
     </I18nProvider>
   </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;
