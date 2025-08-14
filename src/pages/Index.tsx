@@ -5,6 +5,7 @@ import { HeroSection } from "@/components/shared/HeroSection";
 import { FeatureTile } from "@/components/shared/FeatureTile";
 import { RFQAssistant } from "@/components/shared/RFQAssistant";
 import { LiveRFQsWidget } from "@/components/shared/LiveRFQsWidget";
+import { SignupRegister } from "@/components/auth/SignupRegister";
 
 const Index = () => {
   const { t } = useTranslation();
@@ -31,6 +32,37 @@ const Index = () => {
     <AppShell>
       {/* Hero Section */}
       <HeroSection />
+
+      {/* Sign Up Section */}
+      <section className="py-2xl bg-gradient-to-b from-sky/30 to-transparent">
+        <div className="container mx-auto px-lg">
+          <div className="flex justify-center">
+            <SignupRegister 
+              onSubmit={async (formData) => {
+                // Placeholder API integration
+                console.log('Form submitted:', formData);
+                // In real implementation: await registerUser(formData);
+              }}
+              onOAuth={async (provider) => {
+                // Placeholder OAuth integration
+                console.log('OAuth login:', provider);
+                // In real implementation: await signInWithOAuth(provider);
+              }}
+              onSuccess={(next) => {
+                // Handle post-registration actions
+                console.log('Registration success, next:', next);
+                // In real implementation: navigate based on 'next' action
+              }}
+              locale="en"
+              redirectUrls={{
+                verifyEmail: '/verify-email',
+                browseEvents: '/events',
+                completeProfile: '/profile'
+              }}
+            />
+          </div>
+        </div>
+      </section>
 
       {/* Main Content */}
       <div className="container mx-auto px-lg py-2xl">
