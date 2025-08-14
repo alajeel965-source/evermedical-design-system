@@ -49,9 +49,10 @@ export function FilterSidebar({
             variant="ghost"
             size="sm"
             onClick={onClearFilters}
-            className="h-auto p-1 text-muted-foreground hover:text-foreground"
+            className="h-auto p-1 text-muted-foreground hover:text-foreground touch-target"
+            aria-label="Clear all filters"
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
       )}
@@ -64,20 +65,26 @@ export function FilterSidebar({
             onOpenChange={() => toggleGroup(filterGroup.title)}
           >
             <CollapsibleTrigger asChild>
-              <CardHeader className="pb-sm cursor-pointer hover:bg-accent/50 transition-colors">
+              <CardHeader 
+                className="pb-sm cursor-pointer hover:bg-accent/50 transition-colors"
+                role="button"
+                aria-expanded={openGroups[filterGroup.title]}
+                aria-controls={`filter-content-${filterGroup.title}`}
+              >
                 <CardTitle className="text-medical-base font-medium flex items-center justify-between">
                   {filterGroup.title}
                   <ChevronDown
                     className={`h-4 w-4 transition-transform ${
                       openGroups[filterGroup.title] ? "transform rotate-180" : ""
                     }`}
+                    aria-hidden="true"
                   />
                 </CardTitle>
               </CardHeader>
             </CollapsibleTrigger>
             
-            <CollapsibleContent>
-              <CardContent className="pt-0 space-y-sm">
+            <CollapsibleContent id={`filter-content-${filterGroup.title}`}>
+              <CardContent className="pt-0 space-y-sm" role="group" aria-labelledby={`filter-title-${filterGroup.title}`}>
                 {filterGroup.items.map((item) => (
                   <div key={item.value} className="flex items-center space-x-2">
                     <Checkbox
@@ -111,12 +118,19 @@ export function FilterSidebar({
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:block w-64 shrink-0">
+      <aside 
+        className="hidden lg:block w-64 shrink-0"
+        role="complementary"
+        aria-label="Filter controls"
+      >
         <div className="sticky top-24 space-y-lg">
-          <div className="flex items-center gap-2 text-heading font-medium">
-            <Filter className="h-4 w-4" />
+          <h2 
+            className="flex items-center gap-2 text-heading font-medium text-medical-lg"
+            id="filters-heading"
+          >
+            <Filter className="h-4 w-4" aria-hidden="true" />
             Filters
-          </div>
+          </h2>
           <FilterContent />
         </div>
       </aside>
@@ -125,11 +139,17 @@ export function FilterSidebar({
       <div className="lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" className="w-full mb-lg">
-              <Filter className="h-4 w-4 mr-2" />
+            <Button 
+              variant="outline" 
+              className="w-full mb-lg touch-target"
+              aria-expanded="false"
+              aria-haspopup="dialog"
+              aria-label={`Open filters ${getTotalSelectedCount() > 0 ? `(${getTotalSelectedCount()} applied)` : ''}`}
+            >
+              <Filter className="h-4 w-4 mr-2" aria-hidden="true" />
               Filters
               {getTotalSelectedCount() > 0 && (
-                <Badge variant="secondary" className="ml-2">
+                <Badge variant="secondary" className="ml-2" aria-hidden="true">
                   {getTotalSelectedCount()}
                 </Badge>
               )}

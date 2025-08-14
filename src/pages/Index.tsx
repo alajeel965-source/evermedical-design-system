@@ -40,9 +40,9 @@ const Index = () => {
             <RFQAssistant />
             
             {/* Features Grid */}
-            <div className="space-y-xl">
+            <section className="space-y-xl" aria-labelledby="features-heading">
               <div className="text-center space-y-md">
-                <h2 className="text-heading font-bold text-medical-3xl">
+                <h2 id="features-heading" className="text-heading font-bold text-medical-3xl">
                   Why Choose EverMedical?
                 </h2>
                 <p className="text-body text-medical-lg max-w-2xl mx-auto">
@@ -50,17 +50,18 @@ const Index = () => {
                 </p>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-lg">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-lg" role="list">
                 {features.map((feature, index) => (
-                  <FeatureTile
-                    key={index}
-                    icon={feature.icon}
-                    title={feature.title}
-                    description={feature.description}
-                  />
+                  <div key={index} role="listitem">
+                    <FeatureTile
+                      icon={feature.icon}
+                      title={feature.title}
+                      description={feature.description}
+                    />
+                  </div>
                 ))}
               </div>
-            </div>
+            </section>
           </div>
 
           {/* Right Column - Live RFQs */}
@@ -68,8 +69,11 @@ const Index = () => {
             <LiveRFQsWidget />
             
             {/* Trust Indicators */}
-            <div className="bg-card border border-border rounded-medical-md p-lg shadow-soft">
-              <h3 className="text-heading font-semibold text-medical-base mb-md">
+            <aside 
+              className="bg-card border border-border rounded-medical-md p-lg shadow-soft"
+              aria-labelledby="trust-heading"
+            >
+              <h3 id="trust-heading" className="text-heading font-semibold text-medical-base mb-md">
                 Trusted Worldwide
               </h3>
               <div className="space-y-sm text-medical-sm">
@@ -90,7 +94,7 @@ const Index = () => {
                   <span className="text-heading font-semibold">10,000+</span>
                 </div>
               </div>
-            </div>
+            </aside>
           </div>
         </div>
       </div>
