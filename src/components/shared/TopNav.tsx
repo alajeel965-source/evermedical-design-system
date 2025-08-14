@@ -27,8 +27,7 @@ export function TopNav() {
   const navLinks = [
     { href: "/marketplace", label: t("common.navigation.marketplace") },
     { href: "/events", label: t("common.navigation.events") },
-    { href: "/networking", label: t("common.navigation.networking") },
-    { href: "/ai-agent", label: "AI Agent", featureFlag: true }
+    { href: "/networking", label: t("common.navigation.networking") }
   ];
 
   const isActiveLink = (href: string) => location.pathname === href;
@@ -75,21 +74,17 @@ export function TopNav() {
               <Link
                 key={link.href}
                 to={link.href}
-                className={cn(
-                  "text-medical-sm font-medium transition-colors hover:text-primary touch-target",
-                  "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-2 py-1",
-                  isActiveLink(link.href) 
-                    ? "text-primary border-b-2 border-primary pb-1" 
-                    : "text-body",
-                  link.featureFlag && "relative"
-                )}
+                 className={cn(
+                   "text-medical-sm font-medium transition-colors hover:text-primary touch-target",
+                   "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-2 py-1",
+                   isActiveLink(link.href) 
+                     ? "text-primary border-b-2 border-primary pb-1" 
+                     : "text-body"
+                 )}
                 aria-current={isActiveLink(link.href) ? "page" : undefined}
-              >
-                {link.label}
-                {link.featureFlag && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse" />
-                )}
-              </Link>
+               >
+                 {link.label}
+               </Link>
             ))}
           </nav>
 
@@ -255,12 +250,9 @@ export function TopNav() {
                           "block py-sm text-medical-base font-medium transition-colors hover:text-primary relative",
                           isActiveLink(link.href) ? "text-primary" : "text-body"
                         )}
-                      >
-                        {link.label}
-                        {link.featureFlag && (
-                          <span className="absolute top-2 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse" />
-                        )}
-                      </Link>
+                       >
+                         {link.label}
+                       </Link>
                     ))}
                   </div>
 
