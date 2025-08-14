@@ -4,9 +4,12 @@ import { CTAGroup } from "./CTAGroup";
 
 export function HeroSection() {
   return (
-    <section className="relative bg-gradient-to-br from-sky to-background overflow-hidden py-2xl">
+    <section 
+      className="relative bg-gradient-to-br from-sky to-background overflow-hidden py-2xl"
+      aria-labelledby="hero-title"
+    >
       {/* Abstract Blob Background */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0" aria-hidden="true">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-sky/20 rounded-full blur-3xl" />
         <div className="absolute top-3/4 left-1/2 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
@@ -19,7 +22,10 @@ export function HeroSection() {
             <div className="text-center space-y-2xl">
               {/* Main Heading */}
               <div className="space-y-lg">
-                <h1 className="text-heading font-bold text-medical-5xl lg:text-6xl leading-tight animate-fade-in">
+                <h1 
+                  id="hero-title"
+                  className="text-heading font-bold text-medical-5xl lg:text-6xl leading-tight animate-fade-in"
+                >
                   Connect with Global 
                   <span className="text-primary block">Medical Suppliers</span>
                 </h1>
@@ -33,7 +39,11 @@ export function HeroSection() {
               <CTAGroup className="justify-center animate-fade-in" />
 
               {/* Stats Row */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-md max-w-3xl mx-auto pt-lg animate-fade-in">
+              <div 
+                className="grid grid-cols-2 sm:grid-cols-4 gap-md max-w-3xl mx-auto pt-lg animate-fade-in"
+                role="region"
+                aria-label="Platform statistics"
+              >
                 <StatPill label="Active Suppliers" value="15K+" trend="up" />
                 <StatPill label="Equipment Types" value="500+" trend="neutral" />
                 <StatPill label="Countries" value="120+" trend="up" />

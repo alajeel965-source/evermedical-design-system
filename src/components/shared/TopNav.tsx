@@ -36,12 +36,15 @@ export function TopNav() {
   const isActiveLink = (href: string) => location.pathname === href;
 
   return (
-    <header className={cn(
-      "sticky top-0 z-50 w-full border-b transition-all duration-300",
-      isScrolled 
-        ? "bg-background/80 backdrop-blur-md shadow-soft" 
-        : "bg-background"
-    )}>
+    <header 
+      className={cn(
+        "sticky top-0 z-50 w-full border-b transition-all duration-300",
+        isScrolled 
+          ? "bg-background/80 backdrop-blur-md shadow-soft" 
+          : "bg-background"
+      )}
+      role="banner"
+    >
       <div className="container mx-auto">
         <div className={cn(
           "flex h-16 items-center justify-between px-lg",
@@ -62,20 +65,26 @@ export function TopNav() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className={cn(
-            "hidden lg:flex items-center",
-            isRTL ? "space-x-reverse space-x-lg" : "space-x-lg"
-          )}>
+          <nav 
+            className={cn(
+              "hidden lg:flex items-center",
+              isRTL ? "space-x-reverse space-x-lg" : "space-x-lg"
+            )}
+            role="navigation"
+            aria-label={t("common.labels.primaryNavigation")}
+          >
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
                 className={cn(
-                  "text-medical-sm font-medium transition-colors hover:text-primary",
+                  "text-medical-sm font-medium transition-colors hover:text-primary touch-target",
+                  "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-2 py-1",
                   isActiveLink(link.href) 
                     ? "text-primary border-b-2 border-primary pb-1" 
                     : "text-body"
                 )}
+                aria-current={isActiveLink(link.href) ? "page" : undefined}
               >
                 {link.label}
               </Link>
@@ -93,43 +102,70 @@ export function TopNav() {
                 <Search className={cn(
                   "absolute top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted",
                   isRTL ? "right-sm" : "left-sm"
-                )} />
+                )} aria-hidden="true" />
                 <Input
                   placeholder={t("pages.marketplace.searchPlaceholder")}
                   className={cn(
                     "border-0 bg-transparent focus:ring-0 text-body",
                     isRTL ? "pr-10 pl-4" : "pl-10 pr-4"
                   )}
+                  aria-label={t("pages.marketplace.searchPlaceholder")}
+                  role="searchbox"
                 />
               </div>
-              <Badge variant="secondary" shape="pill" className={cn(
-                "flex items-center bg-primary/10 text-primary hover:bg-primary/20",
-                isRTL ? "space-x-reverse space-x-1" : "space-x-1"
-              )}>
-                <Filter className="h-3 w-3" />
+              <button 
+                className={cn(
+                  "flex items-center bg-primary/10 text-primary hover:bg-primary/20",
+                  "rounded-medical-lg px-md py-sm transition-colors touch-target",
+                  "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+                  isRTL ? "space-x-reverse space-x-1" : "space-x-1"
+                )}
+                aria-label={t("common.buttons.openFilters")}
+              >
+                <Filter className="h-3 w-3" aria-hidden="true" />
                 <span>{t("common.buttons.filter")}</span>
-              </Badge>
+              </button>
             </div>
 
             {/* Language Toggle */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className={cn(
-                  "flex items-center",
-                  isRTL ? "space-x-reverse space-x-1" : "space-x-1"
-                )}>
-                  <Globe className="h-4 w-4" />
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className={cn(
+                    "flex items-center touch-target",
+                    isRTL ? "space-x-reverse space-x-1" : "space-x-1"
+                  )}
+                  aria-label={t("common.labels.selectLanguage")}
+                  aria-expanded="false"
+                  aria-haspopup="menu"
+                >
+                  <Globe className="h-4 w-4" aria-hidden="true" />
                   <span className="hidden sm:block">{language === "en" ? "EN" : "العربية"}</span>
-                  <ChevronDown className={cn("h-3 w-3", isRTL && "rotate-180")} />
+                  <ChevronDown className={cn("h-3 w-3", isRTL && "rotate-180")} aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-popover border border-border z-50">
-                <DropdownMenuItem onClick={() => setLanguage("en")}>
-                  <span className={isRTL ? "ml-2" : "mr-2"}>🇺🇸</span>
+              <DropdownMenuContent 
+                align="end" 
+                className="bg-popover border border-border z-50"
+                role="menu"
+                aria-label={t("common.labels.languageOptions")}
+              >
+                <DropdownMenuItem 
+                  onClick={() => setLanguage("en")}
+                  role="menuitem"
+                  className="focus:bg-accent focus:text-accent-foreground"
+                >
+                  <span className={isRTL ? "ml-2" : "mr-2"} aria-hidden="true">🇺🇸</span>
                   English
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLanguage("ar")}>
-                  <span className={isRTL ? "ml-2" : "mr-2"}>🇸🇦</span>
+                <DropdownMenuItem 
+                  onClick={() => setLanguage("ar")}
+                  role="menuitem"
+                  className="focus:bg-accent focus:text-accent-foreground"
+                >
+                  <span className={isRTL ? "ml-2" : "mr-2"} aria-hidden="true">🇸🇦</span>
                   العربية
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -138,27 +174,39 @@ export function TopNav() {
             {/* User Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Avatar className="h-8 w-8 cursor-pointer hover:ring-2 hover:ring-primary/20 transition-all">
-                  <AvatarImage src="/placeholder-avatar.jpg" alt="User" />
-                  <AvatarFallback className="bg-primary text-primary-foreground">
-                    <User className="h-4 w-4" />
-                  </AvatarFallback>
-                </Avatar>
+                <button
+                  className="h-8 w-8 rounded-full hover:ring-2 hover:ring-primary/20 transition-all touch-target focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                  aria-label={t("common.labels.userMenu")}
+                  aria-expanded="false"
+                  aria-haspopup="menu"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src="/placeholder-avatar.jpg" alt="" />
+                    <AvatarFallback className="bg-primary text-primary-foreground">
+                      <User className="h-4 w-4" aria-hidden="true" />
+                    </AvatarFallback>
+                  </Avatar>
+                </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-popover border border-border z-50">
+              <DropdownMenuContent 
+                align="end" 
+                className="w-48 bg-popover border border-border z-50"
+                role="menu"
+                aria-label={t("common.labels.userMenuOptions")}
+              >
                 <DropdownMenuLabel>{t("common.labels.profile")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <User className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                <DropdownMenuItem role="menuitem" className="focus:bg-accent focus:text-accent-foreground">
+                  <User className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
                   <span>{t("common.labels.profile")}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                <DropdownMenuItem role="menuitem" className="focus:bg-accent focus:text-accent-foreground">
+                  <Settings className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
                   <span>{t("common.labels.settings")}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                <DropdownMenuItem role="menuitem" className="focus:bg-accent focus:text-accent-foreground">
+                  <LogOut className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
                   <span>{t("common.labels.logout")}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -167,11 +215,22 @@ export function TopNav() {
             {/* Mobile Menu */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="lg:hidden">
-                  <Menu className="h-4 w-4" />
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  className="lg:hidden touch-target"
+                  aria-label={t("common.labels.openMobileMenu")}
+                  aria-expanded="false"
+                  aria-haspopup="dialog"
+                >
+                  <Menu className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side={isRTL ? "left" : "right"}>
+              <SheetContent 
+                side={isRTL ? "left" : "right"}
+                role="dialog"
+                aria-label={t("common.labels.mobileNavigation")}
+              >
                 <div className="flex flex-col space-y-lg mt-lg">
                   <div className={cn(
                     "flex items-center",

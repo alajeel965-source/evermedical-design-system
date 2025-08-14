@@ -16,6 +16,7 @@ export interface TranslationKey {
       message: string;
       addToCart: string;
       submitQuote: string;
+      openFilters: string;
     };
     labels: {
       language: string;
@@ -31,6 +32,13 @@ export interface TranslationKey {
       help: string;
       privacy: string;
       terms: string;
+      primaryNavigation: string;
+      selectLanguage: string;
+      languageOptions: string;
+      userMenu: string;
+      userMenuOptions: string;
+      openMobileMenu: string;
+      mobileNavigation: string;
     };
     navigation: {
       marketplace: string;
@@ -143,6 +151,7 @@ export const translations: Record<"en" | "ar", TranslationKey> = {
         message: "Message",
         addToCart: "Add to Cart",
         submitQuote: "Submit Quote",
+        openFilters: "Open filters",
       },
       labels: {
         language: "Language",
@@ -158,6 +167,13 @@ export const translations: Record<"en" | "ar", TranslationKey> = {
         help: "Help",
         privacy: "Privacy",
         terms: "Terms",
+        primaryNavigation: "Primary navigation",
+        selectLanguage: "Select language",
+        languageOptions: "Language options",
+        userMenu: "User menu",
+        userMenuOptions: "User menu options",
+        openMobileMenu: "Open mobile menu",
+        mobileNavigation: "Mobile navigation",
       },
       navigation: {
         marketplace: "Marketplace",
@@ -268,6 +284,7 @@ export const translations: Record<"en" | "ar", TranslationKey> = {
         message: "رسالة",
         addToCart: "إضافة للسلة",
         submitQuote: "إرسال عرض سعر",
+        openFilters: "فتح المرشحات",
       },
       labels: {
         language: "اللغة",
@@ -283,6 +300,13 @@ export const translations: Record<"en" | "ar", TranslationKey> = {
         help: "مساعدة",
         privacy: "الخصوصية",
         terms: "الشروط",
+        primaryNavigation: "التنقل الأساسي",
+        selectLanguage: "اختر اللغة",
+        languageOptions: "خيارات اللغة",
+        userMenu: "قائمة المستخدم",
+        userMenuOptions: "خيارات قائمة المستخدم",
+        openMobileMenu: "فتح القائمة المحمولة",
+        mobileNavigation: "التنقل المحمول",
       },
       navigation: {
         marketplace: "السوق",

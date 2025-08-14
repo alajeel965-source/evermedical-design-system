@@ -14,7 +14,7 @@ import Dashboards from "./pages/Dashboards";
 import About from "./pages/company/About";
 import Privacy from "./pages/legal/Privacy";
 import Terms from "./pages/legal/Terms";
-import Styleguide from "./pages/Styleguide";
+import DesignSystem from "./pages/DesignSystem";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,7 +37,7 @@ const App = () => (
           <Route path="/company/about" element={<About />} />
           <Route path="/legal/privacy" element={<Privacy />} />
           <Route path="/legal/terms" element={<Terms />} />
-          <Route path="/styleguide" element={<Styleguide />} />
+          <Route path="/design-system" element={<DesignSystem />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
