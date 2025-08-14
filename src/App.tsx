@@ -25,6 +25,9 @@ import { SpecialtyLanding } from "./pages/SpecialtyLanding";
 import { ProfileMedicalPersonnel } from "./pages/ProfileMedicalPersonnel";
 import { ProfileMedicalInstitute } from "./pages/ProfileMedicalInstitute";
 import { ProfileMedicalSeller } from "./pages/ProfileMedicalSeller";
+import PastEvents from "./pages/PastEvents";
+import SavedRFQs from "./pages/SavedRFQs";
+import BillingHistory from "./pages/BillingHistory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,6 +61,9 @@ const App = () => (
           <Route path="/profile/medical-personnel" element={<ProfileMedicalPersonnel />} />
           <Route path="/profile/medical-institute" element={<ProfileMedicalInstitute />} />
           <Route path="/profile/medical-seller" element={<ProfileMedicalSeller />} />
+          <Route path="/past-events" element={<PastEvents />} />
+          <Route path="/saved-rfqs" element={<SavedRFQs />} />
+          <Route path="/billing-history" element={<BillingHistory />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
