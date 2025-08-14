@@ -33,33 +33,56 @@ const Index = () => {
       {/* Hero Section */}
       <HeroSection />
 
-      {/* Sign Up Section */}
+      {/* Two-Column Layout: Live Quote + Sign Up */}
       <section className="py-2xl bg-gradient-to-b from-sky/30 to-transparent">
         <div className="container mx-auto px-lg">
-          <div className="flex justify-center">
-            <SignupRegister 
-              onSubmit={async (formData) => {
-                // Placeholder API integration
-                console.log('Form submitted:', formData);
-                // In real implementation: await registerUser(formData);
-              }}
-              onOAuth={async (provider) => {
-                // Placeholder OAuth integration
-                console.log('OAuth login:', provider);
-                // In real implementation: await signInWithOAuth(provider);
-              }}
-              onSuccess={(next) => {
-                // Handle post-registration actions
-                console.log('Registration success, next:', next);
-                // In real implementation: navigate based on 'next' action
-              }}
-              locale="en"
-              redirectUrls={{
-                verifyEmail: '/verify-email',
-                browseEvents: '/events',
-                completeProfile: '/profile'
-              }}
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-xl items-start">
+            {/* Left Column: Live Quote Component (RFQAssistant in LTR, right in RTL) */}
+            <div className="order-1 lg:order-1 rtl:lg:order-2 w-full">
+              <div className="backdrop-blur-sm bg-card/80 border border-border shadow-medical rounded-medical-md p-lg h-full min-h-[600px] flex flex-col">
+                <div className="mb-lg">
+                  <h2 className="text-heading font-bold text-medical-2xl mb-md">
+                    Quick Quote Request
+                  </h2>
+                  <p className="text-body text-medical-base">
+                    Get instant quotes from verified suppliers worldwide
+                  </p>
+                </div>
+                <div className="flex-1">
+                  <RFQAssistant />
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Sign Up Component (right in LTR, left in RTL) */}
+            <div className="order-2 lg:order-2 rtl:lg:order-1 w-full flex justify-center lg:justify-start rtl:lg:justify-end">
+              <div className="w-full max-w-md">
+                <SignupRegister 
+                  onSubmit={async (formData) => {
+                    // Placeholder API integration
+                    console.log('Form submitted:', formData);
+                    // In real implementation: await registerUser(formData);
+                  }}
+                  onOAuth={async (provider) => {
+                    // Placeholder OAuth integration
+                    console.log('OAuth login:', provider);
+                    // In real implementation: await signInWithOAuth(provider);
+                  }}
+                  onSuccess={(next) => {
+                    // Handle post-registration actions
+                    console.log('Registration success, next:', next);
+                    // In real implementation: navigate based on 'next' action
+                  }}
+                  locale="en"
+                  redirectUrls={{
+                    verifyEmail: '/verify-email',
+                    browseEvents: '/events',
+                    completeProfile: '/profile',
+                    payment: '/payment'
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -67,9 +90,8 @@ const Index = () => {
       {/* Main Content */}
       <div className="container mx-auto px-lg py-2xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-2xl">
-          {/* Left Column - RFQ Assistant */}
+          {/* Left Column - Features and Live RFQs */}
           <div className="lg:col-span-2 space-y-2xl">
-            <RFQAssistant />
             
             {/* Features Grid */}
             <section className="space-y-xl" aria-labelledby="features-heading">
@@ -96,7 +118,7 @@ const Index = () => {
             </section>
           </div>
 
-          {/* Right Column - Live RFQs */}
+          {/* Right Column - Live RFQs and Trust Indicators */}
           <div className="space-y-lg">
             <LiveRFQsWidget />
             
