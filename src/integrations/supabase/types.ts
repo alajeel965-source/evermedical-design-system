@@ -815,6 +815,7 @@ export type Database = {
           id: string | null
           last_name: string | null
           organization: string | null
+          primary_specialty_slug: string | null
           profile_type: string | null
           specialty: string | null
           title: string | null
@@ -829,6 +830,7 @@ export type Database = {
           id?: string | null
           last_name?: string | null
           organization?: string | null
+          primary_specialty_slug?: string | null
           profile_type?: string | null
           specialty?: string | null
           title?: string | null
@@ -843,6 +845,7 @@ export type Database = {
           id?: string | null
           last_name?: string | null
           organization?: string | null
+          primary_specialty_slug?: string | null
           profile_type?: string | null
           specialty?: string | null
           title?: string | null
@@ -867,6 +870,7 @@ export type Database = {
           id: string | null
           last_name: string | null
           organization: string | null
+          primary_specialty_slug: string | null
           profile_type: string | null
           specialty: string | null
           title: string | null
