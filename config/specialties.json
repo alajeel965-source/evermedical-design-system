@@ -1,19 +1,25 @@
 {
+  "version": "1.0.0",
+  "lastUpdated": "2025-01-14",
   "medicalSpecialties": [
     {
-      "id": "allergy-immunology",
-      "name": "Allergy and Immunology",
+      "name": "Allergy & Immunology",
+      "arabic": "الحساسية والمناعة",
       "slug": "allergy-immunology",
+      "code": "AI",
+      "synonyms": ["Allergy", "Immunology", "Clinical Immunology", "Allergic Diseases"],
       "subspecialties": [
         "Clinical Immunology",
-        "Allergic Diseases",
+        "Allergic Diseases", 
         "Immunodeficiency Disorders"
       ]
     },
     {
-      "id": "anesthesiology",
       "name": "Anesthesiology",
+      "arabic": "التخدير",
       "slug": "anesthesiology",
+      "code": "ANE",
+      "synonyms": ["Anesthesia", "Anesthetics"],
       "subspecialties": [
         "Cardiac Anesthesia",
         "Pediatric Anesthesia",
@@ -22,9 +28,11 @@
       ]
     },
     {
-      "id": "dermatology",
       "name": "Dermatology",
+      "arabic": "الجلدية",
       "slug": "dermatology",
+      "code": "DERM",
+      "synonyms": ["Skin", "Dermatologic", "Cutaneous"],
       "subspecialties": [
         "Dermatopathology",
         "Pediatric Dermatology",
@@ -33,9 +41,11 @@
       ]
     },
     {
-      "id": "emergency-medicine",
       "name": "Emergency Medicine",
+      "arabic": "طب الطوارئ",
       "slug": "emergency-medicine",
+      "code": "EM",
+      "synonyms": ["ER", "A&E", "Emergency", "Trauma"],
       "subspecialties": [
         "Emergency Medical Services",
         "Pediatric Emergency Medicine",
@@ -44,9 +54,11 @@
       ]
     },
     {
-      "id": "family-medicine",
       "name": "Family Medicine",
+      "arabic": "طب الأسرة",
       "slug": "family-medicine",
+      "code": "FM",
+      "synonyms": ["GP", "General Practice", "Primary Care"],
       "subspecialties": [
         "Sports Medicine",
         "Geriatric Medicine",
@@ -55,9 +67,11 @@
       ]
     },
     {
-      "id": "internal-medicine",
       "name": "Internal Medicine",
+      "arabic": "الباطنية",
       "slug": "internal-medicine",
+      "code": "IM",
+      "synonyms": ["Internal", "Internist"],
       "subspecialties": [
         "Cardiology",
         "Endocrinology",
@@ -71,9 +85,11 @@
       ]
     },
     {
-      "id": "medical-genetics",
-      "name": "Medical Genetics and Genomics",
-      "slug": "medical-genetics",
+      "name": "Medical Genetics & Genomics",
+      "arabic": "الوراثة والجيلوميات الطبية",
+      "slug": "medical-genetics-genomics",
+      "code": "MGG",
+      "synonyms": ["Genetics", "Genomics", "Genetic Medicine"],
       "subspecialties": [
         "Clinical Genetics",
         "Molecular Genetics",
@@ -82,9 +98,11 @@
       ]
     },
     {
-      "id": "neurological-surgery",
       "name": "Neurological Surgery",
+      "arabic": "جراحة المخ والأعصاب",
       "slug": "neurological-surgery",
+      "code": "NS",
+      "synonyms": ["Neurosurgery", "Brain Surgery"],
       "subspecialties": [
         "Pediatric Neurological Surgery",
         "Spine Surgery",
@@ -93,9 +111,11 @@
       ]
     },
     {
-      "id": "nuclear-medicine",
       "name": "Nuclear Medicine",
+      "arabic": "الطب النووي",
       "slug": "nuclear-medicine",
+      "code": "NM",
+      "synonyms": ["Radionuclide", "Nuclear Imaging"],
       "subspecialties": [
         "Nuclear Cardiology",
         "Nuclear Radiology",
@@ -103,9 +123,11 @@
       ]
     },
     {
-      "id": "obstetrics-gynecology",
-      "name": "Obstetrics and Gynecology",
+      "name": "Obstetrics & Gynecology",
+      "arabic": "النساء والولادة",
       "slug": "obstetrics-gynecology",
+      "code": "OBGYN",
+      "synonyms": ["OB/GYN", "Obstetrics", "Gynecology", "Women's Health"],
       "subspecialties": [
         "Maternal-Fetal Medicine",
         "Gynecologic Oncology",
@@ -114,9 +136,11 @@
       ]
     },
     {
-      "id": "ophthalmology",
       "name": "Ophthalmology",
+      "arabic": "طب العيون",
       "slug": "ophthalmology",
+      "code": "OPH",
+      "synonyms": ["Eye", "Vision", "Ocular"],
       "subspecialties": [
         "Cornea and External Diseases",
         "Glaucoma",
@@ -128,9 +152,11 @@
       ]
     },
     {
-      "id": "orthopedic-surgery",
       "name": "Orthopedic Surgery",
+      "arabic": "جراحة العظام",
       "slug": "orthopedic-surgery",
+      "code": "ORTHO",
+      "synonyms": ["Orthopedics", "Bone Surgery"],
       "subspecialties": [
         "Sports Medicine",
         "Hand Surgery",
@@ -141,9 +167,11 @@
       ]
     },
     {
-      "id": "otolaryngology",
-      "name": "Otolaryngology – Head and Neck Surgery",
-      "slug": "otolaryngology",
+      "name": "Otolaryngology – Head & Neck Surgery",
+      "arabic": "الأنف والأذن والحنجرة وجراحة الرأس والرقبة",
+      "slug": "otolaryngology-ent",
+      "code": "ENT",
+      "synonyms": ["Otolaryngology", "Head and Neck", "Ear Nose Throat"],
       "subspecialties": [
         "Facial Plastic Surgery",
         "Head and Neck Oncology",
@@ -154,9 +182,11 @@
       ]
     },
     {
-      "id": "pathology",
       "name": "Pathology",
+      "arabic": "علم الأمراض",
       "slug": "pathology",
+      "code": "PATH",
+      "synonyms": ["Histopathology", "Cytology", "Laboratory Medicine"],
       "subspecialties": [
         "Anatomic Pathology",
         "Clinical Pathology",
@@ -168,9 +198,11 @@
       ]
     },
     {
-      "id": "pediatrics",
       "name": "Pediatrics",
+      "arabic": "طب الأطفال",
       "slug": "pediatrics",
+      "code": "PEDS",
+      "synonyms": ["Child Health", "Pediatric"],
       "subspecialties": [
         "Adolescent Medicine",
         "Child Abuse Pediatrics",
@@ -189,9 +221,11 @@
       ]
     },
     {
-      "id": "physical-medicine-rehabilitation",
-      "name": "Physical Medicine and Rehabilitation",
-      "slug": "physical-medicine-rehabilitation",
+      "name": "Physical Medicine & Rehabilitation",
+      "arabic": "الطب الطبيعي وإعادة التأهيل",
+      "slug": "pmr",
+      "code": "PMR",
+      "synonyms": ["PM&R", "Rehab", "Rehabilitation Medicine"],
       "subspecialties": [
         "Spinal Cord Injury Medicine",
         "Sports Medicine",
@@ -200,9 +234,11 @@
       ]
     },
     {
-      "id": "plastic-surgery",
       "name": "Plastic Surgery",
+      "arabic": "جراحة التجميل",
       "slug": "plastic-surgery",
+      "code": "PLAST",
+      "synonyms": ["Aesthetic", "Reconstructive", "Cosmetic Surgery"],
       "subspecialties": [
         "Plastic Surgery Within the Head and Neck",
         "Hand Surgery",
@@ -210,9 +246,11 @@
       ]
     },
     {
-      "id": "preventive-medicine",
       "name": "Preventive Medicine",
+      "arabic": "الطب الوقائي",
       "slug": "preventive-medicine",
+      "code": "PREV",
+      "synonyms": ["Public Health", "Preventive Care"],
       "subspecialties": [
         "Aerospace Medicine",
         "Occupational Medicine",
@@ -220,9 +258,11 @@
       ]
     },
     {
-      "id": "psychiatry",
       "name": "Psychiatry",
+      "arabic": "الطب النفسي",
       "slug": "psychiatry",
+      "code": "PSY",
+      "synonyms": ["Mental Health", "Psychiatric"],
       "subspecialties": [
         "Addiction Medicine",
         "Child and Adolescent Psychiatry",
@@ -233,17 +273,21 @@
       ]
     },
     {
-      "id": "radiation-oncology",
       "name": "Radiation Oncology",
+      "arabic": "الأورام الإشعاعية",
       "slug": "radiation-oncology",
+      "code": "RO",
+      "synonyms": ["Rad Onc", "Radiation Therapy"],
       "subspecialties": [
         "Therapeutic Radiology"
       ]
     },
     {
-      "id": "radiology",
       "name": "Radiology",
+      "arabic": "الأشعة",
       "slug": "radiology",
+      "code": "RAD",
+      "synonyms": ["Imaging", "Medical Imaging"],
       "subspecialties": [
         "Abdominal Radiology",
         "Breast Imaging",
@@ -260,9 +304,11 @@
       ]
     },
     {
-      "id": "surgery",
       "name": "Surgery",
+      "arabic": "الجراحة",
       "slug": "surgery",
+      "code": "SURG",
+      "synonyms": ["General Surgery", "Surgical"],
       "subspecialties": [
         "Pediatric Surgery",
         "Plastic Surgery Within the Head and Neck",
@@ -272,25 +318,31 @@
       ]
     },
     {
-      "id": "thoracic-surgery",
       "name": "Thoracic Surgery",
+      "arabic": "جراحة الصدر",
       "slug": "thoracic-surgery",
+      "code": "THOR",
+      "synonyms": ["Cardiothoracic (thoracic only)", "Chest Surgery"],
       "subspecialties": [
         "Congenital Cardiac Surgery"
       ]
     },
     {
-      "id": "urology",
       "name": "Urology",
+      "arabic": "المسالك البولية",
       "slug": "urology",
+      "code": "URO",
+      "synonyms": ["GU", "Genitourinary"],
       "subspecialties": [
         "Pediatric Urology"
       ]
     },
     {
-      "id": "dentistry",
       "name": "Dentistry",
+      "arabic": "طب الأسنان",
       "slug": "dentistry",
+      "code": "DENT",
+      "synonyms": ["Dental", "Oral Health"],
       "subspecialties": [
         "Oral and Maxillofacial Surgery",
         "Orthodontics",
