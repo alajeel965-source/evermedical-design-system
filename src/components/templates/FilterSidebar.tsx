@@ -117,23 +117,17 @@ export function FilterSidebar({
 
   return (
     <>
-      {/* Desktop sidebar */}
-      <aside 
-        className="hidden lg:block w-64 shrink-0"
-        role="complementary"
-        aria-label="Filter controls"
-      >
-        <div className="sticky top-24 space-y-lg">
-          <h2 
-            className="flex items-center gap-2 text-heading font-medium text-medical-lg"
-            id="filters-heading"
-          >
-            <Filter className="h-4 w-4" aria-hidden="true" />
-            Filters
-          </h2>
-          <FilterContent />
-        </div>
-      </aside>
+      {/* Desktop content */}
+      <div className="space-y-lg">
+        <h2 
+          className="flex items-center gap-2 text-heading font-medium text-medical-lg"
+          id="filters-heading"
+        >
+          <Filter className="h-4 w-4" aria-hidden="true" />
+          Filters
+        </h2>
+        <FilterContent />
+      </div>
 
       {/* Mobile filter sheet */}
       <div className="lg:hidden">

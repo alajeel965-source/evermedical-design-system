@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { PageLayout } from "@/components/templates/PageLayout";
 import { EventCard } from "@/components/templates/cards/EventCard";
+import { LocationFilter } from "@/components/shared/LocationFilter";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Calendar, Grid3X3 } from "lucide-react";
+import { Calendar, Grid3X3, MapPin, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export default function Events() {
   const [activeTab, setActiveTab] = useState("upcoming");
@@ -11,6 +13,7 @@ export default function Events() {
   const [view, setView] = useState<"grid" | "table">("grid");
   const [calendarView, setCalendarView] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
 
   const handleFilterChange = (groupTitle: string, value: string, checked: boolean) => {
     setSelectedFilters(prev => ({
@@ -28,7 +31,9 @@ export default function Events() {
     { value: "cme", label: "CME Eligible" },
   ];
 
+  // Add location filter to the filters array
   const filters = [
+    // Location filter will be handled separately
     {
       title: "Specialty",
       items: [
@@ -120,6 +125,19 @@ export default function Events() {
     },
   ];
 
+  // Get filtered events based on location selection
+  const filteredEvents = events.filter(event => {
+    if (selectedLocations.length === 0) return true;
+    
+    // Simple location matching - in real app, this would be more sophisticated
+    const eventLocation = event.location.toLowerCase();
+    return selectedLocations.some(location => {
+      const locationLabel = location.replace('-', ' ').toLowerCase();
+      return eventLocation.includes(locationLabel) || 
+             eventLocation.includes(location.toLowerCase());
+    });
+  });
+
   return (
     <PageLayout
       title="Medical Events"
@@ -135,8 +153,79 @@ export default function Events() {
       onFilterChange={handleFilterChange}
       view={view}
       onViewChange={setView}
+      locationFilter={
+        <LocationFilter
+          selectedLocations={selectedLocations}
+          onLocationChange={setSelectedLocations}
+        />
+      }
     >
       <div className="space-y-lg">
+        {/* Mobile filter button - include location filter */}
+        <div className="lg:hidden space-y-md">
+          <LocationFilter
+            selectedLocations={selectedLocations}
+            onLocationChange={setSelectedLocations}
+          />
+        </div>
+
+        {/* Applied filters summary */}
+        {(selectedLocations.length > 0 || Object.values(selectedFilters).some(arr => arr.length > 0)) && (
+          <div className="flex flex-wrap items-center gap-sm p-md bg-surface rounded-medical-md border border-border">
+            <span className="text-medical-sm font-medium text-muted-foreground">Applied filters:</span>
+            
+            {/* Location filters */}
+            {selectedLocations.map((location) => (
+              <Badge
+                key={location}
+                variant="secondary"
+                className="flex items-center gap-xs bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer"
+                onClick={() => setSelectedLocations(prev => prev.filter(l => l !== location))}
+              >
+                <MapPin className="w-3 h-3" />
+                {location.replace('-', ' ')}
+                <X className="w-3 h-3" />
+              </Badge>
+            ))}
+            
+            {/* Other filters */}
+            {Object.entries(selectedFilters).map(([group, values]) =>
+              values.map((value) => (
+                <Badge
+                  key={`${group}-${value}`}
+                  variant="secondary"
+                  className="flex items-center gap-xs hover:bg-destructive/20 transition-colors cursor-pointer"
+                  onClick={() => {
+                    const newFilters = { ...selectedFilters };
+                    newFilters[group] = newFilters[group].filter(v => v !== value);
+                    setSelectedFilters(newFilters);
+                  }}
+                >
+                  {value}
+                  <X className="w-3 h-3" />
+                </Badge>
+              ))
+            )}
+            
+            {/* Clear all button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setSelectedFilters({});
+                setSelectedLocations([]);
+              }}
+              className="h-auto p-1 text-muted-foreground hover:text-destructive text-medical-xs"
+            >
+              Clear all
+            </Button>
+          </div>
+        )}
+
+        {/* Results count */}
+        <div className="text-medical-sm text-muted-foreground">
+          Showing {filteredEvents.length} of {events.length} events
+        </div>
         {/* Calendar view toggle */}
         <div className="flex justify-end">
           <div className="flex rounded-medical-sm border border-border bg-card p-1">
@@ -171,7 +260,7 @@ export default function Events() {
           </div>
         ) : view === "grid" ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-lg">
-            {events.map((event) => (
+            {filteredEvents.map((event) => (
               <EventCard key={event.id} {...event} />
             ))}
           </div>
@@ -189,7 +278,7 @@ export default function Events() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {events.map((event) => (
+                {filteredEvents.map((event) => (
                   <TableRow key={event.id}>
                     <TableCell className="font-medium">{event.title}</TableCell>
                     <TableCell>{event.date}</TableCell>

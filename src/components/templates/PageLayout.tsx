@@ -24,6 +24,7 @@ interface PageLayoutProps {
   showFilters?: boolean;
   view?: "grid" | "table";
   onViewChange?: (view: "grid" | "table") => void;
+  locationFilter?: ReactNode;
 }
 
 export function PageLayout({
@@ -43,6 +44,7 @@ export function PageLayout({
   showFilters = true,
   view = "grid",
   onViewChange,
+  locationFilter,
 }: PageLayoutProps) {
   return (
     <AppShell>
@@ -63,13 +65,20 @@ export function PageLayout({
         
         <div className="container mx-auto px-lg py-lg">
           <div className="flex gap-lg">
-            {showFilters && filters && (
-              <FilterSidebar 
-                filters={filters}
-                selectedFilters={selectedFilters}
-                onFilterChange={onFilterChange}
-                onClearFilters={onClearFilters}
-              />
+            {showFilters && (
+              <aside className="hidden lg:block w-64 shrink-0" role="complementary" aria-label="Filter controls">
+                <div className="sticky top-24 space-y-lg">
+                  {locationFilter}
+                  {filters && (
+                    <FilterSidebar 
+                      filters={filters}
+                      selectedFilters={selectedFilters}
+                      onFilterChange={onFilterChange}
+                      onClearFilters={onClearFilters}
+                    />
+                  )}
+                </div>
+              </aside>
             )}
             
             <main className={`flex-1 ${showFilters ? 'lg:max-w-[calc(100%-280px)]' : ''}`}>
