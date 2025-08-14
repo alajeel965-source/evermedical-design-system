@@ -17,6 +17,9 @@ import About from "./pages/company/About";
 import Privacy from "./pages/legal/Privacy";
 import Terms from "./pages/legal/Terms";
 import DesignSystem from "./pages/DesignSystem";
+import AIAgent from "./pages/AIAgent";
+import AIAgentSources from "./pages/AIAgentSources";
+import AIAgentReview from "./pages/AIAgentReview";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +40,9 @@ const App = () => (
           <Route path="/rfqs" element={<RFQs />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/dashboards" element={<Dashboards />} />
+          <Route path="/ai-agent" element={<AIAgent />} />
+          <Route path="/ai-agent/sources" element={<AIAgentSources />} />
+          <Route path="/ai-agent/review" element={<AIAgentReview />} />
           <Route path="/company/about" element={<About />} />
           <Route path="/legal/privacy" element={<Privacy />} />
           <Route path="/legal/terms" element={<Terms />} />

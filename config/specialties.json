@@ -1,0 +1,306 @@
+{
+  "medicalSpecialties": [
+    {
+      "id": "allergy-immunology",
+      "name": "Allergy and Immunology",
+      "slug": "allergy-immunology",
+      "subspecialties": [
+        "Clinical Immunology",
+        "Allergic Diseases",
+        "Immunodeficiency Disorders"
+      ]
+    },
+    {
+      "id": "anesthesiology",
+      "name": "Anesthesiology",
+      "slug": "anesthesiology",
+      "subspecialties": [
+        "Cardiac Anesthesia",
+        "Pediatric Anesthesia",
+        "Pain Medicine",
+        "Critical Care Medicine"
+      ]
+    },
+    {
+      "id": "dermatology",
+      "name": "Dermatology",
+      "slug": "dermatology",
+      "subspecialties": [
+        "Dermatopathology",
+        "Pediatric Dermatology",
+        "Mohs Surgery",
+        "Dermatologic Oncology"
+      ]
+    },
+    {
+      "id": "emergency-medicine",
+      "name": "Emergency Medicine",
+      "slug": "emergency-medicine",
+      "subspecialties": [
+        "Emergency Medical Services",
+        "Pediatric Emergency Medicine",
+        "Toxicology",
+        "Wilderness Medicine"
+      ]
+    },
+    {
+      "id": "family-medicine",
+      "name": "Family Medicine",
+      "slug": "family-medicine",
+      "subspecialties": [
+        "Sports Medicine",
+        "Geriatric Medicine",
+        "Hospice and Palliative Medicine",
+        "Sleep Medicine"
+      ]
+    },
+    {
+      "id": "internal-medicine",
+      "name": "Internal Medicine",
+      "slug": "internal-medicine",
+      "subspecialties": [
+        "Cardiology",
+        "Endocrinology",
+        "Gastroenterology",
+        "Hematology",
+        "Infectious Disease",
+        "Nephrology",
+        "Oncology",
+        "Pulmonology",
+        "Rheumatology"
+      ]
+    },
+    {
+      "id": "medical-genetics",
+      "name": "Medical Genetics and Genomics",
+      "slug": "medical-genetics",
+      "subspecialties": [
+        "Clinical Genetics",
+        "Molecular Genetics",
+        "Clinical Cytogenetics",
+        "Clinical Biochemical Genetics"
+      ]
+    },
+    {
+      "id": "neurological-surgery",
+      "name": "Neurological Surgery",
+      "slug": "neurological-surgery",
+      "subspecialties": [
+        "Pediatric Neurological Surgery",
+        "Spine Surgery",
+        "Vascular Neurosurgery",
+        "Stereotactic and Functional Neurosurgery"
+      ]
+    },
+    {
+      "id": "nuclear-medicine",
+      "name": "Nuclear Medicine",
+      "slug": "nuclear-medicine",
+      "subspecialties": [
+        "Nuclear Cardiology",
+        "Nuclear Radiology",
+        "In Vivo Nuclear Medicine"
+      ]
+    },
+    {
+      "id": "obstetrics-gynecology",
+      "name": "Obstetrics and Gynecology",
+      "slug": "obstetrics-gynecology",
+      "subspecialties": [
+        "Maternal-Fetal Medicine",
+        "Gynecologic Oncology",
+        "Reproductive Endocrinology",
+        "Female Pelvic Medicine"
+      ]
+    },
+    {
+      "id": "ophthalmology",
+      "name": "Ophthalmology",
+      "slug": "ophthalmology",
+      "subspecialties": [
+        "Cornea and External Diseases",
+        "Glaucoma",
+        "Neuro-Ophthalmology",
+        "Oculoplastics",
+        "Pediatric Ophthalmology",
+        "Retinal Diseases",
+        "Uveitis"
+      ]
+    },
+    {
+      "id": "orthopedic-surgery",
+      "name": "Orthopedic Surgery",
+      "slug": "orthopedic-surgery",
+      "subspecialties": [
+        "Sports Medicine",
+        "Hand Surgery",
+        "Spine Surgery",
+        "Pediatric Orthopedics",
+        "Trauma Surgery",
+        "Joint Replacement"
+      ]
+    },
+    {
+      "id": "otolaryngology",
+      "name": "Otolaryngology – Head and Neck Surgery",
+      "slug": "otolaryngology",
+      "subspecialties": [
+        "Facial Plastic Surgery",
+        "Head and Neck Oncology",
+        "Laryngology",
+        "Neurotology",
+        "Pediatric Otolaryngology",
+        "Rhinology"
+      ]
+    },
+    {
+      "id": "pathology",
+      "name": "Pathology",
+      "slug": "pathology",
+      "subspecialties": [
+        "Anatomic Pathology",
+        "Clinical Pathology",
+        "Forensic Pathology",
+        "Hematopathology",
+        "Medical Microbiology",
+        "Molecular Genetic Pathology",
+        "Neuropathology"
+      ]
+    },
+    {
+      "id": "pediatrics",
+      "name": "Pediatrics",
+      "slug": "pediatrics",
+      "subspecialties": [
+        "Adolescent Medicine",
+        "Child Abuse Pediatrics",
+        "Developmental-Behavioral Pediatrics",
+        "Neonatal-Perinatal Medicine",
+        "Pediatric Cardiology",
+        "Pediatric Critical Care Medicine",
+        "Pediatric Emergency Medicine",
+        "Pediatric Endocrinology",
+        "Pediatric Gastroenterology",
+        "Pediatric Hematology-Oncology",
+        "Pediatric Infectious Diseases",
+        "Pediatric Nephrology",
+        "Pediatric Pulmonology",
+        "Pediatric Rheumatology"
+      ]
+    },
+    {
+      "id": "physical-medicine-rehabilitation",
+      "name": "Physical Medicine and Rehabilitation",
+      "slug": "physical-medicine-rehabilitation",
+      "subspecialties": [
+        "Spinal Cord Injury Medicine",
+        "Sports Medicine",
+        "Brain Injury Medicine",
+        "Pain Medicine"
+      ]
+    },
+    {
+      "id": "plastic-surgery",
+      "name": "Plastic Surgery",
+      "slug": "plastic-surgery",
+      "subspecialties": [
+        "Plastic Surgery Within the Head and Neck",
+        "Hand Surgery",
+        "Craniofacial Surgery"
+      ]
+    },
+    {
+      "id": "preventive-medicine",
+      "name": "Preventive Medicine",
+      "slug": "preventive-medicine",
+      "subspecialties": [
+        "Aerospace Medicine",
+        "Occupational Medicine",
+        "Public Health and General Preventive Medicine"
+      ]
+    },
+    {
+      "id": "psychiatry",
+      "name": "Psychiatry",
+      "slug": "psychiatry",
+      "subspecialties": [
+        "Addiction Medicine",
+        "Child and Adolescent Psychiatry",
+        "Consultation-Liaison Psychiatry",
+        "Forensic Psychiatry",
+        "Geriatric Psychiatry",
+        "Sleep Medicine"
+      ]
+    },
+    {
+      "id": "radiation-oncology",
+      "name": "Radiation Oncology",
+      "slug": "radiation-oncology",
+      "subspecialties": [
+        "Therapeutic Radiology"
+      ]
+    },
+    {
+      "id": "radiology",
+      "name": "Radiology",
+      "slug": "radiology",
+      "subspecialties": [
+        "Abdominal Radiology",
+        "Breast Imaging",
+        "Cardiothoracic Radiology",
+        "Emergency Radiology",
+        "Endovascular Surgical Neuroradiology",
+        "Interventional Radiology",
+        "Musculoskeletal Radiology",
+        "Neuroradiology",
+        "Nuclear Radiology",
+        "Pediatric Radiology",
+        "Radiation Oncology",
+        "Vascular and Interventional Radiology"
+      ]
+    },
+    {
+      "id": "surgery",
+      "name": "Surgery",
+      "slug": "surgery",
+      "subspecialties": [
+        "Pediatric Surgery",
+        "Plastic Surgery Within the Head and Neck",
+        "Surgery of the Hand",
+        "Surgical Critical Care",
+        "Vascular Surgery"
+      ]
+    },
+    {
+      "id": "thoracic-surgery",
+      "name": "Thoracic Surgery",
+      "slug": "thoracic-surgery",
+      "subspecialties": [
+        "Congenital Cardiac Surgery"
+      ]
+    },
+    {
+      "id": "urology",
+      "name": "Urology",
+      "slug": "urology",
+      "subspecialties": [
+        "Pediatric Urology"
+      ]
+    },
+    {
+      "id": "dentistry",
+      "name": "Dentistry",
+      "slug": "dentistry",
+      "subspecialties": [
+        "Oral and Maxillofacial Surgery",
+        "Orthodontics",
+        "Periodontics",
+        "Prosthodontics",
+        "Endodontics",
+        "Oral Pathology",
+        "Pediatric Dentistry",
+        "Public Health Dentistry"
+      ]
+    }
+  ]
+}
