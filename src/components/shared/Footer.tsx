@@ -60,6 +60,9 @@ export function Footer({ language = "en" }: FooterProps) {
               <Button variant="link" className="h-auto p-0 text-body hover:text-heading justify-start" asChild>
                 <a href="/pricing">Pricing Plans</a>
               </Button>
+              <Button variant="link" className="h-auto p-0 text-body hover:text-heading justify-start" asChild>
+                <a href="/dashboards">Analytics Dashboard</a>
+              </Button>
               <Button variant="link" className="h-auto p-0 text-body hover:text-heading justify-start">
                 Market Intelligence
               </Button>

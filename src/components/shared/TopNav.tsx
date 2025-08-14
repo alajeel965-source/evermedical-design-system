@@ -27,8 +27,7 @@ export function TopNav() {
   const navLinks = [
     { href: "/marketplace", label: t("common.navigation.marketplace") },
     { href: "/events", label: t("common.navigation.events") },
-    { href: "/networking", label: t("common.navigation.networking") },
-    { href: "/dashboards", label: t("common.navigation.dashboards") }
+    { href: "/networking", label: t("common.navigation.networking") }
   ];
 
   const isActiveLink = (href: string) => location.pathname === href;
