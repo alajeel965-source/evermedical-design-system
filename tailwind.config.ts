@@ -56,8 +56,7 @@ export default {
 				
 				/* Medical Sky Theme */
 				sky: {
-					DEFAULT: 'hsl(var(--sky-blue))',
-					dark: 'hsl(var(--sky-blue-dark))',
+					DEFAULT: 'hsl(var(--sky))',
 					foreground: 'hsl(var(--sky-foreground))'
 				},
 				
@@ -132,14 +131,6 @@ export default {
 				'medical-4xl': 'var(--text-4xl)',
 				'medical-5xl': 'var(--text-5xl)'
 			},
-			
-			/* Enhanced Background Patterns & Gradients */
-			backgroundImage: {
-				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-				'gradient-sky': 'var(--gradient-sky)',
-			},
-			
 			keyframes: {
 				'accordion-down': {
 					from: {
