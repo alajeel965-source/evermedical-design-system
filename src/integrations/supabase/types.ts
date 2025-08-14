@@ -14,6 +14,139 @@ export type Database = {
   }
   public: {
     Tables: {
+      crawl_jobs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          errors: Json | null
+          events_created: number | null
+          events_discovered: number | null
+          events_updated: number | null
+          id: string
+          metadata: Json | null
+          source_id: string
+          started_at: string | null
+          status: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          errors?: Json | null
+          events_created?: number | null
+          events_discovered?: number | null
+          events_updated?: number | null
+          id?: string
+          metadata?: Json | null
+          source_id: string
+          started_at?: string | null
+          status?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          errors?: Json | null
+          events_created?: number | null
+          events_discovered?: number | null
+          events_updated?: number | null
+          id?: string
+          metadata?: Json | null
+          source_id?: string
+          started_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crawl_jobs_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "event_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_duplicates: {
+        Row: {
+          action_taken: string | null
+          created_at: string
+          duplicate_of: string
+          event_id: string
+          id: string
+          match_criteria: string[]
+          reviewed: boolean | null
+          similarity_score: number
+        }
+        Insert: {
+          action_taken?: string | null
+          created_at?: string
+          duplicate_of: string
+          event_id: string
+          id?: string
+          match_criteria: string[]
+          reviewed?: boolean | null
+          similarity_score: number
+        }
+        Update: {
+          action_taken?: string | null
+          created_at?: string
+          duplicate_of?: string
+          event_id?: string
+          id?: string
+          match_criteria?: string[]
+          reviewed?: boolean | null
+          similarity_score?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_duplicates_duplicate_of_fkey"
+            columns: ["duplicate_of"]
+            isOneToOne: false
+            referencedRelation: "medical_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_duplicates_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "medical_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_interactions: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          interaction_type: string
+          metadata: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          interaction_type: string
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          interaction_type?: string
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_interactions_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "medical_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_registrations: {
         Row: {
           event_id: string
@@ -38,13 +171,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "event_registrations_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "medical_events"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "event_registrations_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -60,59 +186,379 @@ export type Database = {
           },
         ]
       }
-      medical_events: {
+      event_sources: {
         Row: {
-          capacity: number | null
-          cme_credits: number | null
-          created_at: string | null
-          description: string | null
-          end_date: string
-          event_type: string
+          crawl_delay_seconds: number | null
+          crawl_enabled: boolean | null
+          crawl_frequency: string | null
+          created_at: string
+          created_by: string | null
+          failure_count: number | null
           id: string
-          is_virtual: boolean | null
-          location: string | null
-          organizer: string | null
-          price: number | null
-          registered_count: number | null
-          specialty: string | null
-          start_date: string
-          title: string
+          last_crawled_at: string | null
+          max_pages: number | null
+          name: string
+          next_crawl_at: string | null
+          respect_robots_txt: boolean | null
+          selectors: Json | null
+          source_type: string
+          success_count: number | null
+          updated_at: string
+          url: string
         }
         Insert: {
-          capacity?: number | null
-          cme_credits?: number | null
-          created_at?: string | null
-          description?: string | null
-          end_date: string
-          event_type: string
+          crawl_delay_seconds?: number | null
+          crawl_enabled?: boolean | null
+          crawl_frequency?: string | null
+          created_at?: string
+          created_by?: string | null
+          failure_count?: number | null
           id?: string
-          is_virtual?: boolean | null
-          location?: string | null
-          organizer?: string | null
-          price?: number | null
-          registered_count?: number | null
-          specialty?: string | null
-          start_date: string
-          title: string
+          last_crawled_at?: string | null
+          max_pages?: number | null
+          name: string
+          next_crawl_at?: string | null
+          respect_robots_txt?: boolean | null
+          selectors?: Json | null
+          source_type?: string
+          success_count?: number | null
+          updated_at?: string
+          url: string
         }
         Update: {
-          capacity?: number | null
-          cme_credits?: number | null
-          created_at?: string | null
-          description?: string | null
-          end_date?: string
-          event_type?: string
+          crawl_delay_seconds?: number | null
+          crawl_enabled?: boolean | null
+          crawl_frequency?: string | null
+          created_at?: string
+          created_by?: string | null
+          failure_count?: number | null
           id?: string
-          is_virtual?: boolean | null
-          location?: string | null
-          organizer?: string | null
-          price?: number | null
-          registered_count?: number | null
-          specialty?: string | null
-          start_date?: string
-          title?: string
+          last_crawled_at?: string | null
+          max_pages?: number | null
+          name?: string
+          next_crawl_at?: string | null
+          respect_robots_txt?: boolean | null
+          selectors?: Json | null
+          source_type?: string
+          success_count?: number | null
+          updated_at?: string
+          url?: string
         }
         Relationships: []
+      }
+      event_specialties: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          level: number
+          name_ar: string | null
+          name_en: string
+          parent_id: string | null
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          level?: number
+          name_ar?: string | null
+          name_en: string
+          parent_id?: string | null
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          level?: number
+          name_ar?: string | null
+          name_en?: string
+          parent_id?: string | null
+          slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_specialties_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "event_specialties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_tag_relations: {
+        Row: {
+          event_id: string
+          tag_id: string
+        }
+        Insert: {
+          event_id: string
+          tag_id: string
+        }
+        Update: {
+          event_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_tag_relations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "medical_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_tag_relations_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "event_tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_tags: {
+        Row: {
+          color: string | null
+          created_at: string
+          id: string
+          is_featured: boolean | null
+          name_ar: string | null
+          name_en: string
+          slug: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          is_featured?: boolean | null
+          name_ar?: string | null
+          name_en: string
+          slug: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          is_featured?: boolean | null
+          name_ar?: string | null
+          name_en?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      medical_events: {
+        Row: {
+          accreditation_details: Json | null
+          accreditation_url: string | null
+          ai_extracted_fields: Json | null
+          approved_at: string | null
+          approved_by: string | null
+          capacity: number | null
+          city: string | null
+          click_count: number | null
+          cme_hours: number | null
+          cme_points: number | null
+          cme_provider: string | null
+          compliance_checked: boolean | null
+          confidence_score: number | null
+          country: string | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          description: string | null
+          description_ar: string | null
+          end_date: string
+          featured_image: string | null
+          fetched_at: string | null
+          format: string
+          gallery_images: string[] | null
+          has_cme: boolean | null
+          id: string
+          is_free: boolean | null
+          languages: string[] | null
+          moderation_flags: string[] | null
+          online_url: string | null
+          organizer: string | null
+          organizer_email: string | null
+          organizer_phone: string | null
+          organizer_website: string | null
+          price_range: string | null
+          primary_specialty_id: string | null
+          registered_count: number | null
+          registration_deadline: string | null
+          registration_required: boolean | null
+          registration_url: string | null
+          review_notes: string | null
+          save_count: number | null
+          seo_description: string | null
+          seo_title: string | null
+          share_count: number | null
+          slug: string
+          source_id: string | null
+          source_url: string | null
+          start_date: string
+          status: string
+          subspecialties: string[] | null
+          summary: string | null
+          summary_ar: string | null
+          target_audience: string[] | null
+          timezone: string
+          title: string
+          title_ar: string | null
+          updated_at: string
+          venue_address: string | null
+          venue_lat: number | null
+          venue_lng: number | null
+          venue_name: string | null
+          view_count: number | null
+        }
+        Insert: {
+          accreditation_details?: Json | null
+          accreditation_url?: string | null
+          ai_extracted_fields?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          capacity?: number | null
+          city?: string | null
+          click_count?: number | null
+          cme_hours?: number | null
+          cme_points?: number | null
+          cme_provider?: string | null
+          compliance_checked?: boolean | null
+          confidence_score?: number | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          description?: string | null
+          description_ar?: string | null
+          end_date: string
+          featured_image?: string | null
+          fetched_at?: string | null
+          format?: string
+          gallery_images?: string[] | null
+          has_cme?: boolean | null
+          id?: string
+          is_free?: boolean | null
+          languages?: string[] | null
+          moderation_flags?: string[] | null
+          online_url?: string | null
+          organizer?: string | null
+          organizer_email?: string | null
+          organizer_phone?: string | null
+          organizer_website?: string | null
+          price_range?: string | null
+          primary_specialty_id?: string | null
+          registered_count?: number | null
+          registration_deadline?: string | null
+          registration_required?: boolean | null
+          registration_url?: string | null
+          review_notes?: string | null
+          save_count?: number | null
+          seo_description?: string | null
+          seo_title?: string | null
+          share_count?: number | null
+          slug: string
+          source_id?: string | null
+          source_url?: string | null
+          start_date: string
+          status?: string
+          subspecialties?: string[] | null
+          summary?: string | null
+          summary_ar?: string | null
+          target_audience?: string[] | null
+          timezone?: string
+          title: string
+          title_ar?: string | null
+          updated_at?: string
+          venue_address?: string | null
+          venue_lat?: number | null
+          venue_lng?: number | null
+          venue_name?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          accreditation_details?: Json | null
+          accreditation_url?: string | null
+          ai_extracted_fields?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          capacity?: number | null
+          city?: string | null
+          click_count?: number | null
+          cme_hours?: number | null
+          cme_points?: number | null
+          cme_provider?: string | null
+          compliance_checked?: boolean | null
+          confidence_score?: number | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          description?: string | null
+          description_ar?: string | null
+          end_date?: string
+          featured_image?: string | null
+          fetched_at?: string | null
+          format?: string
+          gallery_images?: string[] | null
+          has_cme?: boolean | null
+          id?: string
+          is_free?: boolean | null
+          languages?: string[] | null
+          moderation_flags?: string[] | null
+          online_url?: string | null
+          organizer?: string | null
+          organizer_email?: string | null
+          organizer_phone?: string | null
+          organizer_website?: string | null
+          price_range?: string | null
+          primary_specialty_id?: string | null
+          registered_count?: number | null
+          registration_deadline?: string | null
+          registration_required?: boolean | null
+          registration_url?: string | null
+          review_notes?: string | null
+          save_count?: number | null
+          seo_description?: string | null
+          seo_title?: string | null
+          share_count?: number | null
+          slug?: string
+          source_id?: string | null
+          source_url?: string | null
+          start_date?: string
+          status?: string
+          subspecialties?: string[] | null
+          summary?: string | null
+          summary_ar?: string | null
+          target_audience?: string[] | null
+          timezone?: string
+          title?: string
+          title_ar?: string | null
+          updated_at?: string
+          venue_address?: string | null
+          venue_lat?: number | null
+          venue_lng?: number | null
+          venue_name?: string | null
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_events_primary_specialty_id_fkey"
+            columns: ["primary_specialty_id"]
+            isOneToOne: false
+            referencedRelation: "event_specialties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_events_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "event_sources"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_categories: {
         Row: {
@@ -313,6 +759,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      saved_searches: {
+        Row: {
+          alert_enabled: boolean | null
+          alert_frequency: string | null
+          created_at: string
+          id: string
+          last_alert_sent: string | null
+          name: string
+          query: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          alert_enabled?: boolean | null
+          alert_frequency?: string | null
+          created_at?: string
+          id?: string
+          last_alert_sent?: string | null
+          name: string
+          query: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          alert_enabled?: boolean | null
+          alert_frequency?: string | null
+          created_at?: string
+          id?: string
+          last_alert_sent?: string | null
+          name?: string
+          query?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {
