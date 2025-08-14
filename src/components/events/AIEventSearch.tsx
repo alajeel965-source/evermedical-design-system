@@ -350,7 +350,7 @@ export const AIEventSearch: React.FC<AIEventSearchProps> = ({
           .order('start_date', { ascending: true })
           .limit(20);
 
-        setEvents((fallbackEvents || []) as EventSearchResult[]);
+        setEvents((fallbackEvents || []) as unknown as EventSearchResult[]);
       } catch (fallbackError) {
         console.error('Fallback search error:', fallbackError);
       }

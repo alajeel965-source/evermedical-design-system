@@ -102,9 +102,13 @@ export interface TranslationKey {
         subspecialty: string;
         date: string;
         format: string;
-        cmeCredits: string;
+          cmeCredits: string;
+        };
+        specialties: {
+          title: string;
+          subtitle: string;
+        };
       };
-    };
     networking: {
       title: string;
       subtitle: string;
@@ -239,6 +243,10 @@ export const translations: Record<"en" | "ar", TranslationKey> = {
           format: "Format",
           cmeCredits: "CME Credits",
         },
+        specialties: {
+          title: "Medical Specialties",
+          subtitle: "Find events by specialty",
+        },
       },
       networking: {
         title: "Professional Networking",
@@ -371,6 +379,10 @@ export const translations: Record<"en" | "ar", TranslationKey> = {
           date: "التاريخ",
           format: "الشكل",
           cmeCredits: "اعتمادات CME",
+        },
+        specialties: {
+          title: "التخصصات الطبية",
+          subtitle: "ابحث عن الفعاليات حسب التخصص",
         },
       },
       networking: {

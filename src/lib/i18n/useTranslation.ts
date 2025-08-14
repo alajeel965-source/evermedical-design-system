@@ -28,5 +28,5 @@ export function useTranslation() {
     return typeof value === 'string' ? value : key;
   };
 
-  return { t, language };
+  return { t, language, locale: language };
 }

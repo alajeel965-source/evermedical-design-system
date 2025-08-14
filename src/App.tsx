@@ -20,6 +20,7 @@ import DesignSystem from "./pages/DesignSystem";
 import AIAgent from "./pages/AIAgent";
 import AIAgentSources from "./pages/AIAgentSources";
 import AIAgentReview from "./pages/AIAgentReview";
+import { SpecialtyLanding } from "./pages/SpecialtyLanding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,8 @@ const App = () => (
           <Route path="/legal/privacy" element={<Privacy />} />
           <Route path="/legal/terms" element={<Terms />} />
           <Route path="/design-system" element={<DesignSystem />} />
+          <Route path="/specialty/:slug" element={<SpecialtyLanding />} />
+          <Route path="/ar/specialty/:slug" element={<SpecialtyLanding />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
