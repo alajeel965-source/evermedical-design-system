@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Search, Filter, ChevronDown, User, LogOut, Settings, Menu, Globe } from "lucide-react";
+import { Search, Filter, ChevronDown, User, LogOut, Settings, Menu, Globe, Calendar, Bookmark, Receipt } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -9,12 +9,14 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useI18n, useTranslation } from "@/lib/i18n";
+import { useSavedRFQsCount } from "@/hooks/useSavedRFQsCount";
 
 export function TopNav() {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { language, setLanguage, isRTL } = useI18n();
   const { t } = useTranslation();
+  const { displayCount, hasCount } = useSavedRFQsCount();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,6 +33,12 @@ export function TopNav() {
   ];
 
   const isActiveLink = (href: string) => location.pathname === href;
+  
+  // Analytics helper
+  const trackNavClick = (action: string) => {
+    // TODO: Implement analytics tracking
+    console.log(`Analytics: ${action}`);
+  };
 
   return (
     <header 
@@ -193,15 +201,73 @@ export function TopNav() {
               >
                 <DropdownMenuLabel>{t("common.labels.profile")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem role="menuitem" className="focus:bg-accent focus:text-accent-foreground">
-                  <User className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
-                  <span>{t("common.labels.profile")}</span>
-                </DropdownMenuItem>
+                
+                <Link to="/profile" onClick={() => trackNavClick('nav_profile_click')}>
+                  <DropdownMenuItem 
+                    role="menuitem" 
+                    className={cn(
+                      "focus:bg-accent focus:text-accent-foreground",
+                      isActiveLink("/profile") && "bg-accent text-accent-foreground"
+                    )}
+                  >
+                    <User className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
+                    <span>{t("common.labels.profile")}</span>
+                  </DropdownMenuItem>
+                </Link>
+
+                <Link to="/past-events" onClick={() => trackNavClick('nav_past_events_click')}>
+                  <DropdownMenuItem 
+                    role="menuitem" 
+                    className={cn(
+                      "focus:bg-accent focus:text-accent-foreground",
+                      isActiveLink("/past-events") && "bg-accent text-accent-foreground"
+                    )}
+                  >
+                    <Calendar className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
+                    <span>Past Events</span>
+                  </DropdownMenuItem>
+                </Link>
+
+                <Link to="/saved-rfqs" onClick={() => trackNavClick('nav_saved_rfqs_click')}>
+                  <DropdownMenuItem 
+                    role="menuitem" 
+                    className={cn(
+                      "focus:bg-accent focus:text-accent-foreground",
+                      isActiveLink("/saved-rfqs") && "bg-accent text-accent-foreground"
+                    )}
+                  >
+                    <div className="flex items-center w-full">
+                      <Bookmark className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
+                      <span className="flex-1">Saved RFQs</span>
+                      {hasCount && (
+                        <Badge variant="secondary" className="ml-auto text-xs">
+                          {displayCount}
+                        </Badge>
+                      )}
+                    </div>
+                  </DropdownMenuItem>
+                </Link>
+
+                <Link to="/billing-history" onClick={() => trackNavClick('nav_billing_history_click')}>
+                  <DropdownMenuItem 
+                    role="menuitem" 
+                    className={cn(
+                      "focus:bg-accent focus:text-accent-foreground",
+                      isActiveLink("/billing-history") && "bg-accent text-accent-foreground"
+                    )}
+                  >
+                    <Receipt className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
+                    <span>Billing History</span>
+                  </DropdownMenuItem>
+                </Link>
+
+                <DropdownMenuSeparator />
+                
                 <DropdownMenuItem role="menuitem" className="focus:bg-accent focus:text-accent-foreground">
                   <Settings className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
                   <span>{t("common.labels.settings")}</span>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
+                
                 <DropdownMenuItem role="menuitem" className="focus:bg-accent focus:text-accent-foreground">
                   <LogOut className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
                   <span>{t("common.labels.logout")}</span>
@@ -286,21 +352,74 @@ export function TopNav() {
                     </div>
                     
                     <div className="space-y-sm">
-                      <Button variant="ghost" className={cn(
-                        "w-full",
-                        isRTL ? "justify-end" : "justify-start"
-                      )}>
-                        <Settings className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
-                        {t("common.labels.settings")}
-                      </Button>
-                      
-                      <Button variant="ghost" className={cn(
-                        "w-full",
-                        isRTL ? "justify-end" : "justify-start"
-                      )}>
-                        <LogOut className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
-                        {t("common.labels.logout")}
-                      </Button>
+                      <Link to="/profile" onClick={() => trackNavClick('nav_profile_click')}>
+                        <Button variant="ghost" className={cn(
+                          "w-full",
+                          isRTL ? "justify-end" : "justify-start",
+                          isActiveLink("/profile") && "bg-accent text-accent-foreground"
+                        )}>
+                          <User className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                          {t("common.labels.profile")}
+                        </Button>
+                      </Link>
+
+                      <Link to="/past-events" onClick={() => trackNavClick('nav_past_events_click')}>
+                        <Button variant="ghost" className={cn(
+                          "w-full",
+                          isRTL ? "justify-end" : "justify-start",
+                          isActiveLink("/past-events") && "bg-accent text-accent-foreground"
+                        )}>
+                          <Calendar className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                          Past Events
+                        </Button>
+                      </Link>
+
+                      <Link to="/saved-rfqs" onClick={() => trackNavClick('nav_saved_rfqs_click')}>
+                        <Button variant="ghost" className={cn(
+                          "w-full",
+                          isRTL ? "justify-end" : "justify-start",
+                          isActiveLink("/saved-rfqs") && "bg-accent text-accent-foreground"
+                        )}>
+                          <div className="flex items-center w-full">
+                            <Bookmark className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                            <span className="flex-1">Saved RFQs</span>
+                            {hasCount && (
+                              <Badge variant="secondary" className="ml-auto text-xs">
+                                {displayCount}
+                              </Badge>
+                            )}
+                          </div>
+                        </Button>
+                      </Link>
+
+                      <Link to="/billing-history" onClick={() => trackNavClick('nav_billing_history_click')}>
+                        <Button variant="ghost" className={cn(
+                          "w-full",
+                          isRTL ? "justify-end" : "justify-start",
+                          isActiveLink("/billing-history") && "bg-accent text-accent-foreground"
+                        )}>
+                          <Receipt className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                          Billing History
+                        </Button>
+                      </Link>
+
+                      <div className="border-t pt-sm">
+                        <Button variant="ghost" className={cn(
+                          "w-full",
+                          isRTL ? "justify-end" : "justify-start"
+                        )}>
+                          <Settings className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                          {t("common.labels.settings")}
+                        </Button>
+                        
+                        <Button variant="ghost" className={cn(
+                          "w-full",
+                          isRTL ? "justify-end" : "justify-start"
+                        )}>
+                          <LogOut className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                          {t("common.labels.logout")}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
