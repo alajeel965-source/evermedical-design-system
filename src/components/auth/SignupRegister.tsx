@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Eye, EyeOff, Apple, Linkedin, Globe, Check, X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { getCountriesByLanguage, type Country } from '@/lib/countries';
 
 // Types
 interface FormData {
@@ -16,7 +19,8 @@ interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
-  country: string;
+  country: string; // This will store the country code
+  countryName?: string; // For display purposes
   role: string;
   specialty: string;
   phone: string;
@@ -37,7 +41,7 @@ interface RoleOption {
 }
 
 interface SignupRegisterProps {
-  onSubmit?: (formData: FormData & { subscriptionPlan?: string }) => Promise<void>;
+  onSubmit?: (formData: FormData & { subscriptionPlan?: string; countryCode?: string }) => Promise<void>;
   onOAuth?: (provider: 'apple' | 'google' | 'linkedin') => Promise<void>;
   onSuccess?: (next: 'verifyEmail' | 'browseEvents' | 'completeProfile' | 'payment') => void;
   locale?: 'en' | 'ar';
@@ -64,6 +68,7 @@ const translations = {
     password: 'Password',
     confirmPassword: 'Confirm Password',
     country: 'Country',
+    selectCountry: 'Select your country',
     role: 'Role',
     specialty: 'Specialty',
     phone: 'Phone (Optional)',
@@ -76,6 +81,7 @@ const translations = {
     forgotPassword: 'Forgot password?',
     passwordStrength: 'Password Strength',
     language: 'Language',
+    search: 'Search',
     selectRole: 'Select your role',
     roles: {
       medicalPersonnel: 'Medical Personnel',
@@ -97,11 +103,6 @@ const translations = {
       'Gastroenterology', 'Neurology', 'Oncology', 'Orthopedics',
       'Pediatrics', 'Psychiatry', 'Radiology', 'Surgery'
     ],
-    countries: [
-      'United States', 'United Kingdom', 'Canada', 'Australia',
-      'Germany', 'France', 'Saudi Arabia', 'UAE', 'Egypt',
-      'Jordan', 'Lebanon', 'Morocco', 'India', 'Singapore'
-    ],
     success: {
       title: 'Welcome to EverMedical!',
       subtitle: 'Your account has been created successfully.',
@@ -114,7 +115,8 @@ const translations = {
       invalidEmail: 'Please enter a valid email address',
       passwordMismatch: 'Passwords do not match',
       weakPassword: 'Password must be at least 8 characters with upper, lower, and number',
-      termsRequired: 'You must agree to the terms to continue'
+      termsRequired: 'You must agree to the terms to continue',
+      invalidCountry: 'Please select a valid country'
     }
   },
   ar: {
@@ -125,6 +127,7 @@ const translations = {
     password: 'كلمة المرور',
     confirmPassword: 'تأكيد كلمة المرور',
     country: 'البلد',
+    selectCountry: 'اختر بلدك',
     role: 'الدور',
     specialty: 'التخصص',
     phone: 'الهاتف (اختياري)',
@@ -158,11 +161,6 @@ const translations = {
       'أمراض الجهاز الهضمي', 'الأمراض العصبية', 'الأورام', 'العظام',
       'طب الأطفال', 'الطب النفسي', 'الأشعة', 'الجراحة'
     ],
-    countries: [
-      'الولايات المتحدة', 'المملكة المتحدة', 'كندا', 'أستراليا',
-      'ألمانيا', 'فرنسا', 'المملكة العربية السعودية', 'الإمارات العربية المتحدة', 'مصر',
-      'الأردن', 'لبنان', 'المغرب', 'الهند', 'سنغافورة'
-    ],
     success: {
       title: 'مرحباً بك في EverMedical!',
       subtitle: 'تم إنشاء حسابك بنجاح.',
@@ -175,7 +173,8 @@ const translations = {
       invalidEmail: 'يرجى إدخال بريد إلكتروني صحيح',
       passwordMismatch: 'كلمات المرور غير متطابقة',
       weakPassword: 'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل مع أحرف كبيرة وصغيرة ورقم',
-      termsRequired: 'يجب الموافقة على الشروط للمتابعة'
+      termsRequired: 'يجب الموافقة على الشروط للمتابعة',
+      invalidCountry: 'يرجى اختيار بلد صحيح'
     }
   }
 };
@@ -230,9 +229,21 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
   const [success, setSuccess] = useState(false);
   const [specialtySearch, setSpecialtySearch] = useState('');
   const [showInviteCode, setShowInviteCode] = useState(false);
+  const [countryOpen, setCountryOpen] = useState(false);
 
   const t = translations[currentLocale];
   const isRTL = currentLocale === 'ar';
+
+  // Get sorted countries for current language
+  const sortedCountries = useMemo(() => {
+    return getCountriesByLanguage(currentLocale);
+  }, [currentLocale]);
+
+  // Get country display name
+  const getCountryDisplayName = (countryCode: string): string => {
+    const country = sortedCountries.find(c => c.code === countryCode);
+    return country ? (currentLocale === 'ar' ? country.name_ar : country.name_en) : '';
+  };
 
   // Role options with subscription information
   const roleOptions: RoleOption[] = [
@@ -338,7 +349,20 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
         console.log('Registration attempt:', { ...formData, subscriptionPlan });
         
         if (onSubmit) {
-          await onSubmit({ ...formData, subscriptionPlan });
+          await onSubmit({ 
+            ...formData, 
+            subscriptionPlan,
+            countryCode: formData.country 
+          });
+        }
+
+        // Analytics tracking for country selection
+        if (formData.country && formData.role) {
+          console.log('Analytics: country_selected', {
+            country_code: formData.country,
+            country_name: getCountryDisplayName(formData.country),
+            role: formData.role
+          });
         }
       }
       
@@ -385,6 +409,14 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
       if (value !== 'superAdmin') {
         setFormData(prev => ({ ...prev, inviteCode: '' }));
       }
+    }
+
+    // Update country name for display
+    if (field === 'country') {
+      setFormData(prev => ({ 
+        ...prev, 
+        countryName: getCountryDisplayName(value)
+      }));
     }
   };
 
@@ -708,22 +740,54 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
               <div className="grid grid-cols-2 gap-sm">
                 <div className="space-y-xs">
                   <Label htmlFor="country">{t.country} *</Label>
-                  <Select
-                    value={formData.country}
-                    onValueChange={(value) => updateFormData('country', value)}
-                    disabled={isLoading}
-                  >
-                    <SelectTrigger className={cn(errors.country && "border-destructive")}>
-                      <SelectValue placeholder={t.country} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {t.countries.map((country) => (
-                        <SelectItem key={country} value={country}>
-                          {country}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Popover open={countryOpen} onOpenChange={setCountryOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={countryOpen}
+                        className={cn(
+                          "w-full justify-between",
+                          !formData.country && "text-muted-foreground",
+                          errors.country && "border-destructive"
+                        )}
+                        disabled={isLoading}
+                        data-analytics="auth-field-country"
+                      >
+                        {formData.country ? getCountryDisplayName(formData.country) : t.selectCountry}
+                        <Globe className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0" align="start">
+                      <Command className="w-full">
+                        <CommandInput 
+                          placeholder={`Search ${currentLocale === 'ar' ? 'بلد' : 'country'}...`}
+                          className="h-9" 
+                        />
+                        <CommandList className="max-h-[200px] overflow-auto">
+                          <CommandEmpty>No country found.</CommandEmpty>
+                          <CommandGroup>
+                            {sortedCountries.map((country) => (
+                              <CommandItem
+                                key={country.code}
+                                value={currentLocale === 'ar' ? country.name_ar : country.name_en}
+                                onSelect={() => {
+                                  updateFormData('country', country.code);
+                                  setCountryOpen(false);
+                                }}
+                                className="cursor-pointer"
+                              >
+                                {currentLocale === 'ar' ? country.name_ar : country.name_en}
+                                <span className="ml-auto text-xs text-muted-foreground">
+                                  {country.code}
+                                </span>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   {errors.country && (
                     <p className="text-destructive text-medical-sm" role="alert">
                       {errors.country}
