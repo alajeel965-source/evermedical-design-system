@@ -103,6 +103,21 @@ export default function Pricing() {
     }
   ];
 
+  const handlePlanSelect = (planType: string) => {
+    const planParams = new URLSearchParams();
+    
+    if (planType === 'Medical Institute Buyers') {
+      planParams.set('plan', 'free');
+    } else if (planType === 'Medical Sellers') {
+      // Default to yearly for sellers
+      planParams.set('plan', 'sellers-yearly');
+    } else if (planType === 'Medical Personnel') {
+      planParams.set('plan', 'personnel');
+    }
+    
+    window.location.href = `/auth?${planParams.toString()}`;
+  };
+
   return (
     <AppShell>
       <div className="min-h-screen bg-gradient-to-b from-background via-background/95 to-surface">
@@ -202,9 +217,7 @@ export default function Pricing() {
                         ? 'bg-gradient-to-r from-muted to-muted/80 text-foreground hover:from-muted/80 hover:to-muted/60'
                         : 'bg-gradient-to-r from-foreground to-foreground/90 text-background hover:from-foreground/90 hover:to-foreground/80'
                     }`}
-                    onClick={() => {
-                      alert(`Selected ${plan.title} plan - Integration coming soon!`);
-                    }}
+                    onClick={() => handlePlanSelect(plan.title)}
                   >
                     {plan.ctaText}
                   </button>

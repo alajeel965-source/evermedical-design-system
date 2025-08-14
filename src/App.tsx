@@ -12,6 +12,7 @@ import Events from "./pages/Events";
 import Networking from "./pages/Networking";
 import RFQs from "./pages/RFQs";
 import Pricing from "./pages/Pricing";
+import Auth from "./pages/Auth";
 import Dashboards from "./pages/Dashboards";
 import About from "./pages/company/About";
 import Privacy from "./pages/legal/Privacy";
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/networking" element={<Networking />} />
           <Route path="/rfqs" element={<RFQs />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/dashboards" element={<Dashboards />} />
           <Route path="/ai-agent" element={<AIAgent />} />
           <Route path="/ai-agent/sources" element={<AIAgentSources />} />

@@ -663,6 +663,14 @@ export type Database = {
           primary_specialty_slug: string | null
           profile_type: string
           specialty: string | null
+          subscription_currency: string | null
+          subscription_end_date: string | null
+          subscription_plan:
+            | Database["public"]["Enums"]["subscription_plan"]
+            | null
+          subscription_price: number | null
+          subscription_start_date: string | null
+          subscription_status: string | null
           subspecialties: string[] | null
           title: string | null
           updated_at: string | null
@@ -681,6 +689,14 @@ export type Database = {
           primary_specialty_slug?: string | null
           profile_type: string
           specialty?: string | null
+          subscription_currency?: string | null
+          subscription_end_date?: string | null
+          subscription_plan?:
+            | Database["public"]["Enums"]["subscription_plan"]
+            | null
+          subscription_price?: number | null
+          subscription_start_date?: string | null
+          subscription_status?: string | null
           subspecialties?: string[] | null
           title?: string | null
           updated_at?: string | null
@@ -699,6 +715,14 @@ export type Database = {
           primary_specialty_slug?: string | null
           profile_type?: string
           specialty?: string | null
+          subscription_currency?: string | null
+          subscription_end_date?: string | null
+          subscription_plan?:
+            | Database["public"]["Enums"]["subscription_plan"]
+            | null
+          subscription_price?: number | null
+          subscription_start_date?: string | null
+          subscription_status?: string | null
           subspecialties?: string[] | null
           title?: string | null
           updated_at?: string | null
@@ -878,13 +902,27 @@ export type Database = {
           verified: boolean | null
         }
       }
+      handle_subscription_signup: {
+        Args: {
+          plan_price?: number
+          plan_type: Database["public"]["Enums"]["subscription_plan"]
+          user_email: string
+          user_name: string
+          user_password: string
+        }
+        Returns: Json
+      }
       validate_specialty_slug: {
         Args: { slug: string }
         Returns: boolean
       }
     }
     Enums: {
-      [_ in never]: never
+      subscription_plan:
+        | "medical_institute_buyers"
+        | "medical_sellers_monthly"
+        | "medical_sellers_yearly"
+        | "medical_personnel"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1011,6 +1049,13 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      subscription_plan: [
+        "medical_institute_buyers",
+        "medical_sellers_monthly",
+        "medical_sellers_yearly",
+        "medical_personnel",
+      ],
+    },
   },
 } as const
