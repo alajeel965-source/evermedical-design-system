@@ -4,6 +4,7 @@ import { ProductCard } from "@/components/templates/cards/ProductCard";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pagination } from "@/components/ui/pagination";
 import { EmptyState } from "@/components/shared/EmptyState";
+import { Button } from "@/components/ui/button";
 
 export default function Marketplace() {
   const [activeTab, setActiveTab] = useState("all");
@@ -20,29 +21,32 @@ export default function Marketplace() {
 
   const filters = [
     {
-      title: "Category",
+      title: "Specialty",
       items: [
-        { value: "ultrasound", label: "Ultrasound", count: 45 },
-        { value: "mri", label: "MRI", count: 23 },
-        { value: "xray", label: "X-Ray", count: 67 },
-        { value: "surgical", label: "Surgical Tools", count: 156 },
+        { value: "cardiology", label: "Cardiology", count: 45 },
+        { value: "radiology", label: "Radiology", count: 67 },
+        { value: "surgery", label: "Surgery", count: 156 },
+        { value: "oncology", label: "Oncology", count: 23 },
+        { value: "pediatrics", label: "Pediatrics", count: 34 },
       ],
     },
     {
-      title: "Price Range",
+      title: "Region",
       items: [
-        { value: "under-1k", label: "Under $1,000", count: 78 },
-        { value: "1k-10k", label: "$1,000 - $10,000", count: 134 },
-        { value: "10k-50k", label: "$10,000 - $50,000", count: 89 },
-        { value: "over-50k", label: "Over $50,000", count: 34 },
+        { value: "north-america", label: "North America", count: 234 },
+        { value: "europe", label: "Europe", count: 189 },
+        { value: "asia-pacific", label: "Asia Pacific", count: 156 },
+        { value: "middle-east", label: "Middle East", count: 78 },
+        { value: "africa", label: "Africa", count: 45 },
       ],
     },
     {
-      title: "Vendor Rating",
+      title: "Certification",
       items: [
-        { value: "5-star", label: "5 Stars", count: 45 },
-        { value: "4-star", label: "4+ Stars", count: 123 },
-        { value: "3-star", label: "3+ Stars", count: 78 },
+        { value: "fda-approved", label: "FDA Approved", count: 167 },
+        { value: "ce-marked", label: "CE Marked", count: 145 },
+        { value: "iso-certified", label: "ISO Certified", count: 123 },
+        { value: "verified-vendor", label: "Verified Vendor", count: 89 },
       ],
     },
   ];
@@ -111,11 +115,26 @@ export default function Marketplace() {
       view={view}
       onViewChange={setView}
     >
-      {view === "grid" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
-          {products.map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
+      {products.length === 0 ? (
+        <EmptyState
+          title="No products found"
+          description="Try adjusting your filters or search terms"
+          action={
+            <Button variant="outline" onClick={() => setSelectedFilters({})}>
+              Clear filters
+            </Button>
+          }
+        />
+      ) : view === "grid" ? (
+        <div className="space-y-lg">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+            {products.map((product) => (
+              <ProductCard key={product.id} {...product} />
+            ))}
+          </div>
+          <div className="flex justify-center">
+            <Pagination />
+          </div>
         </div>
       ) : (
         <div className="space-y-lg">
@@ -141,6 +160,9 @@ export default function Marketplace() {
               ))}
             </TableBody>
           </Table>
+          <div className="flex justify-center">
+            <Pagination />
+          </div>
         </div>
       )}
     </PageLayout>

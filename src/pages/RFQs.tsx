@@ -2,11 +2,26 @@ import { useState } from "react";
 import { PageLayout } from "@/components/templates/PageLayout";
 import { RFQCard } from "@/components/templates/cards/RFQCard";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Pagination } from "@/components/ui/pagination";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { Plus } from "lucide-react";
 
 export default function RFQs() {
   const [activeTab, setActiveTab] = useState("browse");
   const [searchValue, setSearchValue] = useState("");
   const [view, setView] = useState<"grid" | "table">("grid");
+  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
+
+  const handleFilterChange = (groupTitle: string, value: string, checked: boolean) => {
+    setSelectedFilters(prev => ({
+      ...prev,
+      [groupTitle]: checked
+        ? [...(prev[groupTitle] || []), value]
+        : (prev[groupTitle] || []).filter(f => f !== value)
+    }));
+  };
 
   const tabs = [
     { value: "browse", label: "Browse RFQs" },
@@ -17,29 +32,22 @@ export default function RFQs() {
 
   const filters = [
     {
-      title: "Category",
+      title: "Status",
       items: [
-        { value: "equipment", label: "Medical Equipment", count: 23 },
-        { value: "supplies", label: "Medical Supplies", count: 45 },
-        { value: "services", label: "Services", count: 18 },
-        { value: "pharmaceuticals", label: "Pharmaceuticals", count: 12 },
+        { value: "open", label: "Open", count: 45 },
+        { value: "in-review", label: "In Review", count: 23 },
+        { value: "closed", label: "Closed", count: 18 },
+        { value: "draft", label: "Draft", count: 12 },
       ],
     },
     {
-      title: "Urgency",
+      title: "Region",
       items: [
-        { value: "high", label: "High Priority", count: 8 },
-        { value: "medium", label: "Medium Priority", count: 34 },
-        { value: "low", label: "Low Priority", count: 56 },
-      ],
-    },
-    {
-      title: "Budget Range",
-      items: [
-        { value: "under-5k", label: "Under $5,000", count: 28 },
-        { value: "5k-25k", label: "$5,000 - $25,000", count: 34 },
-        { value: "25k-100k", label: "$25,000 - $100,000", count: 19 },
-        { value: "over-100k", label: "Over $100,000", count: 7 },
+        { value: "north-america", label: "North America", count: 34 },
+        { value: "europe", label: "Europe", count: 28 },
+        { value: "asia-pacific", label: "Asia Pacific", count: 19 },
+        { value: "middle-east", label: "Middle East", count: 15 },
+        { value: "africa", label: "Africa", count: 8 },
       ],
     },
   ];
@@ -94,43 +102,85 @@ export default function RFQs() {
       searchValue={searchValue}
       onSearchChange={setSearchValue}
       filters={filters}
+      selectedFilters={selectedFilters}
+      onFilterChange={handleFilterChange}
       view={view}
       onViewChange={setView}
     >
-      {view === "grid" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
-          {rfqs.map((rfq) => (
-            <RFQCard key={rfq.id} {...rfq} />
-          ))}
+      <div className="flex gap-lg">
+        <div className="flex-1">
+          {rfqs.length === 0 ? (
+            <EmptyState
+              title="No RFQs found"
+              description="Try adjusting your filters or search terms"
+              action={
+                <Button variant="outline" onClick={() => setSelectedFilters({})}>
+                  Clear filters
+                </Button>
+              }
+            />
+          ) : view === "grid" ? (
+            <div className="space-y-lg">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-lg">
+                {rfqs.map((rfq) => (
+                  <RFQCard key={rfq.id} {...rfq} />
+                ))}
+              </div>
+              <div className="flex justify-center">
+                <Pagination />
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-lg">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>RFQ Title</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Budget</TableHead>
+                    <TableHead>Deadline</TableHead>
+                    <TableHead>Responses</TableHead>
+                    <TableHead>Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {rfqs.map((rfq) => (
+                    <TableRow key={rfq.id}>
+                      <TableCell className="font-medium">{rfq.title}</TableCell>
+                      <TableCell>{rfq.category}</TableCell>
+                      <TableCell>{rfq.budget}</TableCell>
+                      <TableCell>{rfq.deadline}</TableCell>
+                      <TableCell>{rfq.responseCount}</TableCell>
+                      <TableCell>{rfq.isPublic ? "Public" : "Private"}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <div className="flex justify-center">
+                <Pagination />
+              </div>
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="space-y-lg">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>RFQ Title</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Budget</TableHead>
-                <TableHead>Deadline</TableHead>
-                <TableHead>Responses</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rfqs.map((rfq) => (
-                <TableRow key={rfq.id}>
-                  <TableCell className="font-medium">{rfq.title}</TableCell>
-                  <TableCell>{rfq.category}</TableCell>
-                  <TableCell>{rfq.budget}</TableCell>
-                  <TableCell>{rfq.deadline}</TableCell>
-                  <TableCell>{rfq.responseCount}</TableCell>
-                  <TableCell>{rfq.isPublic ? "Public" : "Private"}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+        
+        {/* Right rail */}
+        <div className="hidden lg:block w-80">
+          <div className="sticky top-24">
+            <Card className="rounded-medical-md shadow-soft">
+              <CardContent className="p-lg space-y-md">
+                <h3 className="font-semibold text-heading text-medical-lg">Create New RFQ</h3>
+                <p className="text-body text-medical-sm">
+                  Submit a request for quotation to connect with verified suppliers.
+                </p>
+                <Button className="w-full" size="lg">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create RFQ
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      )}
+      </div>
     </PageLayout>
   );
 }
