@@ -1,169 +1,244 @@
-import { useState } from "react";
 import { AppShell } from "@/components/shared/AppShell";
 import { PricingCard } from "@/components/templates/cards/PricingCard";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Heart, Building, Users, GraduationCap, Stethoscope, Award, Globe, ShoppingCart, TrendingUp, Calendar, Shield, Network } from "lucide-react";
 
 export default function Pricing() {
-  const [billingPeriod, setBillingPeriod] = useState("monthly");
-
   const pricingPlans = [
     {
-      title: "Individual",
-      price: billingPeriod === "monthly" ? "$29" : "$290",
-      period: billingPeriod === "monthly" ? "month" : "year",
-      description: "Perfect for individual healthcare practitioners",
+      title: "Medical Institute Buyers",
+      subtitle: "Hospitals, Clinics, Labs, Universities, NGOs",
+      price: "Free",
+      period: "",
+      description: "Complete procurement solution for medical institutions",
+      icon: Building,
       features: [
-        "Personal marketplace access",
-        "Basic RFQ submissions",
-        "Community networking",
-        "Standard support",
-        "Basic analytics",
+        "Browse and compare products from global verified suppliers",
+        "Post bulk RFQs (Requests for Quotation)",
+        "Negotiate directly with sellers",
+        "Invite team members to manage purchases",
+        "Track quote history and orders",
+        "Access special institutional offers and bulk pricing"
       ],
-      ctaText: "Start Free Trial",
+      ctaText: "Join Free",
+      highlight: "Always Free",
     },
     {
-      title: "Professional",
-      price: billingPeriod === "monthly" ? "$99" : "$100",
-      period: billingPeriod === "monthly" ? "month" : "year",
-      description: "Ideal for medical practices and small departments",
+      title: "Medical Sellers",
+      subtitle: "Manufacturers, Distributors, Exporters",
+      price: "$100",
+      period: "month",
+      yearlyPrice: "$1,000",
+      description: "Grow your medical business with qualified global leads",
+      icon: ShoppingCart,
       features: [
-        "Everything in Individual",
-        "Up to 10 team members",
-        "Advanced marketplace features",
-        "Priority RFQ processing",
-        "Event management tools",
-        "Enhanced analytics",
-        "Priority support",
+        "List unlimited products and company profile",
+        "Generate qualified sales leads from buyers globally",
+        "Respond to RFQs in real time",
+        "Access buyer insights and analytics",
+        "Priority listing in search results",
+        "Direct chat and email with buyers",
+        "Support for managing international logistics discussions"
       ],
       isPopular: true,
-      ctaText: "Start Free Trial",
-      savings: billingPeriod === "annual" ? "Save $1,088/year" : undefined,
+      ctaText: "Subscribe Now",
+      yearlyDiscount: "Save $200/year",
     },
     {
-      title: "Hospital & Organizers",
-      price: "Custom",
-      period: "",
-      description: "Comprehensive solution for large healthcare organizations",
+      title: "Medical Personnel",
+      subtitle: "Doctors, Nurses, Pharmacists, Medical Students",
+      price: "$100",
+      originalPrice: "$150",
+      period: "year",
+      description: "Advanced your medical career with CME and networking",
+      icon: Stethoscope,
       features: [
-        "Everything in Professional",
-        "Unlimited team members",
-        "White-label platform",
-        "Custom integrations",
-        "Dedicated account manager",
-        "Advanced procurement workflows",
-        "Multi-location management",
-        "24/7 premium support",
-        "Custom compliance tools",
+        "Access to CME-accredited medical conferences",
+        "CME-accredited workshops and webinars",
+        "CME-accredited exhibitions",
+        "Build and promote your professional profile to potential hospitals",
+        "Personalized event feed based on specialty and subspecialty",
+        "Track CME points and download certificates",
+        "Access a global network of verified suppliers",
+        "Compare and request quotes for medical equipment and supplies"
       ],
-      ctaText: "Contact Sales",
+      ctaText: "Subscribe Now",
+      highlight: "Special Offer",
     },
   ];
 
   const faqs = [
     {
-      question: "What's included in the free trial?",
-      answer: "All plans include a 14-day free trial with full access to features. No credit card required to start."
+      question: "How does the free plan for Medical Institute Buyers work?",
+      answer: "Medical institutions can access our platform completely free to browse suppliers, post RFQs, and manage their procurement. This includes full access to verified suppliers and bulk pricing opportunities."
     },
     {
-      question: "Can I switch plans at any time?",
-      answer: "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately and billing is prorated."
+      question: "What's the difference between monthly and yearly pricing for sellers?",
+      answer: "Medical sellers can choose $100/month or save with our annual plan at $1,000/year, offering significant cost savings for committed partners."
     },
     {
-      question: "What payment methods do you accept?",
-      answer: "We accept all major credit cards, PayPal, and can arrange invoicing for enterprise customers."
+      question: "Is the Medical Personnel plan really discounted?",
+      answer: "Yes! We've reduced the price from $150 to $100 per year to make CME and professional development more accessible to healthcare professionals."
     },
     {
-      question: "Is there a discount for annual billing?",
-      answer: "Yes! Annual billing saves you approximately 17% compared to monthly billing across all plans."
+      question: "Are the CME events really accredited?",
+      answer: "Absolutely. All conferences, workshops, webinars, and exhibitions on our platform are fully CME-accredited, allowing you to earn and track continuing education credits."
     },
     {
-      question: "Do you offer custom pricing for large organizations?",
-      answer: "Absolutely. For hospitals and large healthcare systems, we offer custom pricing and features. Contact our sales team for a personalized quote."
+      question: "Can Medical Personnel access the marketplace features?",
+      answer: "Yes! Medical Personnel subscribers get access to browse suppliers and request quotes for medical equipment and supplies, in addition to all the CME and networking features."
     },
     {
-      question: "What kind of support is included?",
-      answer: "All plans include email support. Professional plans get priority support, and Hospital plans receive dedicated account management with 24/7 premium support."
+      question: "How does team management work for Medical Institute Buyers?",
+      answer: "Institute buyers can invite unlimited team members to collaborate on procurement decisions, track orders, and manage supplier relationships at no additional cost."
     },
     {
-      question: "Can I cancel my subscription anytime?",
-      answer: "Yes, you can cancel your subscription at any time. There are no cancellation fees, and you'll retain access until the end of your billing period."
+      question: "What kind of analytics do Medical Sellers get?",
+      answer: "Sellers receive comprehensive buyer insights, lead analytics, RFQ response tracking, and performance metrics to optimize their sales strategy."
     },
     {
-      question: "Is my data secure and compliant?",
-      answer: "Yes, we're HIPAA compliant and use enterprise-grade security. All data is encrypted in transit and at rest, with regular security audits."
+      question: "Is international logistics support included?",
+      answer: "Yes, Medical Sellers get support for managing international logistics discussions, helping facilitate global trade in medical supplies and equipment."
     }
   ];
 
   return (
     <AppShell>
-      <div className="min-h-screen bg-surface">
+      <div className="min-h-screen bg-gradient-to-b from-background via-background/95 to-surface">
         <div className="container mx-auto px-lg py-2xl">
           <div className="text-center space-y-lg mb-2xl">
-            <h1 className="text-heading font-bold text-medical-4xl">Pricing Plans</h1>
-            <p className="text-body text-medical-lg max-w-2xl mx-auto">
-              Choose the plan that best fits your medical organization's needs
-            </p>
-            
-            <div className="flex justify-center">
-              <Tabs value={billingPeriod} onValueChange={setBillingPeriod} className="w-auto">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="monthly">Monthly</TabsTrigger>
-                  <TabsTrigger value="annual">
-                    Annual
-                    <span className="ml-2 text-xs bg-success text-success-foreground px-1.5 py-0.5 rounded">
-                      Save 17%
-                    </span>
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
+              <Heart className="h-4 w-4" />
+              EverMedical Pricing Plans
             </div>
+            <h1 className="text-heading font-bold text-medical-5xl bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              Choose Your Perfect Plan
+            </h1>
+            <p className="text-body text-medical-lg max-w-3xl mx-auto leading-relaxed">
+              Join thousands of medical professionals, institutions, and suppliers advancing healthcare globally through our comprehensive platform
+            </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-lg max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {pricingPlans.map((plan, index) => (
-              <div key={index} className="relative">
+              <div key={index} className="relative group">
                 {plan.isPopular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <Badge className="bg-primary text-primary-foreground px-4 py-1">
+                    <Badge className="bg-gradient-to-r from-primary to-primary/80 text-white px-6 py-2 shadow-lg">
+                      <TrendingUp className="h-3 w-3 mr-1" />
                       Most Popular
                     </Badge>
                   </div>
                 )}
-                <PricingCard
-                  {...plan}
-                  onSelect={() => {
-                    // Stub checkout button
-                    alert(`Selected ${plan.title} plan - Checkout integration pending`);
-                  }}
-                />
+                {plan.highlight && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                    <Badge className="bg-gradient-to-r from-success to-success/80 text-white px-6 py-2 shadow-lg">
+                      <Award className="h-3 w-3 mr-1" />
+                      {plan.highlight}
+                    </Badge>
+                  </div>
+                )}
+                
+                <div className={`h-full bg-card/80 backdrop-blur-sm border-2 rounded-3xl p-8 shadow-medical-lg hover:shadow-medical-xl transition-all duration-300 group-hover:scale-[1.02] ${
+                  plan.isPopular ? 'border-primary/30 bg-gradient-to-b from-primary/5 to-transparent' : 
+                  plan.highlight ? 'border-success/30 bg-gradient-to-b from-success/5 to-transparent' : 
+                  'border-border/50 hover:border-border'
+                }`}>
+                  <div className="text-center space-y-4 mb-8">
+                    <div className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center ${
+                      plan.isPopular ? 'bg-primary/10 text-primary' : 
+                      plan.highlight ? 'bg-success/10 text-success' : 
+                      'bg-muted text-muted-foreground'
+                    }`}>
+                      <plan.icon className="h-8 w-8" />
+                    </div>
+                    <div>
+                      <h3 className="text-heading font-bold text-medical-xl">{plan.title}</h3>
+                      <p className="text-muted-foreground text-medical-sm mt-1">{plan.subtitle}</p>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-baseline justify-center gap-1">
+                        {plan.originalPrice && (
+                          <span className="text-muted-foreground text-medical-lg line-through">${plan.originalPrice}</span>
+                        )}
+                        <span className="text-heading font-bold text-medical-4xl">{plan.price === "Free" ? "Free" : `$${plan.price}`}</span>
+                        {plan.period && <span className="text-muted-foreground text-medical-sm">/{plan.period}</span>}
+                      </div>
+                      {plan.yearlyPrice && (
+                        <p className="text-muted-foreground text-medical-sm">
+                          or ${plan.yearlyPrice}/year
+                        </p>
+                      )}
+                      {plan.yearlyDiscount && (
+                        <p className="text-success text-medical-sm font-medium">{plan.yearlyDiscount}</p>
+                      )}
+                      <p className="text-body text-medical-sm">{plan.description}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 mb-8">
+                    {plan.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-start gap-3">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center mt-0.5 shrink-0 ${
+                          plan.isPopular ? 'bg-primary/10' : plan.highlight ? 'bg-success/10' : 'bg-muted'
+                        }`}>
+                          <div className={`w-2 h-2 rounded-full ${
+                            plan.isPopular ? 'bg-primary' : plan.highlight ? 'bg-success' : 'bg-muted-foreground'
+                          }`} />
+                        </div>
+                        <span className="text-body text-medical-sm leading-relaxed">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <button
+                    className={`w-full py-4 px-6 rounded-2xl font-semibold text-medical-base transition-all duration-300 ${
+                      plan.isPopular 
+                        ? 'bg-gradient-to-r from-primary to-primary/80 text-white hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-primary/25' 
+                        : plan.highlight
+                        ? 'bg-gradient-to-r from-success to-success/80 text-white hover:from-success/90 hover:to-success/70 shadow-lg hover:shadow-success/25'
+                        : plan.price === "Free"
+                        ? 'bg-gradient-to-r from-muted to-muted/80 text-foreground hover:from-muted/80 hover:to-muted/60'
+                        : 'bg-gradient-to-r from-foreground to-foreground/90 text-background hover:from-foreground/90 hover:to-foreground/80'
+                    }`}
+                    onClick={() => {
+                      alert(`Selected ${plan.title} plan - Integration coming soon!`);
+                    }}
+                  >
+                    {plan.ctaText}
+                  </button>
+                </div>
               </div>
             ))}
           </div>
           
           {/* FAQ Section */}
-          <div className="max-w-4xl mx-auto mt-3xl">
+          <div className="max-w-5xl mx-auto mt-3xl">
             <div className="text-center mb-2xl">
+              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
+                <Shield className="h-4 w-4" />
+                Questions & Answers
+              </div>
               <h2 className="text-heading font-bold text-medical-3xl mb-md">Frequently Asked Questions</h2>
               <p className="text-body text-medical-lg">
-                Everything you need to know about our pricing and plans
+                Everything you need to know about EverMedical pricing and features
               </p>
             </div>
             
-            <Accordion type="single" collapsible className="space-y-md">
+            <Accordion type="single" collapsible className="space-y-4">
               {faqs.map((faq, index) => (
                 <AccordionItem 
                   key={index} 
                   value={`item-${index}`}
-                  className="bg-card rounded-medical-md border border-border px-lg"
+                  className="bg-card/80 backdrop-blur-sm rounded-2xl border border-border/50 px-8 py-2 hover:border-border transition-all duration-300"
                 >
-                  <AccordionTrigger className="text-left hover:no-underline py-lg">
-                    <span className="font-semibold text-heading text-medical-base">
+                  <AccordionTrigger className="text-left hover:no-underline py-6">
+                    <span className="font-semibold text-heading text-medical-base pr-4">
                       {faq.question}
                     </span>
                   </AccordionTrigger>
-                  <AccordionContent className="pb-lg">
+                  <AccordionContent className="pb-6">
                     <p className="text-body text-medical-sm leading-relaxed">
                       {faq.answer}
                     </p>
@@ -174,15 +249,19 @@ export default function Pricing() {
           </div>
           
           <div className="text-center mt-2xl">
-            <p className="text-muted-foreground text-medical-sm mb-md">
-              All plans include a 14-day free trial. No credit card required.
-            </p>
-            <p className="text-body text-medical-sm">
-              Need a custom plan for your organization?{" "}
-              <a href="#" className="text-primary hover:underline">
-                Contact our sales team
-              </a>
-            </p>
+            <div className="bg-card/80 backdrop-blur-sm rounded-3xl border border-border/50 p-8 max-w-2xl mx-auto">
+              <Globe className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h3 className="text-heading font-bold text-medical-xl mb-2">Ready to Transform Healthcare?</h3>
+              <p className="text-body text-medical-sm mb-6">
+                Join our global community of healthcare professionals, institutions, and suppliers making a difference worldwide.
+              </p>
+              <p className="text-muted-foreground text-medical-xs">
+                Questions about enterprise solutions?{" "}
+                <a href="#" className="text-primary hover:underline font-medium">
+                  Contact our team
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>
