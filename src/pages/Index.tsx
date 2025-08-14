@@ -24,21 +24,6 @@ const Index = () => {
       icon: <Zap className="h-6 w-6" />,
       title: "AI-Powered Matching",
       description: "Get instantly matched with the best suppliers for your specific requirements."
-    },
-    {
-      icon: <Users className="h-6 w-6" />,
-      title: "Professional Network",
-      description: "Connect with healthcare professionals and industry experts in your region."
-    },
-    {
-      icon: <Building2 className="h-6 w-6" />,
-      title: "Hospital Solutions",
-      description: "Tailored procurement solutions for hospitals, clinics, and healthcare facilities."
-    },
-    {
-      icon: <Award className="h-6 w-6" />,
-      title: "Quality Assurance",
-      description: "Every product comes with quality guarantees and regulatory compliance documentation."
     }
   ];
 
@@ -65,7 +50,7 @@ const Index = () => {
                 </p>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-lg">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-lg">
                 {features.map((feature, index) => (
                   <FeatureTile
                     key={index}

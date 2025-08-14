@@ -26,24 +26,23 @@ export function HeroSection() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-md">
               <Button variant="hero" size="xl">
-                <Search className="h-5 w-5" />
-                Browse Equipment
+                Post an RFQ
                 <ArrowRight className="h-5 w-5" />
               </Button>
               <Button variant="hero-secondary" size="xl">
-                <Play className="h-5 w-5" />
-                Watch Demo
+                Explore Marketplace
               </Button>
               <Button variant="hero-ghost" size="xl">
-                Create RFQ
+                Upcoming CME Events
               </Button>
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-md max-w-lg">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-md max-w-2xl">
               <StatPill label="Active Suppliers" value="15K+" trend="up" />
               <StatPill label="Equipment Types" value="500+" trend="neutral" />
               <StatPill label="Countries" value="120+" trend="up" />
+              <StatPill label="Monthly RFQs" value="10K+" trend="up" />
             </div>
           </div>
 
