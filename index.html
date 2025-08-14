@@ -3,22 +3,70 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self';" />
+    
+    <!-- Production Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';" />
     <meta http-equiv="X-Frame-Options" content="DENY" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload" />
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <title>evermedical-design-system</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
+    
+    <!-- Performance & Caching -->
+    <meta http-equiv="Cache-Control" content="public, max-age=31536000, immutable" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    
+    <!-- SEO & Branding -->
+    <title>EverMedical - Global Medical Equipment Marketplace</title>
+    <meta name="description" content="Connect with verified medical equipment suppliers worldwide. Trade medical devices, consumables, and healthcare products on the most trusted B2B platform." />
+    <meta name="keywords" content="medical equipment, healthcare marketplace, medical devices, B2B medical, medical supplies, hospital equipment" />
+    <meta name="author" content="EverMedical" />
+    <link rel="canonical" href="https://medicalevents.com" />
 
-    <meta property="og:title" content="evermedical-design-system" />
-    <meta property="og:description" content="Lovable Generated Project" />
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="EverMedical - Global Medical Equipment Marketplace" />
+    <meta property="og:description" content="Connect with verified medical equipment suppliers worldwide. Trade medical devices, consumables, and healthcare products on the most trusted B2B platform." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta property="og:url" content="https://medicalevents.com" />
+    <meta property="og:image" content="https://medicalevents.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="EverMedical" />
+    <meta property="og:locale" content="en_US" />
 
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:site" content="@evermedical" />
+    <meta name="twitter:creator" content="@evermedical" />
+    <meta name="twitter:title" content="EverMedical - Global Medical Equipment Marketplace" />
+    <meta name="twitter:description" content="Connect with verified medical equipment suppliers worldwide. Trade medical devices, consumables, and healthcare products." />
+    <meta name="twitter:image" content="https://medicalevents.com/twitter-image.png" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "EverMedical",
+      "url": "https://medicalevents.com",
+      "description": "Global medical equipment marketplace connecting verified suppliers and buyers worldwide",
+      "industry": "Medical Equipment",
+      "foundingDate": "2024",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "sales",
+        "url": "https://medicalevents.com/contact"
+      }
+    }
+    </script>
+
+    <!-- Icons & Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
   </head>
 
   <body>
