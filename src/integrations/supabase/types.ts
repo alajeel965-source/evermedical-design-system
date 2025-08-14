@@ -248,6 +248,7 @@ export type Database = {
       }
       event_specialties: {
         Row: {
+          code: string | null
           created_at: string
           id: string
           is_active: boolean | null
@@ -256,8 +257,10 @@ export type Database = {
           name_en: string
           parent_id: string | null
           slug: string
+          synonyms: string[] | null
         }
         Insert: {
+          code?: string | null
           created_at?: string
           id?: string
           is_active?: boolean | null
@@ -266,8 +269,10 @@ export type Database = {
           name_en: string
           parent_id?: string | null
           slug: string
+          synonyms?: string[] | null
         }
         Update: {
+          code?: string | null
           created_at?: string
           id?: string
           is_active?: boolean | null
@@ -276,6 +281,7 @@ export type Database = {
           name_en?: string
           parent_id?: string | null
           slug?: string
+          synonyms?: string[] | null
         }
         Relationships: [
           {
@@ -384,7 +390,6 @@ export type Database = {
           organizer_phone: string | null
           organizer_website: string | null
           price_range: string | null
-          primary_specialty_id: string | null
           registered_count: number | null
           registration_deadline: string | null
           registration_required: boolean | null
@@ -397,9 +402,11 @@ export type Database = {
           slug: string
           source_id: string | null
           source_url: string | null
+          specialty_slug: string | null
           start_date: string
           status: string
           subspecialties: string[] | null
+          subspecialty: string | null
           summary: string | null
           summary_ar: string | null
           target_audience: string[] | null
@@ -449,7 +456,6 @@ export type Database = {
           organizer_phone?: string | null
           organizer_website?: string | null
           price_range?: string | null
-          primary_specialty_id?: string | null
           registered_count?: number | null
           registration_deadline?: string | null
           registration_required?: boolean | null
@@ -462,9 +468,11 @@ export type Database = {
           slug: string
           source_id?: string | null
           source_url?: string | null
+          specialty_slug?: string | null
           start_date: string
           status?: string
           subspecialties?: string[] | null
+          subspecialty?: string | null
           summary?: string | null
           summary_ar?: string | null
           target_audience?: string[] | null
@@ -514,7 +522,6 @@ export type Database = {
           organizer_phone?: string | null
           organizer_website?: string | null
           price_range?: string | null
-          primary_specialty_id?: string | null
           registered_count?: number | null
           registration_deadline?: string | null
           registration_required?: boolean | null
@@ -527,9 +534,11 @@ export type Database = {
           slug?: string
           source_id?: string | null
           source_url?: string | null
+          specialty_slug?: string | null
           start_date?: string
           status?: string
           subspecialties?: string[] | null
+          subspecialty?: string | null
           summary?: string | null
           summary_ar?: string | null
           target_audience?: string[] | null
@@ -544,13 +553,6 @@ export type Database = {
           view_count?: number | null
         }
         Relationships: [
-          {
-            foreignKeyName: "medical_events_primary_specialty_id_fkey"
-            columns: ["primary_specialty_id"]
-            isOneToOne: false
-            referencedRelation: "event_specialties"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "medical_events_source_id_fkey"
             columns: ["source_id"]
@@ -658,8 +660,10 @@ export type Database = {
           id: string
           last_name: string
           organization: string | null
+          primary_specialty_slug: string | null
           profile_type: string
           specialty: string | null
+          subspecialties: string[] | null
           title: string | null
           updated_at: string | null
           user_id: string
@@ -674,8 +678,10 @@ export type Database = {
           id?: string
           last_name: string
           organization?: string | null
+          primary_specialty_slug?: string | null
           profile_type: string
           specialty?: string | null
+          subspecialties?: string[] | null
           title?: string | null
           updated_at?: string | null
           user_id: string
@@ -690,8 +696,10 @@ export type Database = {
           id?: string
           last_name?: string
           organization?: string | null
+          primary_specialty_slug?: string | null
           profile_type?: string
           specialty?: string | null
+          subspecialties?: string[] | null
           title?: string | null
           updated_at?: string | null
           user_id?: string
@@ -865,6 +873,10 @@ export type Database = {
           user_id: string | null
           verified: boolean | null
         }
+      }
+      validate_specialty_slug: {
+        Args: { slug: string }
+        Returns: boolean
       }
     }
     Enums: {
