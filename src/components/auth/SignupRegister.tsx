@@ -21,17 +21,31 @@ interface FormData {
   specialty: string;
   phone: string;
   agreeToTerms: boolean;
+  inviteCode?: string;
+}
+
+interface RoleOption {
+  key: string;
+  name: string;
+  subscription: {
+    type: 'free' | 'yearly' | 'monthly' | 'internal';
+    price?: number;
+    period?: string;
+  };
+  requiresPayment: boolean;
+  restricted?: boolean;
 }
 
 interface SignupRegisterProps {
-  onSubmit?: (formData: FormData) => Promise<void>;
+  onSubmit?: (formData: FormData & { subscriptionPlan?: string }) => Promise<void>;
   onOAuth?: (provider: 'apple' | 'google' | 'linkedin') => Promise<void>;
-  onSuccess?: (next: 'verifyEmail' | 'browseEvents' | 'completeProfile') => void;
+  onSuccess?: (next: 'verifyEmail' | 'browseEvents' | 'completeProfile' | 'payment') => void;
   locale?: 'en' | 'ar';
   redirectUrls?: {
     verifyEmail?: string;
     browseEvents?: string;
     completeProfile?: string;
+    payment?: string;
   };
   className?: string;
 }
@@ -62,12 +76,22 @@ const translations = {
     forgotPassword: 'Forgot password?',
     passwordStrength: 'Password Strength',
     language: 'Language',
+    selectRole: 'Select your role',
     roles: {
-      doctor: 'Doctor',
-      nurse: 'Nurse', 
-      student: 'Student',
-      organizer: 'Organizer'
+      medicalPersonnel: 'Medical Personnel',
+      instituteBuyer: 'Medical Institute Buyer',
+      medicalSeller: 'Medical Seller',
+      superAdmin: 'Super Admin'
     },
+    subscriptions: {
+      free: 'Free',
+      yearly100: '$100/year',
+      monthly100: '$100/month',
+      yearly1000: '$1,000/year',
+      internal: 'Internal use only'
+    },
+    inviteCode: 'Invite Code',
+    inviteCodeRequired: 'Super Admin role requires an invite code',
     specialties: [
       'Cardiology', 'Dermatology', 'Emergency Medicine', 'Endocrinology',
       'Gastroenterology', 'Neurology', 'Oncology', 'Orthopedics',
@@ -113,12 +137,22 @@ const translations = {
     forgotPassword: 'نسيت كلمة المرور؟',
     passwordStrength: 'قوة كلمة المرور',
     language: 'اللغة',
+    selectRole: 'اختر دورك',
     roles: {
-      doctor: 'طبيب',
-      nurse: 'ممرض',
-      student: 'طالب',
-      organizer: 'منظم'
+      medicalPersonnel: 'الطاقم الطبي',
+      instituteBuyer: 'مشتري المؤسسة الطبية',
+      medicalSeller: 'بائع طبي',
+      superAdmin: 'مدير عام'
     },
+    subscriptions: {
+      free: 'مجاني',
+      yearly100: '100 دولار/سنة',
+      monthly100: '100 دولار/شهر',
+      yearly1000: '1000 دولار/سنة',
+      internal: 'للاستخدام الداخلي فقط'
+    },
+    inviteCode: 'رمز الدعوة',
+    inviteCodeRequired: 'دور المدير العام يتطلب رمز دعوة',
     specialties: [
       'أمراض القلب', 'الأمراض الجلدية', 'طب الطوارئ', 'الغدد الصماء',
       'أمراض الجهاز الهضمي', 'الأمراض العصبية', 'الأورام', 'العظام',
@@ -189,14 +223,58 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
     role: '',
     specialty: '',
     phone: '',
-    agreeToTerms: false
+    agreeToTerms: false,
+    inviteCode: ''
   });
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [success, setSuccess] = useState(false);
   const [specialtySearch, setSpecialtySearch] = useState('');
+  const [showInviteCode, setShowInviteCode] = useState(false);
 
   const t = translations[currentLocale];
   const isRTL = currentLocale === 'ar';
+
+  // Role options with subscription information
+  const roleOptions: RoleOption[] = [
+    {
+      key: 'medicalPersonnel',
+      name: t.roles.medicalPersonnel,
+      subscription: { type: 'yearly', price: 100, period: 'year' },
+      requiresPayment: true
+    },
+    {
+      key: 'instituteBuyer',
+      name: t.roles.instituteBuyer,
+      subscription: { type: 'free' },
+      requiresPayment: false
+    },
+    {
+      key: 'medicalSeller',
+      name: t.roles.medicalSeller,
+      subscription: { type: 'yearly', price: 1000, period: 'year' },
+      requiresPayment: true
+    },
+    {
+      key: 'superAdmin',
+      name: t.roles.superAdmin,
+      subscription: { type: 'internal' },
+      requiresPayment: false,
+      restricted: true
+    }
+  ];
+
+  const getSubscriptionDisplay = (option: RoleOption) => {
+    switch (option.subscription.type) {
+      case 'free':
+        return t.subscriptions.free;
+      case 'yearly':
+        return option.subscription.price === 100 ? t.subscriptions.yearly100 : t.subscriptions.yearly1000;
+      case 'internal':
+        return t.subscriptions.internal;
+      default:
+        return '';
+    }
+  };
 
   // Validate form
   const validateForm = (data: FormData, isSignIn = false) => {
@@ -206,7 +284,10 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
       if (!data.fullName.trim()) newErrors.fullName = t.errors.required;
       if (!data.country) newErrors.country = t.errors.required;
       if (!data.role) newErrors.role = t.errors.required;
-      if (data.role === 'doctor' && !data.specialty) newErrors.specialty = t.errors.required;
+      if (data.role === 'medicalPersonnel' && !data.specialty) newErrors.specialty = t.errors.required;
+      if (data.role === 'superAdmin' && !data.inviteCode?.trim()) {
+        newErrors.inviteCode = t.inviteCodeRequired;
+      }
       if (!data.agreeToTerms) newErrors.agreeToTerms = t.errors.termsRequired;
       if (data.password !== data.confirmPassword) newErrors.confirmPassword = t.errors.passwordMismatch;
     }
@@ -231,17 +312,34 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
 
     setIsLoading(true);
     try {
+      // Analytics tracking
+      if (!isSignIn && formData.role) {
+        const selectedRole = roleOptions.find(r => r.key === formData.role);
+        if (selectedRole) {
+          // Track role selection
+          console.log('Analytics: role_selected', {
+            role: selectedRole.name,
+            subscription_type: selectedRole.subscription.type,
+            requires_payment: selectedRole.requiresPayment
+          });
+        }
+      }
+
       // Placeholder API call
       if (isSignIn) {
         // POST /api/auth/login
         console.log('Login attempt:', { email: formData.email, password: formData.password });
       } else {
         // POST /api/auth/register
-        console.log('Registration attempt:', formData);
-      }
-      
-      if (onSubmit) {
-        await onSubmit(formData);
+        const selectedRole = roleOptions.find(r => r.key === formData.role);
+        const subscriptionPlan = selectedRole ? 
+          `${selectedRole.subscription.type}_${selectedRole.subscription.price || 'free'}` : 'free';
+        
+        console.log('Registration attempt:', { ...formData, subscriptionPlan });
+        
+        if (onSubmit) {
+          await onSubmit({ ...formData, subscriptionPlan });
+        }
       }
       
       if (!isSignIn) {
@@ -268,7 +366,7 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
     }
   };
 
-  const handleSuccessAction = (action: 'verifyEmail' | 'browseEvents' | 'completeProfile') => {
+  const handleSuccessAction = (action: 'verifyEmail' | 'browseEvents' | 'completeProfile' | 'payment') => {
     if (onSuccess) {
       onSuccess(action);
     }
@@ -279,6 +377,14 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+    
+    // Show invite code field for Super Admin role
+    if (field === 'role') {
+      setShowInviteCode(value === 'superAdmin');
+      if (value !== 'superAdmin') {
+        setFormData(prev => ({ ...prev, inviteCode: '' }));
+      }
     }
   };
 
@@ -308,31 +414,72 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
             <p className="text-body text-medical-base">{t.success.subtitle}</p>
           </div>
           <div className="space-y-sm">
-            <Button 
-              onClick={() => handleSuccessAction('verifyEmail')}
-              className="w-full"
-              data-analytics="auth-signup-verify-email"
-            >
-              {t.success.verifyEmail}
-            </Button>
-            <div className="flex gap-sm">
-              <Button 
-                variant="outline" 
-                className="flex-1"
-                onClick={() => handleSuccessAction('completeProfile')}
-                data-analytics="auth-signup-complete-profile"
-              >
-                {t.success.completeProfile}
-              </Button>
-              <Button 
-                variant="outline" 
-                className="flex-1"
-                onClick={() => handleSuccessAction('browseEvents')}
-                data-analytics="auth-signup-browse-events"
-              >
-                {t.success.browseEvents}
-              </Button>
-            </div>
+            {(() => {
+              const selectedRole = roleOptions.find(r => r.key === formData.role);
+              const requiresPayment = selectedRole?.requiresPayment;
+              
+              if (requiresPayment) {
+                return (
+                  <>
+                    <Button 
+                      onClick={() => handleSuccessAction('payment')}
+                      className="w-full"
+                      data-analytics="auth-signup-payment"
+                    >
+                      Complete Payment Setup
+                    </Button>
+                    <div className="flex gap-sm">
+                      <Button 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => handleSuccessAction('verifyEmail')}
+                        data-analytics="auth-signup-verify-email"
+                      >
+                        {t.success.verifyEmail}
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => handleSuccessAction('browseEvents')}
+                        data-analytics="auth-signup-browse-events"
+                      >
+                        {t.success.browseEvents}
+                      </Button>
+                    </div>
+                  </>
+                );
+              }
+              
+              return (
+                <>
+                  <Button 
+                    onClick={() => handleSuccessAction('verifyEmail')}
+                    className="w-full"
+                    data-analytics="auth-signup-verify-email"
+                  >
+                    {t.success.verifyEmail}
+                  </Button>
+                  <div className="flex gap-sm">
+                    <Button 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => handleSuccessAction('completeProfile')}
+                      data-analytics="auth-signup-complete-profile"
+                    >
+                      {t.success.completeProfile}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => handleSuccessAction('browseEvents')}
+                      data-analytics="auth-signup-browse-events"
+                    >
+                      {t.success.browseEvents}
+                    </Button>
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </CardContent>
       </Card>
@@ -592,12 +739,21 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                     disabled={isLoading}
                   >
                     <SelectTrigger className={cn(errors.role && "border-destructive")}>
-                      <SelectValue placeholder={t.role} />
+                      <SelectValue placeholder={t.selectRole} />
                     </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(t.roles).map(([key, value]) => (
-                        <SelectItem key={key} value={key}>
-                          {value}
+                    <SelectContent className="z-50">
+                      {roleOptions.map((option) => (
+                        <SelectItem 
+                          key={option.key} 
+                          value={option.key}
+                          disabled={option.restricted && !formData.inviteCode}
+                        >
+                          <div className="flex justify-between items-center w-full">
+                            <span>{option.name}</span>
+                            <Badge variant="secondary" className="ml-2 text-xs">
+                              ({getSubscriptionDisplay(option)})
+                            </Badge>
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -610,8 +766,30 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                 </div>
               </div>
 
-              {/* Specialty (if doctor) */}
-              {formData.role === 'doctor' && (
+              {/* Invite Code (if Super Admin) */}
+              {showInviteCode && (
+                <div className="space-y-xs">
+                  <Label htmlFor="inviteCode">{t.inviteCode} *</Label>
+                  <Input
+                    id="inviteCode"
+                    type="text"
+                    value={formData.inviteCode || ''}
+                    onChange={(e) => updateFormData('inviteCode', e.target.value)}
+                    className={cn(errors.inviteCode && "border-destructive")}
+                    disabled={isLoading}
+                    placeholder="Enter your admin invite code"
+                    data-analytics="auth-field-invite-code"
+                  />
+                  {errors.inviteCode && (
+                    <p className="text-destructive text-medical-sm" role="alert">
+                      {errors.inviteCode}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Specialty (if Medical Personnel) */}
+              {formData.role === 'medicalPersonnel' && (
                 <div className="space-y-xs">
                   <Label htmlFor="specialty">{t.specialty} *</Label>
                   <Select
