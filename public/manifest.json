@@ -1,16 +1,16 @@
 {
-  "name": "EverMedical",
-  "short_name": "EverMedical",
-  "description": "Global medical equipment marketplace connecting verified suppliers and buyers worldwide",
+  "name": "EverMedical - Global Medical Equipment Marketplace",
+  "short_name": "EverMedical", 
+  "description": "Connect with verified medical equipment suppliers worldwide",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2563EB",
   "icons": [
     {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "src": "/favicon.png",
+      "sizes": "192x192", 
+      "type": "image/png"
     }
   ]
 }

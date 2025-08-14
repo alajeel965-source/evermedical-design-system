@@ -1,153 +1,88 @@
 import { AppShell } from "@/components/shared/AppShell";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Shield, Zap, Globe, Users, Wrench } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle, Globe, Shield, Zap, Users, Building2 } from "lucide-react";
 
 export default function WhatsNew() {
-  const releases = [
+  const updates = [
     {
-      version: "1.0.0",
-      date: "August 2024",
-      type: "Major Release",
+      category: "Platform",
+      icon: <Globe className="h-5 w-5" />,
+      title: "Global Medical Equipment Marketplace Launch",
+      description: "EverMedical is now live with a comprehensive B2B platform connecting medical equipment suppliers and buyers worldwide.",
       features: [
-        {
-          category: "Security & Performance",
-          icon: Shield,
-          items: [
-            "Production-ready security headers (CSP, HSTS, X-Frame-Options)",
-            "Enhanced database security with proper RLS policies",
-            "Optimized Vite build configuration with code splitting",
-            "Asset optimization and caching strategies"
-          ]
-        },
-        {
-          category: "Platform Foundation",
-          icon: Zap,
-          items: [
-            "Multi-language support (English/Arabic) with RTL layout",
-            "Comprehensive design system with medical-focused tokens",
-            "WCAG 2.1 AA accessibility compliance",
-            "Mobile-first responsive design"
-          ]
-        },
-        {
-          category: "Core Features",
-          icon: Globe,
-          items: [
-            "Medical equipment marketplace with verified suppliers",
-            "Live RFQ (Request for Quote) system",
-            "Medical events and conference listings",
-            "Professional networking for healthcare providers"
-          ]
-        },
-        {
-          category: "User Experience",
-          icon: Users,
-          items: [
-            "Intuitive dashboard with real-time insights",
-            "Advanced search and filtering capabilities",
-            "Professional profile management",
-            "Seamless navigation and user flows"
-          ]
-        },
-        {
-          category: "Technical Excellence",
-          icon: Wrench,
-          items: [
-            "React 18 with TypeScript for type safety",
-            "Supabase backend with real-time capabilities",
-            "Tailwind CSS with custom design tokens",
-            "Production-optimized build pipeline"
-          ]
-        }
+        "Multi-language support (English/Arabic)",
+        "Global supplier verification system", 
+        "Advanced product categorization",
+        "Real-time RFQ management"
+      ]
+    },
+    {
+      category: "Security",
+      icon: <Shield className="h-5 w-5" />,
+      title: "Enterprise-Grade Security",
+      description: "Built with healthcare-grade security standards to protect sensitive medical equipment transactions.",
+      features: [
+        "End-to-end encryption",
+        "GDPR compliance", 
+        "Secure user authentication",
+        "Data protection protocols"
+      ]
+    },
+    {
+      category: "Performance",
+      icon: <Zap className="h-5 w-5" />,
+      title: "Lightning-Fast Performance",
+      description: "Optimized for speed with advanced caching and modern web technologies.",
+      features: [
+        "Sub-second page loads",
+        "Optimized asset delivery",
+        "Progressive web app features",
+        "Mobile-first responsive design"
       ]
     }
   ];
 
   return (
     <AppShell>
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto">
-            <header className="text-center mb-12">
-              <h1 className="text-4xl font-bold text-heading mb-4">
-                What's New in EverMedical
-              </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Discover the latest features, improvements, and enhancements to the 
-                global medical equipment marketplace platform.
-              </p>
-            </header>
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="text-center mb-12">
+          <Badge variant="secondary" className="mb-4">
+            Version 1.0 - January 2025
+          </Badge>
+          <h1 className="text-4xl font-bold mb-4 text-heading">
+            Welcome to EverMedical
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            The world's most trusted B2B platform for medical equipment trading.
+          </p>
+        </div>
 
-            {releases.map((release, index) => (
-              <Card key={index} className="mb-8">
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <CardTitle className="text-2xl text-heading">
-                      Version {release.version}
-                    </CardTitle>
-                    <div className="flex gap-2">
-                      <Badge variant="outline">{release.date}</Badge>
-                      <Badge className="bg-primary text-primary-foreground">
-                        {release.type}
-                      </Badge>
-                    </div>
+        <div className="space-y-6">
+          {updates.map((update, index) => (
+            <Card key={index}>
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                    {update.icon}
                   </div>
-                  <CardDescription className="text-base">
-                    Launch of the complete medical equipment marketplace platform 
-                    with advanced security, performance optimizations, and comprehensive 
-                    feature set.
-                  </CardDescription>
-                </CardHeader>
-                
-                <CardContent>
-                  <div className="grid gap-8">
-                    {release.features.map((category, categoryIndex) => (
-                      <div key={categoryIndex}>
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="p-2 rounded-lg bg-primary/10">
-                            <category.icon className="h-5 w-5 text-primary" />
-                          </div>
-                          <h3 className="text-xl font-semibold text-heading">
-                            {category.category}
-                          </h3>
-                        </div>
-                        
-                        <div className="grid gap-3">
-                          {category.items.map((item, itemIndex) => (
-                            <div key={itemIndex} className="flex items-start gap-3">
-                              <CheckCircle2 className="h-5 w-5 text-success mt-0.5 flex-shrink-0" />
-                              <span className="text-body leading-relaxed">{item}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-
-            <Card className="bg-sky/50 border-primary/20">
-              <CardContent className="pt-6">
-                <div className="text-center">
-                  <h3 className="text-xl font-semibold text-heading mb-2">
-                    Ready to Get Started?
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    Join thousands of healthcare professionals and suppliers on the 
-                    world's most trusted medical equipment marketplace.
-                  </p>
-                  <div className="flex justify-center gap-4 text-sm text-muted-foreground">
-                    <span>🌍 Global Reach</span>
-                    <span>✅ Verified Suppliers</span>
-                    <span>🔒 Secure Platform</span>
-                    <span>📱 Mobile Ready</span>
-                  </div>
+                  <Badge variant="outline">{update.category}</Badge>
                 </div>
+                <CardTitle>{update.title}</CardTitle>
+                <CardDescription>{update.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {update.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-success" />
+                      <span className="text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
               </CardContent>
             </Card>
-          </div>
+          ))}
         </div>
       </div>
     </AppShell>
