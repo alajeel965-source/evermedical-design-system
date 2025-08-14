@@ -4,12 +4,18 @@ import { cn } from "@/lib/utils"
 
 const Table = React.forwardRef<
   HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement>
->(({ className, ...props }, ref) => (
+  React.HTMLAttributes<HTMLTableElement> & {
+    variant?: "default" | "compact";
+  }
+>(({ className, variant = "default", ...props }, ref) => (
   <div className="relative w-full overflow-auto">
     <table
       ref={ref}
-      className={cn("w-full caption-bottom text-sm", className)}
+      className={cn(
+        "w-full caption-bottom text-sm",
+        variant === "compact" && "text-medical-xs",
+        className
+      )}
       {...props}
     />
   </div>
@@ -53,12 +59,15 @@ TableFooter.displayName = "TableFooter"
 
 const TableRow = React.forwardRef<
   HTMLTableRowElement,
-  React.HTMLAttributes<HTMLTableRowElement>
->(({ className, ...props }, ref) => (
+  React.HTMLAttributes<HTMLTableRowElement> & {
+    variant?: "default" | "striped";
+  }
+>(({ className, variant = "default", ...props }, ref) => (
   <tr
     ref={ref}
     className={cn(
       "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
+      variant === "striped" && "even:bg-muted/20",
       className
     )}
     {...props}
@@ -68,12 +77,15 @@ TableRow.displayName = "TableRow"
 
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
-  React.ThHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
+  React.ThHTMLAttributes<HTMLTableCellElement> & {
+    compact?: boolean;
+  }
+>(({ className, compact = false, ...props }, ref) => (
   <th
     ref={ref}
     className={cn(
-      "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
+      "text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
+      compact ? "h-8 px-2 py-1" : "h-12 px-4",
       className
     )}
     {...props}
@@ -83,11 +95,17 @@ TableHead.displayName = "TableHead"
 
 const TableCell = React.forwardRef<
   HTMLTableCellElement,
-  React.TdHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
+  React.TdHTMLAttributes<HTMLTableCellElement> & {
+    compact?: boolean;
+  }
+>(({ className, compact = false, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn("p-4 align-middle [&:has([role=checkbox])]:pr-0", className)}
+    className={cn(
+      "align-middle [&:has([role=checkbox])]:pr-0",
+      compact ? "p-2" : "p-4",
+      className
+    )}
     {...props}
   />
 ))
