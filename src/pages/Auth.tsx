@@ -90,12 +90,16 @@ export default function Auth() {
   });
 
   useEffect(() => {
+    console.log('Auth page mounted, selectedPlan:', selectedPlan);
+    
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', { event, session: !!session, user: !!session?.user });
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user && event === 'SIGNED_IN') {
+        console.log('User signed in, creating profile...');
         // Defer profile creation to avoid callback issues
         setTimeout(() => {
           createUserProfile(session.user, selectedPlan);
@@ -105,10 +109,12 @@ export default function Auth() {
 
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session check:', !!session);
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
+        console.log('User already logged in, redirecting...');
         navigate('/');
       }
     });
@@ -117,8 +123,10 @@ export default function Auth() {
   }, [navigate, selectedPlan]);
 
   const createUserProfile = async (user: User, plan: string) => {
+    console.log('Creating user profile for plan:', plan);
     try {
       const planInfo = plans[plan];
+      console.log('Plan info:', planInfo);
       
       const { error } = await supabase
         .from('profiles')
@@ -140,9 +148,11 @@ export default function Auth() {
       
       if (error) throw error;
       
+      console.log('Profile created successfully');
       setSuccess('Account created successfully! Welcome to EverMedical.');
       navigate('/');
     } catch (error: any) {
+      console.error('Profile creation error:', error);
       setError(error.message);
     }
   };

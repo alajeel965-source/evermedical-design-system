@@ -104,6 +104,7 @@ export default function Pricing() {
   ];
 
   const handlePlanSelect = (planType: string) => {
+    console.log('Plan selected:', planType);
     const planParams = new URLSearchParams();
     
     if (planType === 'Medical Institute Buyers') {
@@ -115,6 +116,7 @@ export default function Pricing() {
       planParams.set('plan', 'personnel');
     }
     
+    console.log('Redirecting to auth with plan:', planParams.toString());
     window.location.href = `/auth?${planParams.toString()}`;
   };
 
