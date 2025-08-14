@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { I18nProvider } from "@/lib/i18n";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Marketplace from "./pages/Marketplace";
 import Events from "./pages/Events";
@@ -28,6 +29,7 @@ import { ProfileMedicalSeller } from "./pages/ProfileMedicalSeller";
 import PastEvents from "./pages/PastEvents";
 import SavedRFQs from "./pages/SavedRFQs";
 import BillingHistory from "./pages/BillingHistory";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,12 +60,13 @@ const App = () => (
           <Route path="/design-system" element={<DesignSystem />} />
           <Route path="/specialty/:slug" element={<SpecialtyLanding />} />
           <Route path="/ar/specialty/:slug" element={<SpecialtyLanding />} />
-          <Route path="/profile/medical-personnel" element={<ProfileMedicalPersonnel />} />
-          <Route path="/profile/medical-institute" element={<ProfileMedicalInstitute />} />
-          <Route path="/profile/medical-seller" element={<ProfileMedicalSeller />} />
-          <Route path="/past-events" element={<PastEvents />} />
-          <Route path="/saved-rfqs" element={<SavedRFQs />} />
-          <Route path="/billing-history" element={<BillingHistory />} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/profile/medical-personnel" element={<ProtectedRoute><ProfileMedicalPersonnel /></ProtectedRoute>} />
+          <Route path="/profile/medical-institute" element={<ProtectedRoute><ProfileMedicalInstitute /></ProtectedRoute>} />
+          <Route path="/profile/medical-seller" element={<ProtectedRoute><ProfileMedicalSeller /></ProtectedRoute>} />
+          <Route path="/past-events" element={<ProtectedRoute><PastEvents /></ProtectedRoute>} />
+          <Route path="/saved-rfqs" element={<ProtectedRoute><SavedRFQs /></ProtectedRoute>} />
+          <Route path="/billing-history" element={<ProtectedRoute><BillingHistory /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useI18n, useTranslation } from "@/lib/i18n";
 import { useSavedRFQsCount } from "@/hooks/useSavedRFQsCount";
+import { useAuth } from "@/hooks/useAuth";
 
 export function TopNav() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,6 +18,7 @@ export function TopNav() {
   const { language, setLanguage, isRTL } = useI18n();
   const { t } = useTranslation();
   const { displayCount, hasCount } = useSavedRFQsCount();
+  const { user, isAuthenticated, signOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,6 +40,12 @@ export function TopNav() {
   const trackNavClick = (action: string) => {
     // TODO: Implement analytics tracking
     console.log(`Analytics: ${action}`);
+  };
+
+  // Handle logout
+  const handleLogout = async () => {
+    trackNavClick('nav_logout_click');
+    await signOut();
   };
 
   return (
@@ -176,104 +184,138 @@ export function TopNav() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* User Menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className="h-8 w-8 rounded-full hover:ring-2 hover:ring-primary/20 transition-all touch-target focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  aria-label={t("common.labels.userMenu")}
-                  aria-expanded="false"
-                  aria-haspopup="menu"
+            {/* Auth Section */}
+            {isAuthenticated ? (
+              /* User Menu */
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="h-8 w-8 rounded-full hover:ring-2 hover:ring-primary/20 transition-all touch-target focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    aria-label={t("common.labels.userMenu")}
+                    aria-expanded="false"
+                    aria-haspopup="menu"
+                  >
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user?.user_metadata?.avatar_url} alt="" />
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {user?.email?.charAt(0).toUpperCase() || <User className="h-4 w-4" aria-hidden="true" />}
+                      </AvatarFallback>
+                    </Avatar>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent 
+                  align="end" 
+                  className="w-48 bg-popover border border-border z-50"
+                  role="menu"
+                  aria-label={t("common.labels.userMenuOptions")}
                 >
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="/placeholder-avatar.jpg" alt="" />
-                    <AvatarFallback className="bg-primary text-primary-foreground">
-                      <User className="h-4 w-4" aria-hidden="true" />
-                    </AvatarFallback>
-                  </Avatar>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent 
-                align="end" 
-                className="w-48 bg-popover border border-border z-50"
-                role="menu"
-                aria-label={t("common.labels.userMenuOptions")}
-              >
-                <DropdownMenuLabel>{t("common.labels.profile")}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                
-                <Link to="/profile" onClick={() => trackNavClick('nav_profile_click')}>
-                  <DropdownMenuItem 
-                    role="menuitem" 
-                    className={cn(
-                      "focus:bg-accent focus:text-accent-foreground",
-                      isActiveLink("/profile") && "bg-accent text-accent-foreground"
-                    )}
-                  >
-                    <User className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
-                    <span>{t("common.labels.profile")}</span>
-                  </DropdownMenuItem>
-                </Link>
-
-                <Link to="/past-events" onClick={() => trackNavClick('nav_past_events_click')}>
-                  <DropdownMenuItem 
-                    role="menuitem" 
-                    className={cn(
-                      "focus:bg-accent focus:text-accent-foreground",
-                      isActiveLink("/past-events") && "bg-accent text-accent-foreground"
-                    )}
-                  >
-                    <Calendar className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
-                    <span>Past Events</span>
-                  </DropdownMenuItem>
-                </Link>
-
-                <Link to="/saved-rfqs" onClick={() => trackNavClick('nav_saved_rfqs_click')}>
-                  <DropdownMenuItem 
-                    role="menuitem" 
-                    className={cn(
-                      "focus:bg-accent focus:text-accent-foreground",
-                      isActiveLink("/saved-rfqs") && "bg-accent text-accent-foreground"
-                    )}
-                  >
-                    <div className="flex items-center w-full">
-                      <Bookmark className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
-                      <span className="flex-1">Saved RFQs</span>
-                      {hasCount && (
-                        <Badge variant="secondary" className="ml-auto text-xs">
-                          {displayCount}
-                        </Badge>
+                  <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  
+                  <Link to="/profile" onClick={() => trackNavClick('nav_profile_click')}>
+                    <DropdownMenuItem 
+                      role="menuitem" 
+                      className={cn(
+                        "focus:bg-accent focus:text-accent-foreground cursor-pointer",
+                        isActiveLink("/profile") && "bg-accent text-accent-foreground"
                       )}
-                    </div>
-                  </DropdownMenuItem>
-                </Link>
+                      data-analytics="nav_profile_click"
+                    >
+                      <User className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
+                      <span>{t("common.labels.profile")}</span>
+                    </DropdownMenuItem>
+                  </Link>
 
-                <Link to="/billing-history" onClick={() => trackNavClick('nav_billing_history_click')}>
+                  <Link to="/past-events" onClick={() => trackNavClick('nav_past_events_click')}>
+                    <DropdownMenuItem 
+                      role="menuitem" 
+                      className={cn(
+                        "focus:bg-accent focus:text-accent-foreground cursor-pointer",
+                        isActiveLink("/past-events") && "bg-accent text-accent-foreground"
+                      )}
+                      data-analytics="nav_past_events_click"
+                    >
+                      <Calendar className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
+                      <span>Past Events</span>
+                    </DropdownMenuItem>
+                  </Link>
+
+                  <Link to="/saved-rfqs" onClick={() => trackNavClick('nav_saved_rfqs_click')}>
+                    <DropdownMenuItem 
+                      role="menuitem" 
+                      className={cn(
+                        "focus:bg-accent focus:text-accent-foreground cursor-pointer",
+                        isActiveLink("/saved-rfqs") && "bg-accent text-accent-foreground"
+                      )}
+                      data-analytics="nav_saved_rfqs_click"
+                    >
+                      <div className="flex items-center w-full">
+                        <Bookmark className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
+                        <span className="flex-1">Saved RFQs</span>
+                        {hasCount && (
+                          <Badge variant="secondary" className="ml-auto text-xs">
+                            {displayCount}
+                          </Badge>
+                        )}
+                      </div>
+                    </DropdownMenuItem>
+                  </Link>
+
+                  <Link to="/billing-history" onClick={() => trackNavClick('nav_billing_history_click')}>
+                    <DropdownMenuItem 
+                      role="menuitem" 
+                      className={cn(
+                        "focus:bg-accent focus:text-accent-foreground cursor-pointer",
+                        isActiveLink("/billing-history") && "bg-accent text-accent-foreground"
+                      )}
+                      data-analytics="nav_billing_history_click"
+                    >
+                      <Receipt className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
+                      <span>Billing History</span>
+                    </DropdownMenuItem>
+                  </Link>
+
+                  <DropdownMenuSeparator />
+                  
                   <DropdownMenuItem 
                     role="menuitem" 
-                    className={cn(
-                      "focus:bg-accent focus:text-accent-foreground",
-                      isActiveLink("/billing-history") && "bg-accent text-accent-foreground"
-                    )}
+                    className="focus:bg-accent focus:text-accent-foreground cursor-pointer"
+                    onClick={() => trackNavClick('nav_settings_click')}
+                    data-analytics="nav_settings_click"
                   >
-                    <Receipt className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
-                    <span>Billing History</span>
+                    <Settings className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
+                    <span>{t("common.labels.settings")}</span>
                   </DropdownMenuItem>
+                  
+                  <DropdownMenuItem 
+                    role="menuitem" 
+                    className="focus:bg-accent focus:text-accent-foreground cursor-pointer"
+                    onClick={handleLogout}
+                    data-analytics="nav_logout_click"
+                  >
+                    <LogOut className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
+                    <span>{t("common.labels.logout")}</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              /* Sign In / Sign Up Buttons */
+              <div className={cn(
+                "flex items-center",
+                isRTL ? "space-x-reverse space-x-2" : "space-x-2"
+              )}>
+                <Link to="/auth">
+                  <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                    Sign In
+                  </Button>
                 </Link>
-
-                <DropdownMenuSeparator />
-                
-                <DropdownMenuItem role="menuitem" className="focus:bg-accent focus:text-accent-foreground">
-                  <Settings className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
-                  <span>{t("common.labels.settings")}</span>
-                </DropdownMenuItem>
-                
-                <DropdownMenuItem role="menuitem" className="focus:bg-accent focus:text-accent-foreground">
-                  <LogOut className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} aria-hidden="true" />
-                  <span>{t("common.labels.logout")}</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <Link to="/auth">
+                  <Button size="sm">
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
 
             {/* Mobile Menu */}
             <Sheet>
@@ -351,76 +393,91 @@ export function TopNav() {
                       </Button>
                     </div>
                     
-                    <div className="space-y-sm">
-                      <Link to="/profile" onClick={() => trackNavClick('nav_profile_click')}>
-                        <Button variant="ghost" className={cn(
-                          "w-full",
-                          isRTL ? "justify-end" : "justify-start",
-                          isActiveLink("/profile") && "bg-accent text-accent-foreground"
-                        )}>
-                          <User className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
-                          {t("common.labels.profile")}
-                        </Button>
-                      </Link>
+                    {isAuthenticated ? (
+                      <div className="space-y-sm">
+                        <Link to="/profile" onClick={() => trackNavClick('nav_profile_click')}>
+                          <Button variant="ghost" className={cn(
+                            "w-full",
+                            isRTL ? "justify-end" : "justify-start",
+                            isActiveLink("/profile") && "bg-accent text-accent-foreground"
+                          )}>
+                            <User className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                            {t("common.labels.profile")}
+                          </Button>
+                        </Link>
 
-                      <Link to="/past-events" onClick={() => trackNavClick('nav_past_events_click')}>
-                        <Button variant="ghost" className={cn(
-                          "w-full",
-                          isRTL ? "justify-end" : "justify-start",
-                          isActiveLink("/past-events") && "bg-accent text-accent-foreground"
-                        )}>
-                          <Calendar className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
-                          Past Events
-                        </Button>
-                      </Link>
+                        <Link to="/past-events" onClick={() => trackNavClick('nav_past_events_click')}>
+                          <Button variant="ghost" className={cn(
+                            "w-full",
+                            isRTL ? "justify-end" : "justify-start",
+                            isActiveLink("/past-events") && "bg-accent text-accent-foreground"
+                          )}>
+                            <Calendar className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                            Past Events
+                          </Button>
+                        </Link>
 
-                      <Link to="/saved-rfqs" onClick={() => trackNavClick('nav_saved_rfqs_click')}>
-                        <Button variant="ghost" className={cn(
-                          "w-full",
-                          isRTL ? "justify-end" : "justify-start",
-                          isActiveLink("/saved-rfqs") && "bg-accent text-accent-foreground"
-                        )}>
-                          <div className="flex items-center w-full">
-                            <Bookmark className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
-                            <span className="flex-1">Saved RFQs</span>
-                            {hasCount && (
-                              <Badge variant="secondary" className="ml-auto text-xs">
-                                {displayCount}
-                              </Badge>
-                            )}
-                          </div>
-                        </Button>
-                      </Link>
+                        <Link to="/saved-rfqs" onClick={() => trackNavClick('nav_saved_rfqs_click')}>
+                          <Button variant="ghost" className={cn(
+                            "w-full",
+                            isRTL ? "justify-end" : "justify-start",
+                            isActiveLink("/saved-rfqs") && "bg-accent text-accent-foreground"
+                          )}>
+                            <div className="flex items-center w-full">
+                              <Bookmark className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                              <span className="flex-1">Saved RFQs</span>
+                              {hasCount && (
+                                <Badge variant="secondary" className="ml-auto text-xs">
+                                  {displayCount}
+                                </Badge>
+                              )}
+                            </div>
+                          </Button>
+                        </Link>
 
-                      <Link to="/billing-history" onClick={() => trackNavClick('nav_billing_history_click')}>
-                        <Button variant="ghost" className={cn(
-                          "w-full",
-                          isRTL ? "justify-end" : "justify-start",
-                          isActiveLink("/billing-history") && "bg-accent text-accent-foreground"
-                        )}>
-                          <Receipt className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
-                          Billing History
-                        </Button>
-                      </Link>
+                        <Link to="/billing-history" onClick={() => trackNavClick('nav_billing_history_click')}>
+                          <Button variant="ghost" className={cn(
+                            "w-full",
+                            isRTL ? "justify-end" : "justify-start",
+                            isActiveLink("/billing-history") && "bg-accent text-accent-foreground"
+                          )}>
+                            <Receipt className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                            Billing History
+                          </Button>
+                        </Link>
 
-                      <div className="border-t pt-sm">
-                        <Button variant="ghost" className={cn(
-                          "w-full",
-                          isRTL ? "justify-end" : "justify-start"
-                        )}>
-                          <Settings className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
-                          {t("common.labels.settings")}
-                        </Button>
-                        
-                        <Button variant="ghost" className={cn(
-                          "w-full",
-                          isRTL ? "justify-end" : "justify-start"
-                        )}>
-                          <LogOut className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
-                          {t("common.labels.logout")}
-                        </Button>
+                        <div className="border-t pt-sm">
+                          <Button variant="ghost" className={cn(
+                            "w-full",
+                            isRTL ? "justify-end" : "justify-start"
+                          )} onClick={() => trackNavClick('nav_settings_click')}>
+                            <Settings className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                            {t("common.labels.settings")}
+                          </Button>
+                          
+                          <Button variant="ghost" className={cn(
+                            "w-full",
+                            isRTL ? "justify-end" : "justify-start"
+                          )} onClick={handleLogout}>
+                            <LogOut className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                            {t("common.labels.logout")}
+                          </Button>
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="space-y-sm">
+                        <Link to="/auth">
+                          <Button className="w-full">
+                            Sign Up
+                          </Button>
+                        </Link>
+                        <Link to="/auth">
+                          <Button variant="outline" className="w-full">
+                            Sign In
+                          </Button>
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </div>
               </SheetContent>
