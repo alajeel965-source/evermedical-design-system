@@ -53,8 +53,8 @@ export function TopNav() {
       className={cn(
         "sticky top-0 z-50 w-full border-b transition-all duration-300",
         isScrolled 
-          ? "bg-background/80 backdrop-blur-md shadow-soft" 
-          : "bg-background"
+          ? "bg-sky/90 backdrop-blur-md shadow-soft" 
+          : "bg-sky"
       )}
       role="banner"
     >
