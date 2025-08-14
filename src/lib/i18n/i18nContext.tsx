@@ -36,7 +36,9 @@ function getInitialLanguage(): Language {
       return 'ar';
     }
   } catch (error) {
-    console.warn('Failed to access localStorage or navigator:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Failed to access localStorage or navigator:', error);
+    }
   }
   
   return 'en';
@@ -60,7 +62,9 @@ export function I18nProvider({ children }: I18nProviderProps) {
         document.documentElement.lang = lang;
         document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
       } catch (error) {
-        console.warn('Failed to update localStorage or document:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Failed to update localStorage or document:', error);
+        }
       }
     }
   };
@@ -75,7 +79,9 @@ export function I18nProvider({ children }: I18nProviderProps) {
         document.documentElement.dir = initialLang === 'ar' ? 'rtl' : 'ltr';
         setIsInitialized(true);
       } catch (error) {
-        console.warn('Failed to initialize language:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Failed to initialize language:', error);
+        }
         setIsInitialized(true);
       }
     }
@@ -88,7 +94,9 @@ export function I18nProvider({ children }: I18nProviderProps) {
         document.documentElement.lang = language;
         document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
       } catch (error) {
-        console.warn('Failed to update document attributes:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Failed to update document attributes:', error);
+        }
       }
     }
   }, [language, isRTL, isInitialized]);

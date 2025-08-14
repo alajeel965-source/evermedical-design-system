@@ -71,6 +71,7 @@ export function SearchHeader({
                 className="pl-10 rounded-medical-sm"
                 aria-label={searchPlaceholder}
                 role="searchbox"
+                autoComplete="off"
               />
             </div>
             
