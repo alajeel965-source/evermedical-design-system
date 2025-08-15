@@ -12,15 +12,15 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-12 items-center justify-center p-1 text-glass-tab-text border border-glass-border",
+      "inline-flex h-12 items-center justify-center p-1 border border-glass-border",
       "bg-glass-bg supports-[backdrop-filter]:bg-glass-bg rounded-xl",
       className
     )}
     style={{
-      backdropFilter: 'blur(12px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+      backdropFilter: 'blur(20px) saturate(120%)',
+      WebkitBackdropFilter: 'blur(20px) saturate(120%)',
       borderRadius: '12px',
-      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.05)'
+      boxShadow: '0 8px 32px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 16px rgba(0, 0, 0, 0.05)'
     }}
     {...props}
   />
@@ -34,15 +34,15 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap px-4 py-2.5 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-      "text-glass-tab-text hover:brightness-110 data-[state=active]:font-semibold data-[state=active]:shadow-sm",
-      "hover:bg-glass-tab-hover data-[state=active]:bg-glass-tab-active",
-      "relative overflow-hidden rounded-lg min-w-0 flex-1 lg:flex-initial lg:min-w-fit",
+      "inline-flex items-center justify-center whitespace-nowrap px-4 py-2.5 text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+      "text-glass-tab-text hover:text-glass-tab-text-hover hover:bg-glass-tab-hover",
+      "data-[state=active]:bg-glass-tab-active-bg data-[state=active]:text-glass-tab-active-text data-[state=active]:font-semibold data-[state=active]:shadow-md",
+      "relative overflow-hidden rounded-full min-w-0 flex-1 lg:flex-initial lg:min-w-fit",
       className
     )}
     style={{
-      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-      borderRadius: '8px'
+      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      borderRadius: '9999px'
     }}
     {...props}
   />
