@@ -10,6 +10,13 @@
     --background: 0 0% 100%;
     --foreground: 217 32% 17%;
     
+    /* Navy Blue Tab System */
+    --navy: 210 100% 12%;          /* #001F3F */
+    --navy-hover: 210 84% 18%;     /* #002E5C */
+    --navy-light: 213 100% 42%;    /* #0074D9 */
+    --navy-foreground: 0 0% 100%;  /* #FFFFFF */
+    --navy-muted: 210 17% 96%;     /* #F5F5F5 */
+    
     /* Medical Primary - Professional Blue */
     --primary: 216 87% 60%;        /* #2563EB */
     --primary-foreground: 0 0% 100%;
