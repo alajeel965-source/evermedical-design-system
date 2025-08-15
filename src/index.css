@@ -10,12 +10,12 @@
     --background: 0 0% 100%;
     --foreground: 217 32% 17%;
     
-    /* Glass Effect System */
-    --glass-bg: rgba(255, 255, 255, 0.3);
-    --glass-border: rgba(255, 255, 255, 0.4);
-    --glass-tab-text: 28 3% 11%;        /* #1C1C1E */
-    --glass-tab-active: rgba(255, 255, 255, 0.2);
-    --glass-tab-hover: rgba(255, 255, 255, 0.15);
+    /* Sky Blue Glass Effect System */
+    --glass-bg: rgba(135, 206, 235, 0.4);      /* Sky blue tint light mode */
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-tab-text: 28 3% 11%;               /* #1C1C1E dark navy */
+    --glass-tab-active: rgba(255, 255, 255, 0.25);
+    --glass-tab-hover: rgba(255, 255, 255, 0.2);
     
     /* Medical Primary - Professional Blue */
     --primary: 216 87% 60%;        /* #2563EB */
@@ -140,12 +140,12 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
     
-    /* Glass Effect System - Dark Mode */
-    --glass-bg: rgba(0, 0, 0, 0.3);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-tab-text: 0 0% 100%;        /* #FFFFFF */
-    --glass-tab-active: rgba(255, 255, 255, 0.1);
-    --glass-tab-hover: rgba(255, 255, 255, 0.08);
+    /* Sky Blue Glass Effect System - Dark Mode */
+    --glass-bg: rgba(70, 130, 180, 0.35);      /* Steel blue tint dark mode */
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-tab-text: 0 0% 100%;               /* #FFFFFF */
+    --glass-tab-active: rgba(255, 255, 255, 0.25);
+    --glass-tab-hover: rgba(255, 255, 255, 0.2);
     
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
