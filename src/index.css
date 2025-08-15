@@ -10,12 +10,12 @@
     --background: 0 0% 100%;
     --foreground: 217 32% 17%;
     
-    /* Navy Blue Tab System */
-    --navy: 210 100% 12%;          /* #001F3F */
-    --navy-hover: 210 84% 18%;     /* #002E5C */
-    --navy-light: 213 100% 42%;    /* #0074D9 */
-    --navy-foreground: 0 0% 100%;  /* #FFFFFF */
-    --navy-muted: 210 17% 96%;     /* #F5F5F5 */
+    /* Glass Effect System */
+    --glass-bg: rgba(255, 255, 255, 0.3);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-tab-text: 28 3% 11%;        /* #1C1C1E */
+    --glass-tab-active: rgba(255, 255, 255, 0.2);
+    --glass-tab-hover: rgba(255, 255, 255, 0.15);
     
     /* Medical Primary - Professional Blue */
     --primary: 216 87% 60%;        /* #2563EB */
@@ -139,6 +139,14 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+    
+    /* Glass Effect System - Dark Mode */
+    --glass-bg: rgba(0, 0, 0, 0.3);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-tab-text: 0 0% 100%;        /* #FFFFFF */
+    --glass-tab-active: rgba(255, 255, 255, 0.1);
+    --glass-tab-hover: rgba(255, 255, 255, 0.08);
+    
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

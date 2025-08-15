@@ -47,13 +47,13 @@ export default {
 					foreground: 'hsl(var(--accent-foreground))'
 				},
 				
-				/* Navy Tab System */
-				navy: {
-					DEFAULT: 'hsl(var(--navy))',
-					hover: 'hsl(var(--navy-hover))',
-					light: 'hsl(var(--navy-light))',
-					foreground: 'hsl(var(--navy-foreground))',
-					muted: 'hsl(var(--navy-muted))'
+				/* Glass Effect System */
+				glass: {
+					bg: 'var(--glass-bg)',
+					border: 'var(--glass-border)',
+					'tab-text': 'hsl(var(--glass-tab-text))',
+					'tab-active': 'var(--glass-tab-active)',
+					'tab-hover': 'var(--glass-tab-hover)'
 				},
 				
 				/* Medical Status Colors */

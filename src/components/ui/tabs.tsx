@@ -12,9 +12,14 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-12 items-center justify-center rounded-medical-sm bg-navy p-1 text-navy-foreground shadow-soft",
+      "inline-flex h-12 items-center justify-center rounded-medical-sm p-1 text-glass-tab-text shadow-soft border border-glass-border backdrop-blur-xl",
+      "bg-glass-bg supports-[backdrop-filter]:bg-glass-bg",
       className
     )}
+    style={{
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)'
+    }}
     {...props}
   />
 ))
@@ -27,9 +32,15 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-medical-sm px-4 py-2.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-light focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-navy-muted hover:bg-navy-hover hover:text-navy-foreground data-[state=active]:bg-navy-light data-[state=active]:text-navy-foreground data-[state=active]:shadow-sm border-b-2 border-transparent data-[state=active]:border-navy-light",
+      "inline-flex items-center justify-center whitespace-nowrap rounded-medical-sm px-4 py-2.5 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+      "text-glass-tab-text hover:brightness-110 data-[state=active]:font-semibold data-[state=active]:shadow-sm",
+      "hover:bg-glass-tab-hover data-[state=active]:bg-glass-tab-active",
+      "relative overflow-hidden",
       className
     )}
+    style={{
+      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+    }}
     {...props}
   />
 ))
