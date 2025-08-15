@@ -32,7 +32,7 @@ export function SearchHeader({
 }: SearchHeaderProps) {
   return (
     <div className="border-b border-border bg-card">
-      <div className="container mx-auto px-lg py-xl">
+      <div className="site-container py-xl">
         <div className="space-y-lg">
           {/* Title and subtitle */}
           <div className="text-center lg:text-left">

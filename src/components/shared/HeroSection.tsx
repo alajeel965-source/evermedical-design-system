@@ -15,7 +15,7 @@ export function HeroSection() {
         <div className="absolute top-3/4 left-1/2 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
       </div>
       
-      <div className="container mx-auto px-lg relative">
+      <div className="site-container relative">
         <div className="max-w-4xl mx-auto">
           {/* Hero Card */}
           <Card className="rounded-2xl bg-gradient-to-br from-card/95 to-card/90 backdrop-blur-sm border-border/50 shadow-medical-lg p-2xl">

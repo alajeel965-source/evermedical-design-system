@@ -58,9 +58,9 @@ export function TopNav() {
       )}
       role="banner"
     >
-      <div className="container mx-auto">
+      <div className="site-container">
         <div className={cn(
-          "flex h-16 items-center justify-between px-lg",
+          "flex h-16 items-center justify-between",
           isRTL && "flex-row-reverse"
         )}>
           

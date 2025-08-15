@@ -9,7 +9,7 @@ export function Footer({ language = "en" }: FooterProps) {
 
   return (
     <footer className={`bg-surface border-t border-border mt-2xl ${isRTL ? 'rtl' : 'ltr'}`}>
-      <div className="container mx-auto px-lg py-2xl">
+      <div className="site-container py-2xl">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-xl">
           {/* Company */}

@@ -63,7 +63,7 @@ export function PageLayout({
           showViewToggle={true}
         />
         
-        <div className="container mx-auto px-lg py-lg">
+        <div className="site-container py-lg">
           <div className="flex gap-lg">
             {showFilters && (
               <aside className="hidden lg:block w-64 shrink-0" role="complementary" aria-label="Filter controls">
@@ -81,7 +81,7 @@ export function PageLayout({
               </aside>
             )}
             
-            <main className={`flex-1 ${showFilters ? 'lg:max-w-[calc(100%-280px)]' : ''}`}>
+            <main className={`flex-1 min-w-0 ${showFilters ? 'lg:max-w-[calc(100%-280px)]' : ''}`}>
               {children}
             </main>
           </div>

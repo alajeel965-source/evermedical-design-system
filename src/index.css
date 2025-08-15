@@ -66,6 +66,11 @@
     --space-xl: 2rem;              /* 32px */
     --space-2xl: 3rem;             /* 48px */
     
+    /* Global Container System */
+    --container-max-width: 1280px;
+    --container-gutter: 1.5rem;    /* 24px */
+    --container-gutter-mobile: 1rem; /* 16px */
+    
     /* Shadows - Soft Medical */
     --shadow-soft: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     --shadow-medium: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -218,6 +223,29 @@
     min-height: 44px;
     min-width: 44px;
     touch-action: manipulation;
+  }
+
+  /* Global Container System */
+  .site-container {
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--container-gutter-mobile);
+    padding-right: var(--container-gutter-mobile);
+  }
+
+  @media (min-width: 768px) {
+    .site-container {
+      padding-left: var(--container-gutter);
+      padding-right: var(--container-gutter);
+    }
+  }
+
+  /* Prevent horizontal overflow */
+  .prevent-overflow {
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   /* Focus management */

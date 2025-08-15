@@ -14,7 +14,7 @@ export function AppShell({ children, announceMessage = "" }: AppShellProps) {
   const { language, isRTL } = useI18n();
 
   return (
-    <div className={`min-h-screen flex flex-col ${isRTL ? 'rtl' : 'ltr'}`}>
+    <div className={`min-h-screen flex flex-col prevent-overflow ${isRTL ? 'rtl' : 'ltr'}`}>
       <SkipToContent />
       <LiveRegion message={announceMessage} />
       

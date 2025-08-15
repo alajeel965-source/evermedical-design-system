@@ -35,7 +35,7 @@ const Index = () => {
 
       {/* Quick RFQ Preview + Live RFQs Section */}
       <section className="py-2xl bg-gradient-to-b from-background to-sky/10">
-        <div className="container mx-auto px-lg">
+        <div className="site-container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-xl items-start">
             {/* Left Column: Quick RFQ Preview (left in LTR, right in RTL) */}
             <div className="order-1 lg:order-1 rtl:lg:order-2 w-full">
@@ -62,7 +62,7 @@ const Index = () => {
 
       {/* Sign Up Section */}
       <section className="py-2xl bg-gradient-to-b from-sky/30 to-transparent">
-        <div className="container mx-auto px-lg">
+        <div className="site-container">
           <div className="flex justify-center">
             <div className="w-full max-w-md">
               <SignupRegister 
@@ -95,7 +95,7 @@ const Index = () => {
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-lg py-2xl">
+      <div className="site-container py-2xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-2xl">
           {/* Left Column - Features and Live RFQs */}
           <div className="lg:col-span-2 space-y-2xl">
