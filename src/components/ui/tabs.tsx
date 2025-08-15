@@ -12,14 +12,15 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-12 items-center justify-center p-1 text-glass-tab-text shadow-soft border border-glass-border",
+      "inline-flex h-12 items-center justify-center p-1 text-glass-tab-text border border-glass-border",
       "bg-glass-bg supports-[backdrop-filter]:bg-glass-bg rounded-xl",
       className
     )}
     style={{
       backdropFilter: 'blur(12px) saturate(180%)',
       WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-      borderRadius: '12px'
+      borderRadius: '12px',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.05)'
     }}
     {...props}
   />

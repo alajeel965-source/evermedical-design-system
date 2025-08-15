@@ -10,9 +10,9 @@
     --background: 0 0% 100%;
     --foreground: 217 32% 17%;
     
-    /* Sky Blue Glass Effect System */
-    --glass-bg: rgba(135, 206, 235, 0.4);      /* Sky blue tint light mode */
-    --glass-border: rgba(255, 255, 255, 0.3);
+    /* White Frosted Glass Effect System */
+    --glass-bg: rgba(255, 255, 255, 0.3);      /* White frosted glass light mode */
+    --glass-border: rgba(255, 255, 255, 0.4);
     --glass-tab-text: 28 3% 11%;               /* #1C1C1E dark navy */
     --glass-tab-active: rgba(255, 255, 255, 0.25);
     --glass-tab-hover: rgba(255, 255, 255, 0.2);
@@ -140,9 +140,9 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
     
-    /* Sky Blue Glass Effect System - Dark Mode */
-    --glass-bg: rgba(70, 130, 180, 0.35);      /* Steel blue tint dark mode */
-    --glass-border: rgba(255, 255, 255, 0.2);
+    /* White Frosted Glass Effect System - Dark Mode */
+    --glass-bg: rgba(255, 255, 255, 0.15);     /* White frosted glass dark mode */
+    --glass-border: rgba(255, 255, 255, 0.25);
     --glass-tab-text: 0 0% 100%;               /* #FFFFFF */
     --glass-tab-active: rgba(255, 255, 255, 0.25);
     --glass-tab-hover: rgba(255, 255, 255, 0.2);
