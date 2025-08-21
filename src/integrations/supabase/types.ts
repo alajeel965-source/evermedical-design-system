@@ -104,24 +104,10 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "event_duplicates_duplicate_of_fkey"
-            columns: ["duplicate_of"]
-            isOneToOne: false
-            referencedRelation: "public_medical_events"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "event_duplicates_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "medical_events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "event_duplicates_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "public_medical_events"
             referencedColumns: ["id"]
           },
         ]
@@ -159,13 +145,6 @@ export type Database = {
             referencedRelation: "medical_events"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "event_interactions_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "public_medical_events"
-            referencedColumns: ["id"]
-          },
         ]
       }
       event_registrations: {
@@ -196,13 +175,6 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "event_registrations_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -333,13 +305,6 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "medical_events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "event_tag_relations_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "public_medical_events"
             referencedColumns: ["id"]
           },
           {
@@ -669,13 +634,6 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "products_supplier_id_fkey"
-            columns: ["supplier_id"]
-            isOneToOne: false
-            referencedRelation: "public_profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       profiles: {
@@ -759,6 +717,219 @@ export type Database = {
         }
         Relationships: []
       }
+      public_medical_events: {
+        Row: {
+          accreditation_details: Json | null
+          accreditation_url: string | null
+          capacity: number | null
+          city: string | null
+          click_count: number | null
+          cme_hours: number | null
+          cme_points: number | null
+          cme_provider: string | null
+          country: string | null
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          description_ar: string | null
+          end_date: string
+          featured_image: string | null
+          format: string | null
+          gallery_images: string[] | null
+          has_cme: boolean | null
+          id: string
+          is_free: boolean | null
+          languages: string[] | null
+          online_url: string | null
+          organizer: string | null
+          organizer_website: string | null
+          price_range: string | null
+          registered_count: number | null
+          registration_deadline: string | null
+          registration_required: boolean | null
+          registration_url: string | null
+          save_count: number | null
+          seo_description: string | null
+          seo_title: string | null
+          share_count: number | null
+          slug: string
+          source_url: string | null
+          specialty_slug: string | null
+          start_date: string
+          status: string | null
+          subspecialties: string[] | null
+          subspecialty: string | null
+          summary: string | null
+          summary_ar: string | null
+          target_audience: string[] | null
+          timezone: string | null
+          title: string
+          title_ar: string | null
+          updated_at: string | null
+          venue_address: string | null
+          venue_lat: number | null
+          venue_lng: number | null
+          venue_name: string | null
+          view_count: number | null
+        }
+        Insert: {
+          accreditation_details?: Json | null
+          accreditation_url?: string | null
+          capacity?: number | null
+          city?: string | null
+          click_count?: number | null
+          cme_hours?: number | null
+          cme_points?: number | null
+          cme_provider?: string | null
+          country?: string | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          description_ar?: string | null
+          end_date: string
+          featured_image?: string | null
+          format?: string | null
+          gallery_images?: string[] | null
+          has_cme?: boolean | null
+          id: string
+          is_free?: boolean | null
+          languages?: string[] | null
+          online_url?: string | null
+          organizer?: string | null
+          organizer_website?: string | null
+          price_range?: string | null
+          registered_count?: number | null
+          registration_deadline?: string | null
+          registration_required?: boolean | null
+          registration_url?: string | null
+          save_count?: number | null
+          seo_description?: string | null
+          seo_title?: string | null
+          share_count?: number | null
+          slug: string
+          source_url?: string | null
+          specialty_slug?: string | null
+          start_date: string
+          status?: string | null
+          subspecialties?: string[] | null
+          subspecialty?: string | null
+          summary?: string | null
+          summary_ar?: string | null
+          target_audience?: string[] | null
+          timezone?: string | null
+          title: string
+          title_ar?: string | null
+          updated_at?: string | null
+          venue_address?: string | null
+          venue_lat?: number | null
+          venue_lng?: number | null
+          venue_name?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          accreditation_details?: Json | null
+          accreditation_url?: string | null
+          capacity?: number | null
+          city?: string | null
+          click_count?: number | null
+          cme_hours?: number | null
+          cme_points?: number | null
+          cme_provider?: string | null
+          country?: string | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          description_ar?: string | null
+          end_date?: string
+          featured_image?: string | null
+          format?: string | null
+          gallery_images?: string[] | null
+          has_cme?: boolean | null
+          id?: string
+          is_free?: boolean | null
+          languages?: string[] | null
+          online_url?: string | null
+          organizer?: string | null
+          organizer_website?: string | null
+          price_range?: string | null
+          registered_count?: number | null
+          registration_deadline?: string | null
+          registration_required?: boolean | null
+          registration_url?: string | null
+          save_count?: number | null
+          seo_description?: string | null
+          seo_title?: string | null
+          share_count?: number | null
+          slug?: string
+          source_url?: string | null
+          specialty_slug?: string | null
+          start_date?: string
+          status?: string | null
+          subspecialties?: string[] | null
+          subspecialty?: string | null
+          summary?: string | null
+          summary_ar?: string | null
+          target_audience?: string[] | null
+          timezone?: string | null
+          title?: string
+          title_ar?: string | null
+          updated_at?: string | null
+          venue_address?: string | null
+          venue_lat?: number | null
+          venue_lng?: number | null
+          venue_name?: string | null
+          view_count?: number | null
+        }
+        Relationships: []
+      }
+      public_profiles: {
+        Row: {
+          avatar_url: string | null
+          country: string | null
+          created_at: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          organization: string | null
+          primary_specialty_slug: string | null
+          profile_type: string
+          specialty: string | null
+          title: string | null
+          user_id: string
+          verified: boolean | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          country?: string | null
+          created_at?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          organization?: string | null
+          primary_specialty_slug?: string | null
+          profile_type: string
+          specialty?: string | null
+          title?: string | null
+          user_id: string
+          verified?: boolean | null
+        }
+        Update: {
+          avatar_url?: string | null
+          country?: string | null
+          created_at?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          organization?: string | null
+          primary_specialty_slug?: string | null
+          profile_type?: string
+          specialty?: string | null
+          title?: string | null
+          user_id?: string
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
       rfqs: {
         Row: {
           budget_range: string | null
@@ -802,13 +973,6 @@ export type Database = {
             columns: ["buyer_id"]
             isOneToOne: false
             referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "rfqs_buyer_id_fkey"
-            columns: ["buyer_id"]
-            isOneToOne: false
-            referencedRelation: "public_profiles"
             referencedColumns: ["id"]
           },
           {
@@ -891,219 +1055,7 @@ export type Database = {
       }
     }
     Views: {
-      public_medical_events: {
-        Row: {
-          accreditation_details: Json | null
-          accreditation_url: string | null
-          capacity: number | null
-          city: string | null
-          click_count: number | null
-          cme_hours: number | null
-          cme_points: number | null
-          cme_provider: string | null
-          country: string | null
-          created_at: string | null
-          currency: string | null
-          description: string | null
-          description_ar: string | null
-          end_date: string | null
-          featured_image: string | null
-          format: string | null
-          gallery_images: string[] | null
-          has_cme: boolean | null
-          id: string | null
-          is_free: boolean | null
-          languages: string[] | null
-          online_url: string | null
-          organizer: string | null
-          organizer_website: string | null
-          price_range: string | null
-          registered_count: number | null
-          registration_deadline: string | null
-          registration_required: boolean | null
-          registration_url: string | null
-          save_count: number | null
-          seo_description: string | null
-          seo_title: string | null
-          share_count: number | null
-          slug: string | null
-          source_url: string | null
-          specialty_slug: string | null
-          start_date: string | null
-          status: string | null
-          subspecialties: string[] | null
-          subspecialty: string | null
-          summary: string | null
-          summary_ar: string | null
-          target_audience: string[] | null
-          timezone: string | null
-          title: string | null
-          title_ar: string | null
-          updated_at: string | null
-          venue_address: string | null
-          venue_lat: number | null
-          venue_lng: number | null
-          venue_name: string | null
-          view_count: number | null
-        }
-        Insert: {
-          accreditation_details?: Json | null
-          accreditation_url?: string | null
-          capacity?: number | null
-          city?: string | null
-          click_count?: number | null
-          cme_hours?: number | null
-          cme_points?: number | null
-          cme_provider?: string | null
-          country?: string | null
-          created_at?: string | null
-          currency?: string | null
-          description?: string | null
-          description_ar?: string | null
-          end_date?: string | null
-          featured_image?: string | null
-          format?: string | null
-          gallery_images?: string[] | null
-          has_cme?: boolean | null
-          id?: string | null
-          is_free?: boolean | null
-          languages?: string[] | null
-          online_url?: string | null
-          organizer?: string | null
-          organizer_website?: string | null
-          price_range?: string | null
-          registered_count?: number | null
-          registration_deadline?: string | null
-          registration_required?: boolean | null
-          registration_url?: string | null
-          save_count?: number | null
-          seo_description?: string | null
-          seo_title?: string | null
-          share_count?: number | null
-          slug?: string | null
-          source_url?: string | null
-          specialty_slug?: string | null
-          start_date?: string | null
-          status?: string | null
-          subspecialties?: string[] | null
-          subspecialty?: string | null
-          summary?: string | null
-          summary_ar?: string | null
-          target_audience?: string[] | null
-          timezone?: string | null
-          title?: string | null
-          title_ar?: string | null
-          updated_at?: string | null
-          venue_address?: string | null
-          venue_lat?: number | null
-          venue_lng?: number | null
-          venue_name?: string | null
-          view_count?: number | null
-        }
-        Update: {
-          accreditation_details?: Json | null
-          accreditation_url?: string | null
-          capacity?: number | null
-          city?: string | null
-          click_count?: number | null
-          cme_hours?: number | null
-          cme_points?: number | null
-          cme_provider?: string | null
-          country?: string | null
-          created_at?: string | null
-          currency?: string | null
-          description?: string | null
-          description_ar?: string | null
-          end_date?: string | null
-          featured_image?: string | null
-          format?: string | null
-          gallery_images?: string[] | null
-          has_cme?: boolean | null
-          id?: string | null
-          is_free?: boolean | null
-          languages?: string[] | null
-          online_url?: string | null
-          organizer?: string | null
-          organizer_website?: string | null
-          price_range?: string | null
-          registered_count?: number | null
-          registration_deadline?: string | null
-          registration_required?: boolean | null
-          registration_url?: string | null
-          save_count?: number | null
-          seo_description?: string | null
-          seo_title?: string | null
-          share_count?: number | null
-          slug?: string | null
-          source_url?: string | null
-          specialty_slug?: string | null
-          start_date?: string | null
-          status?: string | null
-          subspecialties?: string[] | null
-          subspecialty?: string | null
-          summary?: string | null
-          summary_ar?: string | null
-          target_audience?: string[] | null
-          timezone?: string | null
-          title?: string | null
-          title_ar?: string | null
-          updated_at?: string | null
-          venue_address?: string | null
-          venue_lat?: number | null
-          venue_lng?: number | null
-          venue_name?: string | null
-          view_count?: number | null
-        }
-        Relationships: []
-      }
-      public_profiles: {
-        Row: {
-          avatar_url: string | null
-          country: string | null
-          created_at: string | null
-          first_name: string | null
-          id: string | null
-          last_name: string | null
-          organization: string | null
-          primary_specialty_slug: string | null
-          profile_type: string | null
-          specialty: string | null
-          title: string | null
-          user_id: string | null
-          verified: boolean | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          country?: string | null
-          created_at?: string | null
-          first_name?: string | null
-          id?: string | null
-          last_name?: string | null
-          organization?: string | null
-          primary_specialty_slug?: string | null
-          profile_type?: string | null
-          specialty?: string | null
-          title?: string | null
-          user_id?: string | null
-          verified?: boolean | null
-        }
-        Update: {
-          avatar_url?: string | null
-          country?: string | null
-          created_at?: string | null
-          first_name?: string | null
-          id?: string | null
-          last_name?: string | null
-          organization?: string | null
-          primary_specialty_slug?: string | null
-          profile_type?: string | null
-          specialty?: string | null
-          title?: string | null
-          user_id?: string | null
-          verified?: boolean | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       audit_public_view_safety: {
@@ -1152,16 +1104,16 @@ export type Database = {
           country: string | null
           created_at: string | null
           first_name: string | null
-          id: string | null
+          id: string
           last_name: string | null
           organization: string | null
           primary_specialty_slug: string | null
-          profile_type: string | null
+          profile_type: string
           specialty: string | null
           title: string | null
-          user_id: string | null
+          user_id: string
           verified: boolean | null
-        }
+        }[]
       }
       get_safe_profile_summary: {
         Args: { target_user_id: string }
