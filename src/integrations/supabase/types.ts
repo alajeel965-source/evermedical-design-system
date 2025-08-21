@@ -1061,7 +1061,36 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      safe_professional_directory: {
+        Row: {
+          country: string | null
+          created_at: string | null
+          id: string | null
+          primary_specialty_slug: string | null
+          profile_type: string | null
+          specialty: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          country?: never
+          created_at?: string | null
+          id?: string | null
+          primary_specialty_slug?: never
+          profile_type?: string | null
+          specialty?: never
+          verified?: boolean | null
+        }
+        Update: {
+          country?: never
+          created_at?: string | null
+          id?: string | null
+          primary_specialty_slug?: never
+          profile_type?: string | null
+          specialty?: never
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       audit_public_view_safety: {
@@ -1308,6 +1337,16 @@ export type Database = {
           updated_at: string
         }[]
       }
+      get_safe_user_summary: {
+        Args: { target_user_id: string }
+        Returns: {
+          country_region: string
+          is_verified: boolean
+          member_since: string
+          profile_exists: boolean
+          specialty_area: string
+        }[]
+      }
       get_security_compliance_report: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1369,6 +1408,15 @@ export type Database = {
           rls_status: string
           security_level: string
           table_name: string
+        }[]
+      }
+      validate_complete_profile_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
+          status: string
         }[]
       }
       validate_crawl_operation: {
