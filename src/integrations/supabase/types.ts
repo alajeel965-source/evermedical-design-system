@@ -1131,6 +1131,10 @@ export type Database = {
           status: string
         }[]
       }
+      get_current_user_profile_type: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       get_public_profile: {
         Args: { profile_user_id: string }
         Returns: {
@@ -1178,6 +1182,14 @@ export type Database = {
         }
         Returns: Json
       }
+      is_current_user_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      is_current_user_verified_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       validate_profile_security: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1195,6 +1207,14 @@ export type Database = {
         Returns: {
           details: string
           security_aspect: string
+          status: string
+        }[]
+      }
+      verify_profiles_rls_fix: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
           status: string
         }[]
       }
