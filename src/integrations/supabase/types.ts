@@ -1131,6 +1131,16 @@ export type Database = {
           status: string
         }[]
       }
+      comprehensive_security_report: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          category: string
+          check_name: string
+          details: string
+          risk_level: string
+          status: string
+        }[]
+      }
       get_current_user_profile_type: {
         Args: Record<PropertyKey, never>
         Returns: string
