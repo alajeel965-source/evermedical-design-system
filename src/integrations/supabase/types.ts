@@ -1071,24 +1071,6 @@ export type Database = {
           specialty: string | null
           verified: boolean | null
         }
-        Insert: {
-          country?: never
-          created_at?: string | null
-          id?: string | null
-          primary_specialty_slug?: never
-          profile_type?: string | null
-          specialty?: never
-          verified?: boolean | null
-        }
-        Update: {
-          country?: never
-          created_at?: string | null
-          id?: string | null
-          primary_specialty_slug?: never
-          profile_type?: string | null
-          specialty?: never
-          verified?: boolean | null
-        }
         Relationships: []
       }
     }
@@ -1311,6 +1293,18 @@ export type Database = {
           organizer_website: string
         }[]
       }
+      get_safe_professional_directory: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          country: string
+          created_at: string
+          id: string
+          primary_specialty_slug: string
+          profile_type: string
+          specialty: string
+          verified: boolean
+        }[]
+      }
       get_safe_profile_summary: {
         Args: { target_user_id: string }
         Returns: {
@@ -1449,6 +1443,15 @@ export type Database = {
         Returns: {
           check_name: string
           details: string
+          status: string
+        }[]
+      }
+      validate_professional_directory_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
           status: string
         }[]
       }
