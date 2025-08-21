@@ -77,7 +77,7 @@ export interface AuthSession {
 export interface AuthResult {
   success: boolean;
   error?: string;
-  data?: any;
+  data?: UserProfile | AuthSession | Record<string, unknown>;
 }
 
 export interface ValidationResult {
@@ -308,7 +308,7 @@ export interface SelectOption {
 
 export interface ValidationRule {
   type: 'required' | 'email' | 'minLength' | 'maxLength' | 'pattern';
-  value?: any;
+  value?: string | number | RegExp;
   message: string;
 }
 
@@ -333,7 +333,7 @@ export interface TableColumn<T> {
   key: keyof T;
   label: string;
   sortable?: boolean;
-  render?: (value: any, item: T) => React.ReactNode;
+  render?: (value: T[keyof T], item: T) => React.ReactNode;
 }
 
 /**

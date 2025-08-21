@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import type { SupabaseResponse, SupabaseError, EventSearchResult } from "@/lib/types/api";
 
 export interface OrganizerContactInfo {
   organizer_email: string;
@@ -49,7 +50,7 @@ export interface SafeEventData {
   cme_hours?: number;
   cme_points?: number;
   accreditation_url?: string;
-  accreditation_details?: any;
+  accreditation_details?: unknown;
   is_free?: boolean;
   price_range?: string;
   currency?: string;
@@ -75,7 +76,7 @@ export interface SafeEventData {
  * Fetches public medical events data without sensitive organizer contact information
  * This uses the public_medical_events table which excludes email and phone numbers
  */
-export async function getPublicEvents(): Promise<{ data: SafeEventData[] | null; error: any }> {
+export async function getPublicEvents(): Promise<SupabaseResponse<SafeEventData[]>> {
   try {
     const { data, error } = await supabase
       .from('public_medical_events')
@@ -86,14 +87,17 @@ export async function getPublicEvents(): Promise<{ data: SafeEventData[] | null;
     return { data, error };
   } catch (error) {
     console.error('Error fetching public events:', error);
-    return { data: null, error };
+    return { 
+      data: null, 
+      error: error instanceof Error ? { message: error.message, code: 'FETCH_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
+    };
   }
 }
 
 /**
  * Fetches a single public event by ID without sensitive organizer contact information
  */
-export async function getPublicEventById(eventId: string): Promise<{ data: SafeEventData | null; error: any }> {
+export async function getPublicEventById(eventId: string): Promise<SupabaseResponse<SafeEventData>> {
   try {
     const { data, error } = await supabase
       .from('public_medical_events')
@@ -105,7 +109,10 @@ export async function getPublicEventById(eventId: string): Promise<{ data: SafeE
     return { data, error };
   } catch (error) {
     console.error('Error fetching public event:', error);
-    return { data: null, error };
+    return { 
+      data: null, 
+      error: error instanceof Error ? { message: error.message, code: 'FETCH_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
+    };
   }
 }
 
@@ -113,7 +120,7 @@ export async function getPublicEventById(eventId: string): Promise<{ data: SafeE
  * Securely fetches organizer contact information
  * Only accessible to event creators and verified admins
  */
-export async function getOrganizerContactInfo(eventId: string): Promise<{ data: OrganizerContactInfo[] | null; error: any }> {
+export async function getOrganizerContactInfo(eventId: string): Promise<SupabaseResponse<OrganizerContactInfo[]>> {
   try {
     const { data, error } = await supabase.rpc('get_organizer_contact_info', {
       event_id: eventId
@@ -127,7 +134,10 @@ export async function getOrganizerContactInfo(eventId: string): Promise<{ data: 
     return { data, error: null };
   } catch (error) {
     console.error('Error in organizer contact info request:', error);
-    return { data: null, error };
+    return { 
+      data: null, 
+      error: error instanceof Error ? { message: error.message, code: 'RPC_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
+    };
   }
 }
 
@@ -150,12 +160,15 @@ export async function canAccessOrganizerData(eventId: string): Promise<boolean> 
 /**
  * Fetches events created by the current user (includes all data)
  */
-export async function getUserCreatedEvents(): Promise<{ data: any[] | null; error: any }> {
+export async function getUserCreatedEvents(): Promise<SupabaseResponse<SafeEventData[]>> {
   try {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      return { data: null, error: 'User not authenticated' };
+      return { 
+        data: null, 
+        error: { message: 'User not authenticated', code: 'AUTH_REQUIRED' } as SupabaseError
+      };
     }
 
     const { data, error } = await supabase
@@ -167,7 +180,10 @@ export async function getUserCreatedEvents(): Promise<{ data: any[] | null; erro
     return { data, error };
   } catch (error) {
     console.error('Error fetching user created events:', error);
-    return { data: null, error };
+    return { 
+      data: null, 
+      error: error instanceof Error ? { message: error.message, code: 'FETCH_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
+    };
   }
 }
 
@@ -177,7 +193,7 @@ export async function getUserCreatedEvents(): Promise<{ data: any[] | null; erro
 export async function getSafeOrganizerDisplay(
   eventId: string, 
   includeSensitive: boolean = false
-): Promise<{ data: SafeOrganizerDisplay | null; error: any }> {
+): Promise<SupabaseResponse<SafeOrganizerDisplay>> {
   try {
     const { data, error } = await supabase.rpc('get_safe_organizer_display', {
       event_id: eventId,
@@ -192,7 +208,10 @@ export async function getSafeOrganizerDisplay(
     return { data: data?.[0] || null, error: null };
   } catch (error) {
     console.error('Error in safe organizer display request:', error);
-    return { data: null, error };
+    return { 
+      data: null, 
+      error: error instanceof Error ? { message: error.message, code: 'RPC_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
+    };
   }
 }
 
@@ -211,7 +230,7 @@ export async function searchEvents(params: {
   end_date?: string;
   page?: number;
   limit?: number;
-}): Promise<{ data: any | null; error: any }> {
+}): Promise<SupabaseResponse<EventSearchResult>> {
   try {
     const searchParams = new URLSearchParams();
     
@@ -228,6 +247,9 @@ export async function searchEvents(params: {
     return { data, error };
   } catch (error) {
     console.error('Error searching events:', error);
-    return { data: null, error };
+    return { 
+      data: null, 
+      error: error instanceof Error ? { message: error.message, code: 'SEARCH_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
+    };
   }
 }

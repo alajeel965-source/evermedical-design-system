@@ -10,25 +10,31 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UsernameField } from "./UsernameField";
 import { User, Shield, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { ProfileFormData } from "@/lib/types/api";
 
 interface ProfileFormProps {
   profileType: "medical_personnel" | "medical_institute" | "medical_seller";
-  initialData?: any;
-  onSave?: (data: any) => void;
+  initialData?: Partial<ProfileFormData>;
+  onSave?: (data: ProfileFormData) => void;
   className?: string;
 }
 
 export function ProfileForm({ profileType, initialData, onSave, className }: ProfileFormProps) {
+  // Safe property access with fallbacks
+  const getInitialValue = (key: string, fallback = "") => {
+    return (initialData as Record<string, unknown>)?.[key] as string || fallback;
+  };
+
   const [formData, setFormData] = useState({
-    first_name: initialData?.first_name || "",
-    last_name: initialData?.last_name || "",
-    username: initialData?.username || "",
-    email: initialData?.email || "",
-    title: initialData?.title || "",
-    organization: initialData?.organization || "",
-    specialty: initialData?.specialty || "",
-    country: initialData?.country || "",
-    avatar_url: initialData?.avatar_url || "",
+    first_name: getInitialValue("first_name"),
+    last_name: getInitialValue("last_name"),
+    username: getInitialValue("username"),
+    email: getInitialValue("email"),
+    title: getInitialValue("title"),
+    organization: getInitialValue("organization"),
+    specialty: getInitialValue("specialty"),
+    country: getInitialValue("country"),
+    avatar_url: getInitialValue("avatar_url"),
     profile_type: profileType,
     ...initialData
   });
@@ -40,7 +46,8 @@ export function ProfileForm({ profileType, initialData, onSave, className }: Pro
   };
 
   const handleSave = () => {
-    onSave?.(formData);
+    // Type assertion to ensure compatibility with ProfileFormData
+    onSave?.(formData as ProfileFormData);
   };
 
   const getFormTitle = () => {
@@ -71,9 +78,9 @@ export function ProfileForm({ profileType, initialData, onSave, className }: Pro
             <AvatarImage src={formData.avatar_url} alt="Profile picture" />
             <AvatarFallback>
               {formData.first_name && formData.last_name 
-                ? `${formData.first_name[0]}${formData.last_name[0]}`
+                ? `${formData.first_name[0] || ''}${formData.last_name[0] || ''}`
                 : formData.organization
-                  ? formData.organization.slice(0, 2)
+                  ? formData.organization.slice(0, 2).toUpperCase()
                   : "??"
               }
             </AvatarFallback>

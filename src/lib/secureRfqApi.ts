@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import type { SupabaseResponse, SupabaseError } from "@/lib/types/api";
 
 export interface SafeRfqDisplay {
   id: string;
@@ -33,7 +34,7 @@ export interface RfqData {
 export async function getSafeRfqDisplay(
   rfqId: string, 
   includeSensitive: boolean = false
-): Promise<{ data: SafeRfqDisplay | null; error: any }> {
+): Promise<SupabaseResponse<SafeRfqDisplay>> {
   try {
     const { data, error } = await supabase.rpc('get_safe_rfq_display', {
       rfq_id: rfqId,
@@ -48,14 +49,17 @@ export async function getSafeRfqDisplay(
     return { data: data?.[0] || null, error: null };
   } catch (error) {
     console.error('Error in safe RFQ display request:', error);
-    return { data: null, error };
+    return { 
+      data: null, 
+      error: error instanceof Error ? { message: error.message, code: 'RPC_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
+    };
   }
 }
 
 /**
  * Fetches RFQs accessible to current user with proper security
  */
-export async function getUserAccessibleRfqs(): Promise<{ data: RfqData[] | null; error: any }> {
+export async function getUserAccessibleRfqs(): Promise<SupabaseResponse<RfqData[]>> {
   try {
     const { data, error } = await supabase
       .from('rfqs')
@@ -66,19 +70,25 @@ export async function getUserAccessibleRfqs(): Promise<{ data: RfqData[] | null;
     return { data, error };
   } catch (error) {
     console.error('Error fetching accessible RFQs:', error);
-    return { data: null, error };
+    return { 
+      data: null, 
+      error: error instanceof Error ? { message: error.message, code: 'FETCH_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
+    };
   }
 }
 
 /**
  * Creates a new RFQ (only for authenticated buyers)
  */
-export async function createRfq(rfqData: Omit<RfqData, 'id' | 'created_at' | 'updated_at' | 'buyer_id'>): Promise<{ data: RfqData | null; error: any }> {
+export async function createRfq(rfqData: Omit<RfqData, 'id' | 'created_at' | 'updated_at' | 'buyer_id'>): Promise<SupabaseResponse<RfqData>> {
   try {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      return { data: null, error: 'User not authenticated' };
+      return { 
+        data: null, 
+        error: { message: 'User not authenticated', code: 'AUTH_REQUIRED' } as SupabaseError
+      };
     }
 
     // Get user profile to get buyer_id
@@ -89,7 +99,10 @@ export async function createRfq(rfqData: Omit<RfqData, 'id' | 'created_at' | 'up
       .single();
 
     if (!profile) {
-      return { data: null, error: 'User profile not found' };
+      return { 
+        data: null, 
+        error: { message: 'User profile not found', code: 'PROFILE_NOT_FOUND' } as SupabaseError
+      };
     }
 
     const { data, error } = await supabase
@@ -105,14 +118,17 @@ export async function createRfq(rfqData: Omit<RfqData, 'id' | 'created_at' | 'up
     return { data, error };
   } catch (error) {
     console.error('Error creating RFQ:', error);
-    return { data: null, error };
+    return { 
+      data: null, 
+      error: error instanceof Error ? { message: error.message, code: 'CREATE_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
+    };
   }
 }
 
 /**
  * Updates an existing RFQ (only by buyer who created it)
  */
-export async function updateRfq(rfqId: string, updates: Partial<Omit<RfqData, 'id' | 'created_at' | 'buyer_id'>>): Promise<{ data: RfqData | null; error: any }> {
+export async function updateRfq(rfqId: string, updates: Partial<Omit<RfqData, 'id' | 'created_at' | 'buyer_id'>>): Promise<SupabaseResponse<RfqData>> {
   try {
     const { data, error } = await supabase
       .from('rfqs')
@@ -124,6 +140,9 @@ export async function updateRfq(rfqId: string, updates: Partial<Omit<RfqData, 'i
     return { data, error };
   } catch (error) {
     console.error('Error updating RFQ:', error);
-    return { data: null, error };
+    return { 
+      data: null, 
+      error: error instanceof Error ? { message: error.message, code: 'UPDATE_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
+    };
   }
 }

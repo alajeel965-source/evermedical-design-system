@@ -5,20 +5,21 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Analytics } from '@/lib/api';
+import type { FormFieldValue, UseFormReturn, UseAsyncReturn } from '@/lib/types/hooks';
 
 /**
  * Enhanced form hook with validation and error handling
  */
-export function useForm<T extends Record<string, any>>(
+export function useForm<T extends Record<string, FormFieldValue>>(
   initialValues: T,
   validationSchema?: (values: T) => Record<keyof T, string>
-) {
+): UseFormReturn<T> {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
   const [touched, setTouched] = useState<Partial<Record<keyof T, boolean>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const setValue = useCallback((field: keyof T, value: any) => {
+  const setValue = useCallback((field: keyof T, value: FormFieldValue) => {
     setValues(prev => ({ ...prev, [field]: value }));
     
     // Clear error when user starts typing
@@ -172,8 +173,8 @@ export function usePrevious<T>(value: T): T | undefined {
  */
 export function useAsync<T, E = string>(
   asyncFunction: () => Promise<T>,
-  dependencies: any[] = []
-) {
+  dependencies: React.DependencyList = []
+): UseAsyncReturn<T, E> {
   const [data, setData] = useState<T | undefined>(undefined);
   const [error, setError] = useState<E | undefined>(undefined);
   const [loading, setLoading] = useState(true);
