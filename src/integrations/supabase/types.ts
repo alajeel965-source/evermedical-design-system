@@ -1098,12 +1098,18 @@ export type Database = {
         }[]
       }
       check_rate_limit: {
-        Args: {
-          action_type: string
-          max_attempts?: number
-          user_id_input: string
-          window_minutes?: number
-        }
+        Args:
+          | {
+              action_type: string
+              max_attempts?: number
+              user_id_input: string
+              window_minutes?: number
+            }
+          | {
+              max_requests: number
+              operation_name: string
+              time_window: unknown
+            }
         Returns: boolean
       }
       comprehensive_security_audit: {
