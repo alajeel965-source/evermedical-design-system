@@ -8,7 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { StatPill } from "@/components/shared/StatPill";
 import { EmptyState } from "@/components/shared/EmptyState";
-import { MapPin, Calendar, Download, Star, Award, Users, BookOpen, Settings, Edit } from "lucide-react";
+import { ProfileForm } from "@/components/shared/ProfileForm";
+import { MapPin, Calendar, Download, Star, Award, Users, BookOpen, Settings, Edit, User, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CMEActivity {
@@ -49,11 +50,16 @@ interface QuoteRequest {
 
 export function ProfileMedicalPersonnel() {
   const [userProfile, setUserProfile] = useState({
-    name: "Dr. Sarah Mitchell",
+    first_name: "Sarah",
+    last_name: "Mitchell",
+    username: "dr_sarah_mitchell",
+    email: "sarah.mitchell@jhmi.edu",
     title: "Cardiologist",
     specialty: "Interventional Cardiology",
     subspecialty: "Cardiac Catheterization",
-    location: "Johns Hopkins Hospital, Baltimore, MD",
+    organization: "Johns Hopkins Hospital",
+    country: "US",
+    location: "Baltimore, MD",
     profilePicture: "/placeholder.svg",
     verified: true,
     totalCME: 145,
@@ -62,6 +68,8 @@ export function ProfileMedicalPersonnel() {
     subscriptionPlan: "Premium",
     memberSince: "2021"
   });
+
+  const [showEditProfile, setShowEditProfile] = useState(false);
 
   const [cmeActivities] = useState<CMEActivity[]>([
     {
@@ -186,9 +194,9 @@ export function ProfileMedicalPersonnel() {
             <div className="flex flex-col md:flex-row items-start md:items-center gap-lg">
               <div className="relative">
                 <Avatar className="h-24 w-24 border-4 border-background shadow-medical">
-                  <AvatarImage src={userProfile.profilePicture} alt={userProfile.name} />
+                  <AvatarImage src={userProfile.profilePicture} alt={`${userProfile.first_name} ${userProfile.last_name}`} />
                   <AvatarFallback className="text-medical-lg font-semibold">
-                    {userProfile.name.split(' ').map(n => n[0]).join('')}
+                    {userProfile.first_name[0]}{userProfile.last_name[0]}
                   </AvatarFallback>
                 </Avatar>
                 {userProfile.verified && (
@@ -201,16 +209,27 @@ export function ProfileMedicalPersonnel() {
               <div className="flex-1 space-y-sm">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-md">
                   <div>
-                    <h1 className="text-medical-3xl font-bold text-heading">{userProfile.name}</h1>
-                    <p className="text-medical-xl text-primary font-semibold">{userProfile.title}</p>
+                    <h1 className="text-medical-3xl font-bold text-heading">
+                      {userProfile.first_name} {userProfile.last_name}
+                    </h1>
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-medical-xl text-primary font-semibold">{userProfile.title}</p>
+                      <Badge variant="secondary" className="text-xs">
+                        @{userProfile.username}
+                      </Badge>
+                    </div>
                     <p className="text-body">{userProfile.specialty}</p>
                     {userProfile.subspecialty && (
                       <p className="text-muted text-medical-sm">{userProfile.subspecialty}</p>
                     )}
+                    <div className="flex items-center gap-1 mt-1">
+                      <Shield className="h-3 w-3 text-muted" />
+                      <span className="text-xs text-muted">Email protected</span>
+                    </div>
                   </div>
                   
                   <div className="flex flex-col sm:flex-row gap-sm">
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => setShowEditProfile(true)}>
                       <Edit className="h-4 w-4 mr-2" />
                       Edit Profile
                     </Button>
@@ -224,11 +243,15 @@ export function ProfileMedicalPersonnel() {
                 <div className="flex flex-wrap items-center gap-md text-medical-sm text-muted">
                   <div className="flex items-center gap-1">
                     <MapPin className="h-4 w-4" />
-                    {userProfile.location}
+                    {userProfile.organization}, {userProfile.location}
                   </div>
                   <div className="flex items-center gap-1">
                     <Calendar className="h-4 w-4" />
                     Member since {userProfile.memberSince}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <User className="h-4 w-4" />
+                    @{userProfile.username}
                   </div>
                   <Badge variant="secondary">{userProfile.subscriptionPlan} Plan</Badge>
                   {userProfile.verified && <Badge className="bg-success text-success-foreground">Verified</Badge>}
@@ -261,6 +284,30 @@ export function ProfileMedicalPersonnel() {
             trend="neutral"
           />
         </div>
+
+        {/* Edit Profile Modal */}
+        {showEditProfile && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="bg-background rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-semibold">Edit Profile</h2>
+                  <Button variant="ghost" onClick={() => setShowEditProfile(false)}>
+                    ×
+                  </Button>
+                </div>
+                <ProfileForm
+                  profileType="medical_personnel"
+                  initialData={userProfile}
+                  onSave={(data) => {
+                    setUserProfile(prev => ({ ...prev, ...data }));
+                    setShowEditProfile(false);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="cme" className="space-y-lg">

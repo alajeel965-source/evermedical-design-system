@@ -661,6 +661,7 @@ export type Database = {
           title: string | null
           updated_at: string | null
           user_id: string
+          username: string | null
           verified: boolean | null
         }
         Insert: {
@@ -687,6 +688,7 @@ export type Database = {
           title?: string | null
           updated_at?: string | null
           user_id: string
+          username?: string | null
           verified?: boolean | null
         }
         Update: {
@@ -713,6 +715,7 @@ export type Database = {
           title?: string | null
           updated_at?: string | null
           user_id?: string
+          username?: string | null
           verified?: boolean | null
         }
         Relationships: []
@@ -896,6 +899,7 @@ export type Database = {
           specialty: string | null
           title: string | null
           user_id: string
+          username: string | null
           verified: boolean | null
         }
         Insert: {
@@ -911,6 +915,7 @@ export type Database = {
           specialty?: string | null
           title?: string | null
           user_id: string
+          username?: string | null
           verified?: boolean | null
         }
         Update: {
@@ -926,6 +931,7 @@ export type Database = {
           specialty?: string | null
           title?: string | null
           user_id?: string
+          username?: string | null
           verified?: boolean | null
         }
         Relationships: []
@@ -1097,6 +1103,25 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      get_profile_by_username: {
+        Args: { username_input: string }
+        Returns: {
+          avatar_url: string | null
+          country: string | null
+          created_at: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          organization: string | null
+          primary_specialty_slug: string | null
+          profile_type: string
+          specialty: string | null
+          title: string | null
+          user_id: string
+          username: string | null
+          verified: boolean | null
+        }[]
+      }
       get_public_profile: {
         Args: { profile_user_id: string }
         Returns: {
@@ -1112,6 +1137,7 @@ export type Database = {
           specialty: string | null
           title: string | null
           user_id: string
+          username: string | null
           verified: boolean | null
         }[]
       }
@@ -1152,6 +1178,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      is_username_available: {
+        Args: { username_input: string }
+        Returns: boolean
+      }
       validate_profile_security: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1180,6 +1210,10 @@ export type Database = {
       }
       validate_specialty_slug: {
         Args: { slug: string }
+        Returns: boolean
+      }
+      validate_username: {
+        Args: { username_input: string }
         Returns: boolean
       }
       verify_email_protection: {
