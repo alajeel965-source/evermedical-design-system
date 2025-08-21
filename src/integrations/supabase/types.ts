@@ -856,6 +856,39 @@ export type Database = {
         }
         Relationships: []
       }
+      security_audit_log: {
+        Row: {
+          accessed_user_id: string | null
+          created_at: string
+          details: Json | null
+          id: string
+          operation: string
+          table_name: string
+          timestamp: string
+          user_id: string | null
+        }
+        Insert: {
+          accessed_user_id?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          operation: string
+          table_name: string
+          timestamp?: string
+          user_id?: string | null
+        }
+        Update: {
+          accessed_user_id?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          operation?: string
+          table_name?: string
+          timestamp?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       public_medical_events: {
@@ -1090,6 +1123,14 @@ export type Database = {
       can_see_user_email: {
         Args: { target_user_id: string }
         Returns: boolean
+      }
+      check_profiles_security_status: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          details: string
+          security_check: string
+          status: string
+        }[]
       }
       get_public_profile: {
         Args: { profile_user_id: string }
