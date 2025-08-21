@@ -885,57 +885,6 @@ export type Database = {
         }
         Relationships: []
       }
-      public_profiles: {
-        Row: {
-          avatar_url: string | null
-          country: string | null
-          created_at: string | null
-          first_name: string | null
-          id: string
-          last_name: string | null
-          organization: string | null
-          primary_specialty_slug: string | null
-          profile_type: string
-          specialty: string | null
-          title: string | null
-          user_id: string
-          username: string | null
-          verified: boolean | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          country?: string | null
-          created_at?: string | null
-          first_name?: string | null
-          id: string
-          last_name?: string | null
-          organization?: string | null
-          primary_specialty_slug?: string | null
-          profile_type: string
-          specialty?: string | null
-          title?: string | null
-          user_id: string
-          username?: string | null
-          verified?: boolean | null
-        }
-        Update: {
-          avatar_url?: string | null
-          country?: string | null
-          created_at?: string | null
-          first_name?: string | null
-          id?: string
-          last_name?: string | null
-          organization?: string | null
-          primary_specialty_slug?: string | null
-          profile_type?: string
-          specialty?: string | null
-          title?: string | null
-          user_id?: string
-          username?: string | null
-          verified?: boolean | null
-        }
-        Relationships: []
-      }
       rfqs: {
         Row: {
           budget_range: string | null
@@ -1188,44 +1137,6 @@ export type Database = {
           review_notes: string
         }[]
       }
-      get_profile_by_username: {
-        Args: { username_input: string }
-        Returns: {
-          avatar_url: string | null
-          country: string | null
-          created_at: string | null
-          first_name: string | null
-          id: string
-          last_name: string | null
-          organization: string | null
-          primary_specialty_slug: string | null
-          profile_type: string
-          specialty: string | null
-          title: string | null
-          user_id: string
-          username: string | null
-          verified: boolean | null
-        }[]
-      }
-      get_public_profile: {
-        Args: { profile_user_id: string }
-        Returns: {
-          avatar_url: string | null
-          country: string | null
-          created_at: string | null
-          first_name: string | null
-          id: string
-          last_name: string | null
-          organization: string | null
-          primary_specialty_slug: string | null
-          profile_type: string
-          specialty: string | null
-          title: string | null
-          user_id: string
-          username: string | null
-          verified: boolean | null
-        }[]
-      }
       get_safe_medical_events: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1305,6 +1216,22 @@ export type Database = {
           verified: boolean
         }[]
       }
+      get_safe_profile_by_username: {
+        Args: { username_input: string }
+        Returns: {
+          avatar_url: string
+          country: string
+          id: string
+          member_since_year: number
+          organization: string
+          primary_specialty_slug: string
+          profile_type: string
+          specialty: string
+          title: string
+          username: string
+          verified: boolean
+        }[]
+      }
       get_safe_profile_summary: {
         Args: { target_user_id: string }
         Returns: {
@@ -1339,6 +1266,25 @@ export type Database = {
           member_since: string
           profile_exists: boolean
           specialty_area: string
+        }[]
+      }
+      get_secure_public_profiles: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          avatar_url: string
+          country: string
+          created_date: string
+          id: string
+          member_since_year: number
+          organization: string
+          primary_specialty_slug: string
+          profile_type: string
+          specialty: string
+          subspecialties: string[]
+          title: string
+          user_id: string
+          username: string
+          verified: boolean
         }[]
       }
       get_security_compliance_report: {
@@ -1443,6 +1389,15 @@ export type Database = {
         Returns: {
           check_name: string
           details: string
+          status: string
+        }[]
+      }
+      validate_no_pii_exposure: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
           status: string
         }[]
       }
