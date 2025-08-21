@@ -1157,6 +1157,17 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: number
       }
+      comprehensive_profile_security_audit: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          category: string
+          check_name: string
+          details: string
+          recommendation: string
+          risk_level: string
+          status: string
+        }[]
+      }
       comprehensive_security_audit: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1421,6 +1432,17 @@ export type Database = {
           specialty: string
           title: string
           username: string
+          verified: boolean
+        }[]
+      }
+      get_safe_profile_display: {
+        Args: { target_user_id: string }
+        Returns: {
+          country: string
+          created_year: number
+          profile_exists: boolean
+          profile_type: string
+          specialty: string
           verified: boolean
         }[]
       }
@@ -1745,6 +1767,15 @@ export type Database = {
           check_name: string
           details: string
           risk_level: string
+          status: string
+        }[]
+      }
+      validate_profile_data_isolation: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          details: string
+          risk_level: string
+          security_check: string
           status: string
         }[]
       }
