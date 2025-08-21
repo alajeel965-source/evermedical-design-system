@@ -4,8 +4,9 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { SafeEventData, getOrganizerContactInfo, canAccessOrganizerData, type OrganizerContactInfo } from "@/lib/secureEventApi";
+import { SafeEventData, getSafeOrganizerDisplay, canAccessOrganizerData, type SafeOrganizerDisplay } from "@/lib/secureEventApi";
 import { useAuth } from "@/hooks/auth";
+import { ContactInfoBlur } from "@/components/shared/BlurredText";
 
 interface SecureEventCardProps {
   event: SafeEventData;
@@ -18,10 +19,10 @@ export function SecureEventCard({
   showContactInfo = false,
   onClick 
 }: SecureEventCardProps) {
-  const { user } = useAuth();
-  const [contactInfo, setContactInfo] = useState<OrganizerContactInfo | null>(null);
+  const { user, isAuthenticated } = useAuth();
+  const [organizerDisplay, setOrganizerDisplay] = useState<SafeOrganizerDisplay | null>(null);
   const [loadingContact, setLoadingContact] = useState(false);
-  const [canAccess, setCanAccess] = useState<boolean | null>(null);
+  const [contactRequested, setContactRequested] = useState(false);
 
   const isAlmostFull = event.registered_count && event.capacity 
     ? event.registered_count / event.capacity > 0.8 
@@ -30,26 +31,19 @@ export function SecureEventCard({
     ? event.registered_count >= event.capacity 
     : false;
 
-  const handleLoadContactInfo = async () => {
-    if (!user) return;
-    
+  const handleLoadContactInfo = async (includeSensitive: boolean = false) => {
     setLoadingContact(true);
     
     try {
-      // First check if user can access this data
-      const hasAccess = await canAccessOrganizerData(event.id);
-      setCanAccess(hasAccess);
-      
-      if (hasAccess) {
-        const { data, error } = await getOrganizerContactInfo(event.id);
-        if (data && data.length > 0) {
-          setContactInfo(data[0]);
-        } else if (error) {
-          console.error('Failed to load contact info:', error);
-        }
+      const { data, error } = await getSafeOrganizerDisplay(event.id, includeSensitive);
+      if (data) {
+        setOrganizerDisplay(data);
+        setContactRequested(true);
+      } else if (error) {
+        console.error('Failed to load organizer display:', error);
       }
     } catch (error) {
-      console.error('Error loading organizer contact info:', error);
+      console.error('Error loading organizer display:', error);
     } finally {
       setLoadingContact(false);
     }
@@ -135,14 +129,14 @@ export function SecureEventCard({
           </div>
         )}
 
-        {/* Secure Contact Information Section */}
-        {showContactInfo && user && (
+        {/* Secure Contact Information Section with Blurring */}
+        {showContactInfo && (
           <div className="border-t pt-md">
-            {!contactInfo && canAccess === null && (
+            {!organizerDisplay && (
               <Button
                 variant="outline" 
                 size="sm"
-                onClick={handleLoadContactInfo}
+                onClick={() => handleLoadContactInfo(false)}
                 disabled={loadingContact}
                 className="w-full"
               >
@@ -150,53 +144,16 @@ export function SecureEventCard({
               </Button>
             )}
 
-            {canAccess === false && (
-              <Alert>
-                <AlertDescription>
-                  You don't have permission to view organizer contact information for this event.
-                  Only event creators and verified admins can access this data.
-                </AlertDescription>
-              </Alert>
-            )}
-
-            {contactInfo && (
-              <div className="space-y-sm bg-muted rounded-medical-sm p-sm">
-                <div className="text-medical-sm font-medium text-muted-foreground">
-                  Organizer Contact (Restricted Access)
-                </div>
-                
-                {contactInfo.organizer_email && (
-                  <div className="flex items-center gap-2 text-medical-sm">
-                    <Mail className="h-3 w-3 text-muted-foreground" />
-                    <a 
-                      href={`mailto:${contactInfo.organizer_email}`}
-                      className="text-primary hover:underline"
-                    >
-                      {contactInfo.organizer_email}
-                    </a>
-                  </div>
-                )}
-                
-                {contactInfo.organizer_phone && (
-                  <div className="flex items-center gap-2 text-medical-sm">
-                    <Phone className="h-3 w-3 text-muted-foreground" />
-                    <a 
-                      href={`tel:${contactInfo.organizer_phone}`}
-                      className="text-primary hover:underline"
-                    >
-                      {contactInfo.organizer_phone}
-                    </a>
-                  </div>
-                )}
-
-                {contactInfo.moderation_flags && contactInfo.moderation_flags.length > 0 && (
-                  <Alert>
-                    <AlertDescription>
-                      This event has moderation flags: {contactInfo.moderation_flags.join(', ')}
-                    </AlertDescription>
-                  </Alert>
-                )}
-              </div>
+            {organizerDisplay && (
+              <ContactInfoBlur
+                email={organizerDisplay.organizer_email_masked}
+                phone={organizerDisplay.organizer_phone_masked}
+                website={organizerDisplay.organizer_website}
+                isAuthorized={organizerDisplay.can_access_full_contact}
+                canRequestAccess={isAuthenticated && !organizerDisplay.can_access_full_contact}
+                onRequestAccess={() => handleLoadContactInfo(true)}
+                loading={loadingContact}
+              />
             )}
           </div>
         )}

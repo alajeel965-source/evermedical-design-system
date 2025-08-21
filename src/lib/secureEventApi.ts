@@ -8,6 +8,14 @@ export interface OrganizerContactInfo {
   moderation_flags: string[];
 }
 
+export interface SafeOrganizerDisplay {
+  organizer_name: string;
+  organizer_website: string;
+  organizer_email_masked: string;
+  organizer_phone_masked: string;
+  can_access_full_contact: boolean;
+}
+
 export interface SafeEventData {
   id: string;
   title: string;
@@ -159,6 +167,31 @@ export async function getUserCreatedEvents(): Promise<{ data: any[] | null; erro
     return { data, error };
   } catch (error) {
     console.error('Error fetching user created events:', error);
+    return { data: null, error };
+  }
+}
+
+/**
+ * Gets safe organizer display data with masking for unauthorized users
+ */
+export async function getSafeOrganizerDisplay(
+  eventId: string, 
+  includeSensitive: boolean = false
+): Promise<{ data: SafeOrganizerDisplay | null; error: any }> {
+  try {
+    const { data, error } = await supabase.rpc('get_safe_organizer_display', {
+      event_id: eventId,
+      include_sensitive: includeSensitive
+    });
+
+    if (error) {
+      console.error('Error fetching safe organizer display:', error);
+      return { data: null, error };
+    }
+
+    return { data: data?.[0] || null, error: null };
+  } catch (error) {
+    console.error('Error in safe organizer display request:', error);
     return { data: null, error };
   }
 }

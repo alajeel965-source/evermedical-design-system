@@ -1272,6 +1272,16 @@ export type Database = {
           view_count: number
         }[]
       }
+      get_safe_organizer_display: {
+        Args: { event_id: string; include_sensitive?: boolean }
+        Returns: {
+          can_access_full_contact: boolean
+          organizer_email_masked: string
+          organizer_name: string
+          organizer_phone_masked: string
+          organizer_website: string
+        }[]
+      }
       get_safe_profile_summary: {
         Args: { target_user_id: string }
         Returns: {
@@ -1368,6 +1378,14 @@ export type Database = {
           policy_name: string
           policy_type: string
           security_status: string
+        }[]
+      }
+      validate_medical_events_complete_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          status: string
         }[]
       }
       validate_profile_security: {
