@@ -902,6 +902,24 @@ export type Database = {
           verified: boolean | null
         }
       }
+      get_public_profile_safe: {
+        Args: { profile_user_id: string }
+        Returns: {
+          avatar_url: string
+          country: string
+          created_at: string
+          first_name: string
+          id: string
+          last_name: string
+          organization: string
+          primary_specialty_slug: string
+          profile_type: string
+          specialty: string
+          title: string
+          user_id: string
+          verified: boolean
+        }[]
+      }
       handle_subscription_signup: {
         Args: {
           plan_price?: number
