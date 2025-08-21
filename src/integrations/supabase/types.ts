@@ -1311,6 +1311,24 @@ export type Database = {
           title: string
         }[]
       }
+      get_safe_event_with_masked_contacts: {
+        Args: { event_id: string }
+        Returns: {
+          city: string
+          country: string
+          description: string
+          end_date: string
+          id: string
+          masked_organizer_contact: Json
+          organizer: string
+          registration_url: string
+          start_date: string
+          status: string
+          title: string
+          venue_address: string
+          venue_name: string
+        }[]
+      }
       get_safe_medical_events: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1507,6 +1525,14 @@ export type Database = {
         Args: { username_input: string }
         Returns: boolean
       }
+      mask_organizer_contact_info: {
+        Args: {
+          event_created_by: string
+          input_email: string
+          input_phone: string
+        }
+        Returns: Json
+      }
       monitor_analytics_access_violations: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1693,6 +1719,14 @@ export type Database = {
           check_name: string
           details: string
           risk_level: string
+          status: string
+        }[]
+      }
+      validate_organizer_contact_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          details: string
+          security_aspect: string
           status: string
         }[]
       }
