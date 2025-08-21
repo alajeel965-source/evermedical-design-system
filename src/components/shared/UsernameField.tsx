@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { SecureProfile, InputValidator } from "@/lib/secureApi";
 import { cn } from "@/lib/utils";
 
 interface UsernameFieldProps {
@@ -21,10 +21,9 @@ export function UsernameField({ value, onChange, required = false, className }: 
   const validateUsername = (username: string): string | null => {
     if (!username) return null;
     
-    if (username.length < 3) return "Username must be at least 3 characters";
-    if (username.length > 30) return "Username must be 30 characters or less";
-    if (!/^[a-zA-Z0-9_]+$/.test(username)) return "Username can only contain letters, numbers, and underscores";
-    if (username.includes("__")) return "Username cannot contain consecutive underscores";
+    if (!InputValidator.validateUsername(username)) {
+      return "Username must be 3-30 characters, alphanumeric and underscore only";
+    }
     
     return null;
   };
@@ -39,12 +38,15 @@ export function UsernameField({ value, onChange, required = false, className }: 
     setError("");
 
     try {
-      const { data, error } = await supabase.rpc('is_username_available', {
-        username_input: username
-      });
+      const response = await SecureProfile.checkUsernameAvailability(username);
 
-      if (error) throw error;
-      setIsAvailable(data);
+      if (!response.success) {
+        setError(response.error || "Unable to check availability");
+        setIsAvailable(null);
+        return;
+      }
+
+      setIsAvailable(response.data);
     } catch (err) {
       console.error('Error checking username availability:', err);
       setError("Unable to check availability");

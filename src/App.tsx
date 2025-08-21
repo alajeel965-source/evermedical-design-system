@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { I18nProvider } from "@/lib/i18n";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
+import SecurityErrorBoundary from "@/components/security/SecurityErrorBoundary";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Marketplace from "./pages/Marketplace";
@@ -35,8 +36,9 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
+  <SecurityErrorBoundary>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
     <I18nProvider>
       <TooltipProvider>
         <Toaster />
@@ -73,8 +75,9 @@ const App = () => (
         </BrowserRouter>
       </TooltipProvider>
     </I18nProvider>
-  </QueryClientProvider>
-  </ErrorBoundary>
+    </QueryClientProvider>
+    </ErrorBoundary>
+  </SecurityErrorBoundary>
 );
 
 export default App;
