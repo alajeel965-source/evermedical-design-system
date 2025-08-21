@@ -1,6 +1,20 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { logger } from "@/lib/logger";
+
+/**
+ * Enhanced Error Boundary Component
+ * 
+ * Provides production-ready error handling with:
+ * - Structured error logging
+ * - User-friendly error display
+ * - Recovery mechanisms
+ * - Development-only error details
+ * 
+ * @author EverMedical Team
+ * @version 2.0.0
+ */
 
 interface Props {
   children: ReactNode;
@@ -22,13 +36,14 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Log error only in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('ErrorBoundary caught an error:', error, errorInfo);
-    }
-    
-    // In production, you would send this to an error reporting service
-    // Example: errorReportingService.captureException(error, { extra: errorInfo });
+    // Log error using structured logging system
+    logger.error('React Error Boundary caught error', error, {
+      component: 'ErrorBoundary',
+      metadata: {
+        componentStack: errorInfo.componentStack,
+        errorBoundary: this.constructor.name
+      }
+    });
   }
 
   private handleReset = () => {

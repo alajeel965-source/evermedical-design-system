@@ -10,6 +10,7 @@
 
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { logger } from "./logger";
 
 /**
  * Combines and merges CSS classes using clsx and tailwind-merge
@@ -130,11 +131,13 @@ export async function retryWithBackoff<T>(
       lastError = error as Error;
       
       if (i === maxRetries) {
+        logger.error(`Retry failed after ${maxRetries} attempts`, lastError);
         throw lastError;
       }
       
       // Exponential backoff with jitter to prevent thundering herd
       const delay = baseDelay * Math.pow(2, i) + Math.random() * 1000;
+      logger.warn(`Retry attempt ${i + 1}/${maxRetries} in ${Math.round(delay)}ms`);
       await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
@@ -245,7 +248,11 @@ export function formatDate(
 export function safeJsonParse<T>(json: string, fallback: T): T {
   try {
     return JSON.parse(json);
-  } catch {
+  } catch (error) {
+    logger.warn('Failed to parse JSON', {
+      component: 'utils',
+      metadata: { jsonLength: json.length }
+    });
     return fallback;
   }
 }
@@ -260,13 +267,92 @@ export function isDevelopment(): boolean {
 }
 
 /**
- * Logs errors only in development environment
+ * Logs errors with proper context and security considerations
+ * Replaces direct console.* usage throughout the application
  * 
  * @param error - Error to log
  * @param context - Additional context information
+ * @deprecated Use logger.error() instead for better structured logging
  */
 export function devLog(error: any, context?: string): void {
-  if (isDevelopment()) {
-    console.error('Dev Error:', error, context ? `Context: ${context}` : '');
+  logger.error(
+    context || 'Development error',
+    error instanceof Error ? error : new Error(String(error)),
+    { component: 'dev-log' }
+  );
+}
+
+/**
+ * Performance measurement utility
+ * 
+ * @param name - Name of the operation being measured
+ * @returns Function to call when operation completes
+ * 
+ * @example
+ * const endTimer = measurePerformance('api-call');
+ * await apiCall();
+ * endTimer(); // Logs the duration
+ */
+export function measurePerformance(name: string): () => void {
+  const startTime = performance.now();
+  
+  return () => {
+    const duration = performance.now() - startTime;
+    logger.perf(name, Math.round(duration));
+  };
+}
+
+/**
+ * Validates and sanitizes user input for healthcare compliance
+ * 
+ * @param input - User input to validate
+ * @param type - Type of input ('email', 'name', 'phone', 'text')
+ * @returns Sanitized and validated input
+ */
+export function validateInput(input: string, type: 'email' | 'name' | 'phone' | 'text'): {
+  isValid: boolean;
+  sanitized: string;
+  errors: string[];
+} {
+  const errors: string[] = [];
+  let sanitized = sanitizeString(input);
+  let isValid = true;
+
+  switch (type) {
+    case 'email':
+      if (!isValidEmail(sanitized)) {
+        errors.push('Invalid email format');
+        isValid = false;
+      }
+      break;
+      
+    case 'name':
+      if (sanitized.length < 2) {
+        errors.push('Name must be at least 2 characters');
+        isValid = false;
+      }
+      if (!/^[a-zA-Z\s\-'\.]+$/.test(sanitized)) {
+        errors.push('Name contains invalid characters');
+        isValid = false;
+      }
+      break;
+      
+    case 'phone':
+      // Remove all non-digit characters for validation
+      const phoneDigits = sanitized.replace(/\D/g, '');
+      if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+        errors.push('Invalid phone number format');
+        isValid = false;
+      }
+      break;
+      
+    case 'text':
+      if (sanitized.length === 0) {
+        errors.push('Text cannot be empty');
+        isValid = false;
+      }
+      break;
   }
+
+  return { isValid, sanitized, errors };
 }
