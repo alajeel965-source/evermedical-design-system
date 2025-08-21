@@ -177,6 +177,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "event_registrations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "safe_public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       event_sources: {
@@ -634,6 +641,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "products_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "safe_public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       profiles: {
@@ -982,6 +996,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "rfqs_buyer_id_fkey"
+            columns: ["buyer_id"]
+            isOneToOne: false
+            referencedRelation: "safe_public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "rfqs_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
@@ -1061,7 +1082,57 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      safe_public_profiles: {
+        Row: {
+          avatar_url: string | null
+          country: string | null
+          created_at: string | null
+          first_name: string | null
+          id: string | null
+          last_name: string | null
+          organization: string | null
+          primary_specialty_slug: string | null
+          profile_type: string | null
+          specialty: string | null
+          title: string | null
+          user_id: string | null
+          username: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          country?: string | null
+          created_at?: string | null
+          first_name?: string | null
+          id?: string | null
+          last_name?: string | null
+          organization?: string | null
+          primary_specialty_slug?: string | null
+          profile_type?: string | null
+          specialty?: string | null
+          title?: string | null
+          user_id?: string | null
+          username?: string | null
+          verified?: boolean | null
+        }
+        Update: {
+          avatar_url?: string | null
+          country?: string | null
+          created_at?: string | null
+          first_name?: string | null
+          id?: string | null
+          last_name?: string | null
+          organization?: string | null
+          primary_specialty_slug?: string | null
+          profile_type?: string | null
+          specialty?: string | null
+          title?: string | null
+          user_id?: string | null
+          username?: string | null
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       audit_public_view_safety: {
@@ -1085,8 +1156,16 @@ export type Database = {
         Args: { target_user_id: string }
         Returns: boolean
       }
+      can_access_profile_data_enhanced: {
+        Args: { target_user_id: string }
+        Returns: boolean
+      }
       can_see_user_email: {
         Args: { target_user_id: string }
+        Returns: boolean
+      }
+      check_profile_access_rate_limit: {
+        Args: Record<PropertyKey, never>
         Returns: boolean
       }
       check_profiles_security_status: {
@@ -1344,6 +1423,14 @@ export type Database = {
       validate_email: {
         Args: { email_input: string }
         Returns: boolean
+      }
+      validate_enhanced_profile_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          status: string
+        }[]
       }
       validate_event_registrations_security: {
         Args: Record<PropertyKey, never>
