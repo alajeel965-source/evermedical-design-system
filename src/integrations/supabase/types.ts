@@ -908,7 +908,6 @@ export type Database = {
           description_ar: string | null
           end_date: string | null
           featured_image: string | null
-          fetched_at: string | null
           format: string | null
           gallery_images: string[] | null
           has_cme: boolean | null
@@ -928,7 +927,6 @@ export type Database = {
           seo_title: string | null
           share_count: number | null
           slug: string | null
-          source_id: string | null
           source_url: string | null
           specialty_slug: string | null
           start_date: string | null
@@ -964,7 +962,6 @@ export type Database = {
           description_ar?: string | null
           end_date?: string | null
           featured_image?: string | null
-          fetched_at?: string | null
           format?: string | null
           gallery_images?: string[] | null
           has_cme?: boolean | null
@@ -984,7 +981,6 @@ export type Database = {
           seo_title?: string | null
           share_count?: number | null
           slug?: string | null
-          source_id?: string | null
           source_url?: string | null
           specialty_slug?: string | null
           start_date?: string | null
@@ -1020,7 +1016,6 @@ export type Database = {
           description_ar?: string | null
           end_date?: string | null
           featured_image?: string | null
-          fetched_at?: string | null
           format?: string | null
           gallery_images?: string[] | null
           has_cme?: boolean | null
@@ -1040,7 +1035,6 @@ export type Database = {
           seo_title?: string | null
           share_count?: number | null
           slug?: string | null
-          source_id?: string | null
           source_url?: string | null
           specialty_slug?: string | null
           start_date?: string | null
@@ -1060,15 +1054,7 @@ export type Database = {
           venue_name?: string | null
           view_count?: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "medical_events_source_id_fkey"
-            columns: ["source_id"]
-            isOneToOne: false
-            referencedRelation: "event_sources"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       public_profiles: {
         Row: {
@@ -1120,6 +1106,15 @@ export type Database = {
       }
     }
     Functions: {
+      audit_public_view_safety: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          exposed_fields_count: number
+          risk_assessment: string
+          security_status: string
+          view_name: string
+        }[]
+      }
       can_access_profile_data: {
         Args: { target_user_id: string }
         Returns: boolean
