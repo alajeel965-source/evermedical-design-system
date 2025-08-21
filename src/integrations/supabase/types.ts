@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      access_tracking: {
+        Row: {
+          access_count: number | null
+          blocked_until: string | null
+          created_at: string | null
+          first_access: string | null
+          id: string
+          ip_address: unknown
+          last_access: string | null
+          resource_type: string
+          suspicious_patterns: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          access_count?: number | null
+          blocked_until?: string | null
+          created_at?: string | null
+          first_access?: string | null
+          id?: string
+          ip_address: unknown
+          last_access?: string | null
+          resource_type: string
+          suspicious_patterns?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          access_count?: number | null
+          blocked_until?: string | null
+          created_at?: string | null
+          first_access?: string | null
+          id?: string
+          ip_address?: unknown
+          last_access?: string | null
+          resource_type?: string
+          suspicious_patterns?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       crawl_jobs: {
         Row: {
           completed_at: string | null
@@ -1106,6 +1145,10 @@ export type Database = {
             }
         Returns: boolean
       }
+      cleanup_old_access_tracking: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
       comprehensive_security_audit: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1126,6 +1169,19 @@ export type Database = {
           risk_level: string
           status: string
         }[]
+      }
+      detect_bot_behavior: {
+        Args: { resource_name: string }
+        Returns: boolean
+      }
+      enhanced_rate_limit_check: {
+        Args: {
+          max_requests_per_day?: number
+          max_requests_per_hour?: number
+          max_requests_per_minute?: number
+          resource_name: string
+        }
+        Returns: boolean
       }
       get_buyer_rfq_details: {
         Args: { rfq_id: string }
@@ -1370,6 +1426,17 @@ export type Database = {
           status: string
         }[]
       }
+      get_suspicious_activity_report: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          access_count: number
+          blocked_until: string
+          ip_address: unknown
+          patterns: Json
+          resource_type: string
+          suspicion_score: number
+        }[]
+      }
       handle_subscription_signup: {
         Args: {
           plan_price?: number
@@ -1462,6 +1529,15 @@ export type Database = {
         }[]
       }
       validate_analytics_data_protection: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
+          status: string
+        }[]
+      }
+      validate_anti_scraping_protection: {
         Args: Record<PropertyKey, never>
         Returns: {
           check_name: string
