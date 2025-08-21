@@ -1502,6 +1502,15 @@ export type Database = {
         Args: { username_input: string }
         Returns: boolean
       }
+      validate_zero_pii_exposure: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
+          status: string
+        }[]
+      }
       verify_crawl_jobs_security: {
         Args: Record<PropertyKey, never>
         Returns: {
