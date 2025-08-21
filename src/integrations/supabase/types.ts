@@ -1378,6 +1378,16 @@ export type Database = {
           user_id: string
         }[]
       }
+      monitor_product_access_violations: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          access_timestamp: string
+          alert_type: string
+          details: Json
+          risk_level: string
+          user_id: string
+        }[]
+      }
       refresh_safe_professional_directory: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -1475,6 +1485,15 @@ export type Database = {
         }[]
       }
       validate_no_pii_exposure: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
+          status: string
+        }[]
+      }
+      validate_products_security: {
         Args: Record<PropertyKey, never>
         Returns: {
           check_name: string
