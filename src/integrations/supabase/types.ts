@@ -1182,6 +1182,24 @@ export type Database = {
         Args: { resource_name: string }
         Returns: boolean
       }
+      detect_profile_access_violations: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          access_time: string
+          accessed_profile_id: string
+          details: Json
+          violation_type: string
+          violator_user_id: string
+        }[]
+      }
+      emergency_profiles_security_check: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          immediate_action_required: string
+          security_issue: string
+          severity: string
+        }[]
+      }
       enhanced_rate_limit_check: {
         Args: {
           max_requests_per_day?: number
@@ -1696,11 +1714,24 @@ export type Database = {
           status: string
         }[]
       }
+      validate_profile_ownership: {
+        Args: { target_user_id: string }
+        Returns: boolean
+      }
       validate_profile_security: {
         Args: Record<PropertyKey, never>
         Returns: {
           details: string
           security_check: string
+          status: string
+        }[]
+      }
+      validate_profiles_security_comprehensive: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
           status: string
         }[]
       }
