@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/hooks";
 import { Search, Filter, ChevronDown, User, LogOut, Settings, Menu, Globe, Calendar, Bookmark, Receipt } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +11,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useI18n, useTranslation } from "@/lib/i18n";
 import { useSavedRFQsCount } from "@/hooks/useSavedRFQsCount";
-import { useAuth } from "@/hooks/useAuth";
 
 export function TopNav() {
   const [isScrolled, setIsScrolled] = useState(false);
