@@ -1164,6 +1164,14 @@ export type Database = {
         Args: { slug: string }
         Returns: boolean
       }
+      verify_email_protection: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          details: string
+          security_aspect: string
+          status: string
+        }[]
+      }
     }
     Enums: {
       subscription_plan:
