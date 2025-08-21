@@ -1101,6 +1101,20 @@ export type Database = {
           status: string
         }[]
       }
+      get_buyer_rfq_details: {
+        Args: { rfq_id: string }
+        Returns: {
+          budget_range: string
+          category_id: string
+          created_at: string
+          delivery_location: string
+          description: string
+          id: string
+          status: string
+          title: string
+          updated_at: string
+        }[]
+      }
       get_crawl_job_sensitive_data: {
         Args: { job_id: string }
         Returns: {
@@ -1135,6 +1149,17 @@ export type Database = {
           organizer_phone: string
           organizer_website: string
           review_notes: string
+        }[]
+      }
+      get_public_rfq_summaries: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          category_id: string
+          created_at: string
+          description: string
+          id: string
+          status: string
+          title: string
         }[]
       }
       get_safe_medical_events: {
@@ -1435,11 +1460,12 @@ export type Database = {
           view_name: string
         }[]
       }
-      validate_rfq_security: {
+      validate_rfq_security_status: {
         Args: Record<PropertyKey, never>
         Returns: {
           check_name: string
           details: string
+          risk_level: string
           status: string
         }[]
       }
