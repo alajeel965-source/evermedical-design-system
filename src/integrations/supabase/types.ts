@@ -1241,6 +1241,14 @@ export type Database = {
           status: string
         }[]
       }
+      verify_profiles_security_enhancement: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          status: string
+        }[]
+      }
       view_security_audit: {
         Args: Record<PropertyKey, never>
         Returns: {
