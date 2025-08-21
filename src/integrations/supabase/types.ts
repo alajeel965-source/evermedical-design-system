@@ -1378,6 +1378,14 @@ export type Database = {
           status: string
         }[]
       }
+      validate_profiles_security_final: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          status: string
+        }[]
+      }
       validate_public_views_security: {
         Args: Record<PropertyKey, never>
         Returns: {
