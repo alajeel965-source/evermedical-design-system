@@ -939,6 +939,39 @@ export type Database = {
           },
         ]
       }
+      safe_professional_directory: {
+        Row: {
+          country: string | null
+          created_at: string
+          id: string
+          last_updated: string
+          primary_specialty_slug: string | null
+          profile_type: string
+          specialty: string | null
+          verified: boolean
+        }
+        Insert: {
+          country?: string | null
+          created_at: string
+          id: string
+          last_updated?: string
+          primary_specialty_slug?: string | null
+          profile_type: string
+          specialty?: string | null
+          verified?: boolean
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          id?: string
+          last_updated?: string
+          primary_specialty_slug?: string | null
+          profile_type?: string
+          specialty?: string | null
+          verified?: boolean
+        }
+        Relationships: []
+      }
       saved_searches: {
         Row: {
           alert_enabled: boolean | null
@@ -1010,18 +1043,7 @@ export type Database = {
       }
     }
     Views: {
-      safe_professional_directory: {
-        Row: {
-          country: string | null
-          created_at: string | null
-          id: string | null
-          primary_specialty_slug: string | null
-          profile_type: string | null
-          specialty: string | null
-          verified: boolean | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       audit_public_view_safety: {
@@ -1356,6 +1378,10 @@ export type Database = {
           user_id: string
         }[]
       }
+      refresh_safe_professional_directory: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       safe_search_events: {
         Args: {
           limit_count?: number
@@ -1400,6 +1426,15 @@ export type Database = {
       validate_crawl_operation: {
         Args: { operation_type: string }
         Returns: boolean
+      }
+      validate_directory_rls_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
+          status: string
+        }[]
       }
       validate_email: {
         Args: { email_input: string }
