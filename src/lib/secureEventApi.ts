@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { SupabaseResponse, SupabaseError, EventSearchResult } from "@/lib/types/api";
+import { logger } from "@/lib/logger";
 
 export interface OrganizerContactInfo {
   organizer_email: string;
@@ -86,7 +87,9 @@ export async function getPublicEvents(): Promise<SupabaseResponse<SafeEventData[
 
     return { data, error };
   } catch (error) {
-    console.error('Error fetching public events:', error);
+    logger.error('Error fetching public events', error instanceof Error ? error : new Error(String(error)), { 
+      component: 'secureEventApi.getPublicEvents'
+    });
     return { 
       data: null, 
       error: error instanceof Error ? { message: error.message, code: 'FETCH_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
@@ -108,7 +111,10 @@ export async function getPublicEventById(eventId: string): Promise<SupabaseRespo
 
     return { data, error };
   } catch (error) {
-    console.error('Error fetching public event:', error);
+    logger.error('Error fetching public event', error instanceof Error ? error : new Error(String(error)), { 
+      component: 'secureEventApi.getPublicEventById',
+      metadata: { eventId }
+    });
     return { 
       data: null, 
       error: error instanceof Error ? { message: error.message, code: 'FETCH_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
@@ -127,13 +133,19 @@ export async function getOrganizerContactInfo(eventId: string): Promise<Supabase
     });
 
     if (error) {
-      console.error('Error fetching organizer contact info:', error);
+      logger.error('Error fetching organizer contact info', error instanceof Error ? error : new Error(String(error)), { 
+        component: 'secureEventApi.getOrganizerContactInfo',
+        metadata: { eventId }
+      });
       return { data: null, error };
     }
 
     return { data, error: null };
   } catch (error) {
-    console.error('Error in organizer contact info request:', error);
+    logger.error('Error in organizer contact info request', error instanceof Error ? error : new Error(String(error)), { 
+      component: 'secureEventApi.getOrganizerContactInfo',
+      metadata: { eventId }
+    });
     return { 
       data: null, 
       error: error instanceof Error ? { message: error.message, code: 'RPC_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
@@ -152,7 +164,10 @@ export async function canAccessOrganizerData(eventId: string): Promise<boolean> 
 
     return data === true;
   } catch (error) {
-    console.error('Error checking organizer data access:', error);
+    logger.error('Error checking organizer data access', error instanceof Error ? error : new Error(String(error)), { 
+      component: 'secureEventApi.canAccessOrganizerData',
+      metadata: { eventId }
+    });
     return false;
   }
 }
@@ -179,7 +194,9 @@ export async function getUserCreatedEvents(): Promise<SupabaseResponse<SafeEvent
 
     return { data, error };
   } catch (error) {
-    console.error('Error fetching user created events:', error);
+    logger.error('Error fetching user created events', error instanceof Error ? error : new Error(String(error)), { 
+      component: 'secureEventApi.getUserCreatedEvents'
+    });
     return { 
       data: null, 
       error: error instanceof Error ? { message: error.message, code: 'FETCH_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
@@ -201,13 +218,19 @@ export async function getSafeOrganizerDisplay(
     });
 
     if (error) {
-      console.error('Error fetching safe organizer display:', error);
+      logger.error('Error fetching safe organizer display', error instanceof Error ? error : new Error(String(error)), { 
+        component: 'secureEventApi.getSafeOrganizerDisplay',
+        metadata: { eventId, includeSensitive }
+      });
       return { data: null, error };
     }
 
     return { data: data?.[0] || null, error: null };
   } catch (error) {
-    console.error('Error in safe organizer display request:', error);
+    logger.error('Error in safe organizer display request', error instanceof Error ? error : new Error(String(error)), { 
+      component: 'secureEventApi.getSafeOrganizerDisplay',
+      metadata: { eventId, includeSensitive }
+    });
     return { 
       data: null, 
       error: error instanceof Error ? { message: error.message, code: 'RPC_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
@@ -246,7 +269,10 @@ export async function searchEvents(params: {
 
     return { data, error };
   } catch (error) {
-    console.error('Error searching events:', error);
+    logger.error('Error searching events', error instanceof Error ? error : new Error(String(error)), { 
+      component: 'secureEventApi.searchEvents',
+      metadata: { params }
+    });
     return { 
       data: null, 
       error: error instanceof Error ? { message: error.message, code: 'SEARCH_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError

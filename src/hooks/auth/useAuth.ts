@@ -14,6 +14,8 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { Analytics } from '@/lib/api';
 import { SecureAuth, InputValidator, SecurityError, ValidationError } from '@/lib/secureApi';
+import { logger } from '@/lib/logger';
+import { AuthUtils } from './authUtils';
 
 // Comprehensive return type with all features
 export interface UseAuthReturn {
@@ -74,7 +76,14 @@ export function useAuth(): UseAuthReturn {
     });
 
     if (process.env.NODE_ENV === 'development') {
-      console.error('Auth Error:', errorMessage, context ? `Context: ${context}` : '');
+      logger.error('Authentication error', error instanceof Error ? error : new Error(String(error)), { 
+        component: 'useAuth',
+        metadata: {
+          errorMessage,
+          context: context || undefined,
+          errorType: AuthUtils.getErrorType(error instanceof Error ? error : new Error(String(error)))
+        }
+      });
     }
   }, []);
 

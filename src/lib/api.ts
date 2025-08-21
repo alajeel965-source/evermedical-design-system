@@ -4,6 +4,7 @@
  */
 import { supabase } from '@/integrations/supabase/client';
 import { retryWithBackoff, debounce } from './utils';
+import { logger } from './logger';
 
 // Simplified error classes for now
 class DatabaseError extends Error {
@@ -30,10 +31,9 @@ class ValidationError extends Error {
 // Simple error logger
 const ErrorLogger = {
   logError: (error: Error) => {
-    console.error(`[${error.name}]:`, error.message);
-    if (process.env.NODE_ENV === 'development') {
-      console.error(error.stack);
-    }
+    logger.error(`[${error.name}]: ${error.message}`, error, {
+      component: 'ErrorLogger'
+    });
   }
 };
 
@@ -273,7 +273,10 @@ export class RFQService {
   static async getSavedRFQs(userId: string): Promise<ApiResponse<any[]>> {
     try {
       // TODO: Implement when saved_rfqs table is created
-      console.log('Getting saved RFQs for user:', userId);
+      logger.info('Getting saved RFQs for user', { 
+        component: 'RFQ.getSavedRFQs',
+        metadata: { userId } 
+      });
       return { data: [], error: null, success: true };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch saved RFQs';
@@ -288,7 +291,10 @@ export class RFQService {
   static async saveRFQ(userId: string, rfqId: string): Promise<ApiResponse<any>> {
     try {
       // TODO: Implement when saved_rfqs table is created
-      console.log('Saving RFQ:', { userId, rfqId });
+      logger.info('Saving RFQ', { 
+        component: 'RFQ.saveRFQ',
+        metadata: { userId, rfqId } 
+      });
       return { data: { id: rfqId }, error: null, success: true };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save RFQ';
@@ -303,7 +309,10 @@ export class RFQService {
   static async removeSavedRFQ(userId: string, rfqId: string): Promise<ApiResponse<void>> {
     try {
       // TODO: Implement when saved_rfqs table is created
-      console.log('Removing saved RFQ:', { userId, rfqId });
+      logger.info('Removing saved RFQ', { 
+        component: 'RFQ.removeSavedRFQ',
+        metadata: { userId, rfqId } 
+      });
       return { data: null, error: null, success: true };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to remove saved RFQ';
@@ -396,11 +405,14 @@ export class AnalyticsService {
     try {
       // For now, just log to console in development
       if (APP_CONFIG.ENVIRONMENT === 'development') {
-        console.log('Analytics Event:', {
-          event: eventName,
-          properties,
-          userId,
-          timestamp: new Date().toISOString(),
+        logger.info('Analytics Event', {
+          component: 'Analytics.trackEvent',
+          metadata: { 
+            event: eventName,
+            properties,
+            userId,
+            timestamp: new Date().toISOString(),
+          }
         });
       }
 

@@ -5,6 +5,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Analytics } from '@/lib/api';
+import { logger } from '@/lib/logger';
 import type { FormFieldValue, UseFormReturn, UseAsyncReturn } from '@/lib/types/hooks';
 
 /**
@@ -58,7 +59,9 @@ export function useForm<T extends Record<string, FormFieldValue>>(
         await onSubmit(values);
       }
     } catch (error) {
-      console.error('Form submission error:', error);
+      logger.error('Form submission error', error instanceof Error ? error : new Error(String(error)), {
+        component: 'useForm.handleSubmit'
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -119,7 +122,10 @@ export function useLocalStorage<T>(
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
-      console.warn(`Error reading localStorage key "${key}":`, error);
+      logger.warn('Error reading localStorage', {
+        component: 'useLocalStorage',
+        metadata: { key }
+      });
       return initialValue;
     }
   });
@@ -136,7 +142,10 @@ export function useLocalStorage<T>(
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
       }
     } catch (error) {
-      console.warn(`Error setting localStorage key "${key}":`, error);
+      logger.warn('Error setting localStorage', {
+        component: 'useLocalStorage.setValue',
+        metadata: { key }
+      });
     }
   }, [key, storedValue]);
 
@@ -148,7 +157,10 @@ export function useLocalStorage<T>(
         window.localStorage.removeItem(key);
       }
     } catch (error) {
-      console.warn(`Error removing localStorage key "${key}":`, error);
+      logger.warn('Error removing localStorage', {
+        component: 'useLocalStorage.removeValue',
+        metadata: { key }
+      });
     }
   }, [key, initialValue]);
 

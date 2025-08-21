@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { SupabaseResponse, SupabaseError } from "@/lib/types/api";
+import { logger } from "@/lib/logger";
 
 export interface SafeRfqDisplay {
   id: string;
@@ -42,13 +43,27 @@ export async function getSafeRfqDisplay(
     });
 
     if (error) {
-      console.error('Error fetching safe RFQ display:', error);
+      logger.error('Error fetching safe RFQ display', { 
+        component: 'secureRfqApi.getSafeRfqDisplay',
+        metadata: {
+          errorMessage: error instanceof Error ? error.message : 'Unknown error',
+          rfqId, 
+          includeSensitive 
+        }
+      });
       return { data: null, error };
     }
 
     return { data: data?.[0] || null, error: null };
   } catch (error) {
-    console.error('Error in safe RFQ display request:', error);
+    logger.error('Error in safe RFQ display request', { 
+      component: 'secureRfqApi.getSafeRfqDisplay',
+      metadata: {
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        rfqId, 
+        includeSensitive 
+      }
+    });
     return { 
       data: null, 
       error: error instanceof Error ? { message: error.message, code: 'RPC_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
@@ -69,7 +84,12 @@ export async function getUserAccessibleRfqs(): Promise<SupabaseResponse<RfqData[
 
     return { data, error };
   } catch (error) {
-    console.error('Error fetching accessible RFQs:', error);
+    logger.error('Error fetching accessible RFQs', { 
+      component: 'secureRfqApi.getUserAccessibleRfqs',
+      metadata: {
+        errorMessage: error instanceof Error ? error.message : 'Unknown error' 
+      }
+    });
     return { 
       data: null, 
       error: error instanceof Error ? { message: error.message, code: 'FETCH_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
@@ -117,7 +137,13 @@ export async function createRfq(rfqData: Omit<RfqData, 'id' | 'created_at' | 'up
 
     return { data, error };
   } catch (error) {
-    console.error('Error creating RFQ:', error);
+    logger.error('Error creating RFQ', { 
+      component: 'secureRfqApi.createRfq',
+      metadata: {
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        rfqTitle: rfqData.title 
+      }
+    });
     return { 
       data: null, 
       error: error instanceof Error ? { message: error.message, code: 'CREATE_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
@@ -139,7 +165,13 @@ export async function updateRfq(rfqId: string, updates: Partial<Omit<RfqData, 'i
 
     return { data, error };
   } catch (error) {
-    console.error('Error updating RFQ:', error);
+    logger.error('Error updating RFQ', { 
+      component: 'secureRfqApi.updateRfq',
+      metadata: {
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        rfqId 
+      }
+    });
     return { 
       data: null, 
       error: error instanceof Error ? { message: error.message, code: 'UPDATE_ERROR' } : { message: 'Unknown error', code: 'UNKNOWN' } as SupabaseError
