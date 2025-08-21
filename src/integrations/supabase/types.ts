@@ -1492,6 +1492,16 @@ export type Database = {
           user_id: string
         }[]
       }
+      monitor_reference_data_access_patterns: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          blocked_ips_count: number
+          resource_type: string
+          suspicious_activity_count: number
+          total_requests_today: number
+          unique_ips_today: number
+        }[]
+      }
       refresh_safe_professional_directory: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -1674,6 +1684,15 @@ export type Database = {
           security_status: string
           sensitive_fields_check: string
           view_name: string
+        }[]
+      }
+      validate_reference_data_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          access_level: string
+          details: string
+          security_status: string
+          table_name: string
         }[]
       }
       validate_rfq_security_status: {
