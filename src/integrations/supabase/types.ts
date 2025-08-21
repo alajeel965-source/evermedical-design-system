@@ -1384,6 +1384,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      is_current_user_audit_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       is_current_user_verified_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
@@ -1458,6 +1462,15 @@ export type Database = {
         }[]
       }
       validate_analytics_data_protection: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
+          status: string
+        }[]
+      }
+      validate_audit_log_security: {
         Args: Record<PropertyKey, never>
         Returns: {
           check_name: string
