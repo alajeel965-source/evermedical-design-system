@@ -1053,6 +1053,10 @@ export type Database = {
         Args: { target_user_id: string }
         Returns: boolean
       }
+      check_directory_access_rate_limit: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       check_profile_access_rate_limit: {
         Args: Record<PropertyKey, never>
         Returns: boolean
@@ -1342,6 +1346,15 @@ export type Database = {
       is_username_available: {
         Args: { username_input: string }
         Returns: boolean
+      }
+      monitor_directory_access_patterns: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          alert_type: string
+          details: Json
+          risk_level: string
+          user_id: string
+        }[]
       }
       safe_search_events: {
         Args: {
