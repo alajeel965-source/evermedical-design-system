@@ -1089,6 +1089,50 @@ export type Database = {
       }
     }
     Views: {
+      crawl_jobs_status: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          events_created: number | null
+          events_discovered: number | null
+          events_updated: number | null
+          id: string | null
+          source_id: string | null
+          started_at: string | null
+          status: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          events_created?: number | null
+          events_discovered?: number | null
+          events_updated?: number | null
+          id?: string | null
+          source_id?: string | null
+          started_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          events_created?: number | null
+          events_discovered?: number | null
+          events_updated?: number | null
+          id?: string | null
+          source_id?: string | null
+          started_at?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crawl_jobs_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "event_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       safe_medical_events: {
         Row: {
           accreditation_details: Json | null
@@ -1265,6 +1309,10 @@ export type Database = {
           view_name: string
         }[]
       }
+      can_access_crawl_sensitive_data: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       can_access_organizer_data: {
         Args: { event_id: string }
         Returns: boolean
@@ -1293,6 +1341,14 @@ export type Database = {
           details: string
           risk_level: string
           status: string
+        }[]
+      }
+      get_crawl_job_sensitive_data: {
+        Args: { job_id: string }
+        Returns: {
+          errors: Json
+          failure_count: number
+          metadata: Json
         }[]
       }
       get_current_user_profile_type: {
@@ -1388,6 +1444,10 @@ export type Database = {
         Args: { username_input: string }
         Returns: boolean
       }
+      validate_crawl_operation: {
+        Args: { operation_type: string }
+        Returns: boolean
+      }
       validate_event_registrations_security: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1430,6 +1490,14 @@ export type Database = {
       validate_username: {
         Args: { username_input: string }
         Returns: boolean
+      }
+      verify_crawl_jobs_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          status: string
+        }[]
       }
       verify_email_protection: {
         Args: Record<PropertyKey, never>
