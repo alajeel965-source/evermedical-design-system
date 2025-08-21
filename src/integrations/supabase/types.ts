@@ -1167,6 +1167,29 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      get_event_analytics_data: {
+        Args: { event_id: string }
+        Returns: {
+          click_count: number
+          engagement_score: number
+          save_count: number
+          share_count: number
+          view_count: number
+        }[]
+      }
+      get_events_analytics_summary: {
+        Args: { end_date?: string; start_date?: string }
+        Returns: {
+          created_at: string
+          engagement_rate: number
+          event_id: string
+          event_title: string
+          total_clicks: number
+          total_saves: number
+          total_shares: number
+          total_views: number
+        }[]
+      }
       get_organizer_contact_info: {
         Args: { event_id: string }
         Returns: {
@@ -1369,6 +1392,16 @@ export type Database = {
         Args: { username_input: string }
         Returns: boolean
       }
+      monitor_analytics_access_violations: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          access_timestamp: string
+          alert_type: string
+          details: Json
+          risk_level: string
+          user_id: string
+        }[]
+      }
       monitor_directory_access_patterns: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1422,6 +1455,15 @@ export type Database = {
           rls_status: string
           security_level: string
           table_name: string
+        }[]
+      }
+      validate_analytics_data_protection: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
+          status: string
         }[]
       }
       validate_complete_profile_security: {
