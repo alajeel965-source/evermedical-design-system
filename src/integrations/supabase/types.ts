@@ -1178,6 +1178,14 @@ export type Database = {
         }
         Returns: Json
       }
+      validate_profile_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          details: string
+          security_check: string
+          status: string
+        }[]
+      }
       validate_specialty_slug: {
         Args: { slug: string }
         Returns: boolean
