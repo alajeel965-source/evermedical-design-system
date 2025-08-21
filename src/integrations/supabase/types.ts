@@ -1409,6 +1409,15 @@ export type Database = {
           security_status: string
         }[]
       }
+      validate_healthcare_directory_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
+          status: string
+        }[]
+      }
       validate_medical_events_complete_security: {
         Args: Record<PropertyKey, never>
         Returns: {
