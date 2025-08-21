@@ -1120,6 +1120,10 @@ export type Database = {
       }
     }
     Functions: {
+      can_access_profile_data: {
+        Args: { target_user_id: string }
+        Returns: boolean
+      }
       can_see_user_email: {
         Args: { target_user_id: string }
         Returns: boolean
@@ -1149,6 +1153,25 @@ export type Database = {
           user_id: string | null
           verified: boolean | null
         }
+      }
+      get_safe_profile_summary: {
+        Args: { target_user_id: string }
+        Returns: {
+          country: string
+          created_date: string
+          is_verified: boolean
+          profile_exists: boolean
+          profile_type: string
+        }[]
+      }
+      get_security_compliance_report: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          compliance_item: string
+          details: string
+          risk_level: string
+          status: string
+        }[]
       }
       handle_subscription_signup: {
         Args: {
