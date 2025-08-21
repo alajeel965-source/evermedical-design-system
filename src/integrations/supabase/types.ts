@@ -1198,6 +1198,15 @@ export type Database = {
           status: string
         }[]
       }
+      validate_security_functions: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          function_name: string
+          has_search_path: boolean
+          has_security_definer: boolean
+          security_status: string
+        }[]
+      }
       validate_specialty_slug: {
         Args: { slug: string }
         Returns: boolean
