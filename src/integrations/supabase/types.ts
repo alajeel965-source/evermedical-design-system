@@ -1476,6 +1476,15 @@ export type Database = {
           status: string
         }[]
       }
+      validate_medical_events_access_control: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
+          status: string
+        }[]
+      }
       validate_medical_events_complete_security: {
         Args: Record<PropertyKey, never>
         Returns: {
