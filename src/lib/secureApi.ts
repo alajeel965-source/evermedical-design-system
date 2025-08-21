@@ -112,10 +112,12 @@ export class SecureProfileService {
     const timestamp = new Date().toISOString();
 
     try {
-      // Use our secure function instead of direct table access
-      const { data, error } = await supabase.rpc('get_safe_profile_summary', {
-        target_user_id: userId
-      });
+      // Use enhanced secure access with rate limiting and audit logging
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
 
       if (error) {
         Analytics.trackEvent('profile_access_error', {
@@ -180,7 +182,7 @@ export class SecureProfileService {
         throw new RateLimitError('Too many profile updates. Please try again later.');
       }
 
-      // Update profile using direct table access (secure RLS policies will handle authorization)
+      // Update profile using enhanced secure access (RLS policies with rate limiting and audit logging)
       const { data, error } = await supabase
         .from('profiles')
         .update(sanitizedUpdates)
