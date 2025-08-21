@@ -460,6 +460,18 @@ export class SecureAuthService {
   }
 }
 
+// Re-export event-related functions for consistency
+export { 
+  getPublicEvents, 
+  getPublicEventById, 
+  getOrganizerContactInfo, 
+  canAccessOrganizerData,
+  getUserCreatedEvents,
+  searchEvents,
+  type SafeEventData,
+  type OrganizerContactInfo 
+} from './secureEventApi';
+
 // Export all secure services
 export {
   SecureProfileService as SecureProfile,
