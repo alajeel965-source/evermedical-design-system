@@ -16,19 +16,37 @@
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
+/**
+ * Contextual information for log entries
+ * Used to provide structured metadata for debugging and monitoring
+ */
 interface LogContext {
+  /** Component or service generating the log */
   component?: string;
+  /** User ID associated with the action (auto-sanitized) */
   userId?: string;
+  /** Session ID for tracking user sessions */
   sessionId?: string;
+  /** Action or operation being performed */
   action?: string;
+  /** Additional structured metadata */
   metadata?: Record<string, any>;
 }
 
+/**
+ * Structured log entry format
+ * Standardized format for all log outputs
+ */
 interface LogEntry {
+  /** ISO timestamp of the log event */
   timestamp: string;
+  /** Severity level of the log */
   level: LogLevel;
+  /** Human-readable log message */
   message: string;
+  /** Optional contextual information */
   context?: LogContext;
+  /** Error details if applicable */
   error?: {
     name: string;
     message: string;
@@ -36,8 +54,16 @@ interface LogEntry {
   };
 }
 
+/**
+ * Production-grade logger with healthcare compliance features
+ * 
+ * Automatically sanitizes PII, structures logs for monitoring systems,
+ * and provides environment-appropriate output formatting.
+ */
 class Logger {
+  /** Development environment flag */
   private isDevelopment: boolean = process.env.NODE_ENV === 'development';
+  /** Test environment flag */
   private isTestEnvironment: boolean = process.env.NODE_ENV === 'test';
 
   /**
@@ -179,6 +205,18 @@ class Logger {
   
   /**
    * Debug level logging - development only
+   * Only outputs in development environment to prevent sensitive data leaks
+   * 
+   * @param message - Debug message
+   * @param context - Optional contextual information
+   * 
+   * @example
+   * ```typescript
+   * logger.debug('Processing user data', { 
+   *   component: 'userProcessor',
+   *   metadata: { recordCount: 42 }
+   * });
+   * ```
    */
   debug(message: string, context?: LogContext): void {
     if (this.isDevelopment) {
@@ -188,6 +226,18 @@ class Logger {
 
   /**
    * Info level logging
+   * Used for normal application flow and important events
+   * 
+   * @param message - Information message
+   * @param context - Optional contextual information
+   * 
+   * @example
+   * ```typescript
+   * logger.info('User profile updated successfully', {
+   *   component: 'profileService',
+   *   userId: user.id
+   * });
+   * ```
    */
   info(message: string, context?: LogContext): void {
     this.log('info', message, context);
@@ -195,6 +245,18 @@ class Logger {
 
   /**
    * Warning level logging
+   * Used for potentially problematic situations that don't prevent operation
+   * 
+   * @param message - Warning message
+   * @param context - Optional contextual information
+   * 
+   * @example
+   * ```typescript
+   * logger.warn('API rate limit approaching', {
+   *   component: 'apiClient',
+   *   metadata: { currentRate: 90, limit: 100 }
+   * });
+   * ```
    */
   warn(message: string, context?: LogContext): void {
     this.log('warn', message, context);
@@ -202,6 +264,19 @@ class Logger {
 
   /**
    * Error level logging
+   * Used for error conditions that require attention
+   * 
+   * @param message - Error message
+   * @param error - Optional Error object with stack trace
+   * @param context - Optional contextual information
+   * 
+   * @example
+   * ```typescript
+   * logger.error('Database connection failed', dbError, {
+   *   component: 'databaseService',
+   *   metadata: { host: 'db.example.com', port: 5432 }
+   * });
+   * ```
    */
   error(message: string, error?: Error, context?: LogContext): void {
     this.log('error', message, context, error);
@@ -209,6 +284,18 @@ class Logger {
 
   /**
    * Authentication-specific logging
+   * Specialized logging for auth events with automatic component tagging
+   * 
+   * @param action - Authentication action performed
+   * @param context - Authentication context (excluding component)
+   * 
+   * @example
+   * ```typescript
+   * logger.auth('login_success', { 
+   *   userId: user.id, 
+   *   metadata: { method: '2fa', ip: '192.168.1.1' }
+   * });
+   * ```
    */
   auth(action: string, context?: Omit<LogContext, 'component'>): void {
     this.info(`Auth: ${action}`, { ...context, component: 'auth' });
@@ -255,7 +342,33 @@ class Logger {
   }
 }
 
-// Export singleton instance
+/**
+ * Global logger instance for the EverMedical platform
+ * 
+ * Pre-configured logger with healthcare compliance features:
+ * - Automatic PII sanitization for patient data protection
+ * - Structured JSON output for monitoring integration
+ * - Environment-specific formatting and filtering
+ * - Integration with external monitoring services
+ * 
+ * @example
+ * ```typescript
+ * import { logger } from '@/lib/logger';
+ * 
+ * // Log user actions
+ * logger.info('Medical event created', {
+ *   component: 'eventService',
+ *   userId: user.id,
+ *   metadata: { eventType: 'conference', specialty: 'cardiology' }
+ * });
+ * 
+ * // Log errors with context
+ * logger.error('Failed to process RFQ', error, {
+ *   component: 'rfqProcessor', 
+ *   metadata: { rfqId: 'rfq-123', retryCount: 3 }
+ * });
+ * ```
+ */
 export const logger = new Logger();
 
 // Export types for external use

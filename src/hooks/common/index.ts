@@ -10,6 +10,33 @@ import type { FormFieldValue, UseFormReturn, UseAsyncReturn } from '@/lib/types/
 
 /**
  * Enhanced form hook with validation and error handling
+ * 
+ * Provides a complete form state management solution with built-in validation,
+ * error handling, and submission logic. Designed for medical forms requiring
+ * strict validation and user experience standards.
+ * 
+ * @template T - Form values type extending Record<string, FormFieldValue>
+ * @param initialValues - Initial form values
+ * @param validationSchema - Optional validation function
+ * @returns Form state and handlers
+ * 
+ * @example
+ * ```typescript
+ * const userForm = useForm<UserProfileData>(
+ *   { name: '', email: '', specialty: '' },
+ *   (values) => {
+ *     const errors: Partial<Record<keyof UserProfileData, string>> = {};
+ *     if (!values.name) errors.name = 'Name is required';
+ *     if (!values.email?.includes('@')) errors.email = 'Valid email required';
+ *     return errors;
+ *   }
+ * );
+ * 
+ * // In component
+ * const handleSubmit = userForm.handleSubmit(async (values) => {
+ *   await saveUserProfile(values);
+ * });
+ * ```
  */
 export function useForm<T extends Record<string, FormFieldValue>>(
   initialValues: T,
@@ -90,6 +117,27 @@ export function useForm<T extends Record<string, FormFieldValue>>(
 
 /**
  * Debounced value hook for search inputs and API calls
+ * 
+ * Delays value updates until after the specified delay period has passed
+ * without new changes. Essential for optimizing search performance and
+ * reducing API calls.
+ * 
+ * @template T - Type of value to debounce
+ * @param value - Value to debounce
+ * @param delay - Delay in milliseconds
+ * @returns Debounced value
+ * 
+ * @example
+ * ```typescript
+ * const [searchQuery, setSearchQuery] = useState('');
+ * const debouncedQuery = useDebounce(searchQuery, 300);
+ * 
+ * useEffect(() => {
+ *   if (debouncedQuery) {
+ *     searchEvents(debouncedQuery);
+ *   }
+ * }, [debouncedQuery]);
+ * ```
  */
 export function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -107,6 +155,28 @@ export function useDebounce<T>(value: T, delay: number): T {
 
 /**
  * Local storage hook with type safety and SSR compatibility
+ * 
+ * Provides persistent state management using localStorage with automatic
+ * serialization/deserialization and error handling. Safe for SSR environments.
+ * 
+ * @template T - Type of stored value
+ * @param key - localStorage key
+ * @param initialValue - Default value if key doesn't exist
+ * @returns Tuple of [value, setValue, removeValue]
+ * 
+ * @example
+ * ```typescript
+ * const [preferences, setPreferences, clearPreferences] = useLocalStorage(
+ *   'userPreferences',
+ *   { theme: 'light', language: 'en' }
+ * );
+ * 
+ * // Update preferences
+ * setPreferences(prev => ({ ...prev, theme: 'dark' }));
+ * 
+ * // Clear preferences
+ * clearPreferences();
+ * ```
  */
 export function useLocalStorage<T>(
   key: string,
