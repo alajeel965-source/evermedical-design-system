@@ -1182,6 +1182,15 @@ export type Database = {
         Args: { username_input: string }
         Returns: boolean
       }
+      validate_event_registrations_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          issue_description: string
+          policy_name: string
+          policy_type: string
+          security_status: string
+        }[]
+      }
       validate_profile_security: {
         Args: Record<PropertyKey, never>
         Returns: {
