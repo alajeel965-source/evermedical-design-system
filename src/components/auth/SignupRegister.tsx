@@ -98,18 +98,12 @@ const translations = {
     },
     inviteCode: 'Invite Code',
     inviteCodeRequired: 'Super Admin role requires an invite code',
-    specialties: [
-      'Cardiology', 'Dermatology', 'Emergency Medicine', 'Endocrinology',
-      'Gastroenterology', 'Neurology', 'Oncology', 'Orthopedics',
-      'Pediatrics', 'Psychiatry', 'Radiology', 'Surgery'
-    ],
-    success: {
-      title: 'Welcome to EverMedical!',
-      subtitle: 'Your account has been created successfully.',
-      verifyEmail: 'Verify Email',
-      browseEvents: 'Browse Events',
-      completeProfile: 'Complete Profile'
-    },
+    inviteCodePlaceholder: 'Enter your invite code',
+    subscription: 'Subscription',
+    subscriptionRequired: 'Subscription required for this role',
+    summary: 'Summary',
+    joinOurCommunity: 'Join Our Medical Community',
+    signInToContinue: 'Sign in to continue to your account',
     errors: {
       required: 'This field is required',
       invalidEmail: 'Please enter a valid email address',
@@ -121,7 +115,7 @@ const translations = {
   },
   ar: {
     signUp: 'إنشاء حساب',
-    signIn: 'تسجيل دخول',
+    signIn: 'تسجيل الدخول',
     fullName: 'الاسم الكامل',
     email: 'البريد الإلكتروني',
     password: 'كلمة المرور',
@@ -134,40 +128,35 @@ const translations = {
     agreeToTerms: 'أوافق على شروط الخدمة وسياسة الخصوصية',
     continueWith: 'المتابعة باستخدام',
     createAccount: 'إنشاء حساب',
-    signInAccount: 'تسجيل دخول',
+    signInAccount: 'تسجيل الدخول',
     alreadyHaveAccount: 'لديك حساب بالفعل؟',
     dontHaveAccount: 'ليس لديك حساب؟',
     forgotPassword: 'نسيت كلمة المرور؟',
     passwordStrength: 'قوة كلمة المرور',
     language: 'اللغة',
+    search: 'بحث',
     selectRole: 'اختر دورك',
     roles: {
-      medicalPersonnel: 'الطاقم الطبي',
-      instituteBuyer: 'مشتري المؤسسة الطبية',
+      medicalPersonnel: 'الكادر الطبي',
+      instituteBuyer: 'مشتري مؤسسة طبية',
       medicalSeller: 'بائع طبي',
       superAdmin: 'مدير عام'
     },
     subscriptions: {
       free: 'مجاني',
-      yearly100: '100 دولار/سنة',
-      monthly100: '100 دولار/شهر',
-      yearly1000: '1000 دولار/سنة',
+      yearly100: '100$ / سنة',
+      monthly100: '100$ / شهر',
+      yearly1000: '1000$ / سنة',
       internal: 'للاستخدام الداخلي فقط'
     },
-    inviteCode: 'رمز الدعوة',
-    inviteCodeRequired: 'دور المدير العام يتطلب رمز دعوة',
-    specialties: [
-      'أمراض القلب', 'الأمراض الجلدية', 'طب الطوارئ', 'الغدد الصماء',
-      'أمراض الجهاز الهضمي', 'الأمراض العصبية', 'الأورام', 'العظام',
-      'طب الأطفال', 'الطب النفسي', 'الأشعة', 'الجراحة'
-    ],
-    success: {
-      title: 'مرحباً بك في EverMedical!',
-      subtitle: 'تم إنشاء حسابك بنجاح.',
-      verifyEmail: 'تحقق من البريد الإلكتروني',
-      browseEvents: 'تصفح الفعاليات',
-      completeProfile: 'إكمال الملف الشخصي'
-    },
+    inviteCode: 'كود الدعوة',
+    inviteCodeRequired: 'دور المدير العام يتطلب كود دعوة',
+    inviteCodePlaceholder: 'أدخل كود الدعوة',
+    subscription: 'الاشتراك',
+    subscriptionRequired: 'مطلوب اشتراك لهذا الدور',
+    summary: 'ملخص',
+    joinOurCommunity: 'انضم إلى مجتمعنا الطبي',
+    signInToContinue: 'سجل الدخول للمتابعة إلى حسابك',
     errors: {
       required: 'هذا الحقل مطلوب',
       invalidEmail: 'يرجى إدخال بريد إلكتروني صحيح',
@@ -208,11 +197,12 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
   redirectUrls = {},
   className
 }) => {
-  const [currentLocale, setCurrentLocale] = useState<'en' | 'ar'>(locale);
-  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<'signup' | 'signin'>('signup');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [activeTab, setActiveTab] = useState('signup');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<ValidationErrors>({});
+  const [countries, setCountries] = useState<Country[]>([]);
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     email: '',
@@ -225,48 +215,52 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
     agreeToTerms: false,
     inviteCode: ''
   });
-  const [errors, setErrors] = useState<ValidationErrors>({});
-  const [success, setSuccess] = useState(false);
-  const [specialtySearch, setSpecialtySearch] = useState('');
-  const [showInviteCode, setShowInviteCode] = useState(false);
-  const [countryOpen, setCountryOpen] = useState(false);
 
-  const t = translations[currentLocale];
-  const isRTL = currentLocale === 'ar';
+  const t = translations[locale];
+  const isRTL = locale === 'ar';
 
-  // Get sorted countries for current language
-  const sortedCountries = useMemo(() => {
-    return getCountriesByLanguage(currentLocale);
-  }, [currentLocale]);
-
-  // Get country display name
-  const getCountryDisplayName = (countryCode: string): string => {
-    const country = sortedCountries.find(c => c.code === countryCode);
-    return country ? (currentLocale === 'ar' ? country.name_ar : country.name_en) : '';
+  // Helper function to get country flag emoji
+  const getCountryFlag = (countryCode: string): string => {
+    const codePoints = countryCode
+      .toUpperCase()
+      .split('')
+      .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
   };
+
+  // Helper function to get country name based on locale
+  const getCountryName = (country: Country): string => {
+    return locale === 'ar' ? country.name_ar : country.name_en;
+  };
+
+  // Load countries
+  useEffect(() => {
+    const countryList = getCountriesByLanguage(locale);
+    setCountries(countryList);
+  }, [locale]);
 
   // Role options with subscription information
   const roleOptions: RoleOption[] = [
     {
-      key: 'medicalPersonnel',
+      key: 'medical_personnel',
       name: t.roles.medicalPersonnel,
-      subscription: { type: 'yearly', price: 100, period: 'year' },
-      requiresPayment: true
-    },
-    {
-      key: 'instituteBuyer',
-      name: t.roles.instituteBuyer,
       subscription: { type: 'free' },
       requiresPayment: false
     },
     {
-      key: 'medicalSeller',
+      key: 'medical_institute',
+      name: t.roles.instituteBuyer,
+      subscription: { type: 'yearly', price: 100, period: 'year' },
+      requiresPayment: true
+    },
+    {
+      key: 'medical_seller',
       name: t.roles.medicalSeller,
       subscription: { type: 'yearly', price: 1000, period: 'year' },
       requiresPayment: true
     },
     {
-      key: 'superAdmin',
+      key: 'admin',
       name: t.roles.superAdmin,
       subscription: { type: 'internal' },
       requiresPayment: false,
@@ -274,36 +268,13 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
     }
   ];
 
-  const getSubscriptionDisplay = (option: RoleOption) => {
-    switch (option.subscription.type) {
-      case 'free':
-        return t.subscriptions.free;
-      case 'yearly':
-        return option.subscription.price === 100 ? t.subscriptions.yearly100 : t.subscriptions.yearly1000;
-      case 'internal':
-        return t.subscriptions.internal;
-      default:
-        return '';
-    }
-  };
+  const selectedRole = roleOptions.find(role => role.key === formData.role);
 
-  // Validate form
+  // Form validation
   const validateForm = (data: FormData, isSignIn = false) => {
     const newErrors: ValidationErrors = {};
 
-    if (!isSignIn) {
-      if (!data.fullName.trim()) newErrors.fullName = t.errors.required;
-      if (!data.country) newErrors.country = t.errors.required;
-      if (!data.role) newErrors.role = t.errors.required;
-      if (data.role === 'medicalPersonnel' && !data.specialty) newErrors.specialty = t.errors.required;
-      if (data.role === 'superAdmin' && !data.inviteCode?.trim()) {
-        newErrors.inviteCode = t.inviteCodeRequired;
-      }
-      if (!data.agreeToTerms) newErrors.agreeToTerms = t.errors.termsRequired;
-      if (data.password !== data.confirmPassword) newErrors.confirmPassword = t.errors.passwordMismatch;
-    }
-
-    if (!data.email.trim()) newErrors.email = t.errors.required;
+    if (!data.email) newErrors.email = t.errors.required;
     else if (!isValidEmail(data.email)) newErrors.email = t.errors.invalidEmail;
 
     if (!data.password) newErrors.password = t.errors.required;
@@ -311,66 +282,64 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
       newErrors.password = t.errors.weakPassword;
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    if (!isSignIn) {
+      if (!data.fullName) newErrors.fullName = t.errors.required;
+      if (!data.confirmPassword) newErrors.confirmPassword = t.errors.required;
+      else if (data.password !== data.confirmPassword) newErrors.confirmPassword = t.errors.passwordMismatch;
+      if (!data.country) newErrors.country = t.errors.required;
+      if (!data.role) newErrors.role = t.errors.required;
+      if (!data.agreeToTerms) newErrors.agreeToTerms = t.errors.termsRequired;
+      if (selectedRole?.restricted && !data.inviteCode) newErrors.inviteCode = t.inviteCodeRequired;
+    }
+
+    return newErrors;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const updateFormData = (field: keyof FormData, value: string | boolean) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent, isSignIn = false) => {
     e.preventDefault();
-    const isSignIn = activeTab === 'signin';
-    
-    if (!validateForm(formData, isSignIn)) return;
-
     setIsLoading(true);
+
     try {
-      // Analytics tracking
-      if (!isSignIn && formData.role) {
-        const selectedRole = roleOptions.find(r => r.key === formData.role);
-        if (selectedRole) {
-          // Track role selection
-          console.log('Analytics: role_selected', {
-            role: selectedRole.name,
-            subscription_type: selectedRole.subscription.type,
-            requires_payment: selectedRole.requiresPayment
-          });
-        }
+      const validationErrors = validateForm(formData, isSignIn);
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
       }
 
-      // Placeholder API call
-      if (isSignIn) {
-        // POST /api/auth/login
+      if (onSubmit) {
         console.log('Login attempt:', { email: formData.email, password: formData.password });
-      } else {
-        // POST /api/auth/register
-        const selectedRole = roleOptions.find(r => r.key === formData.role);
-        const subscriptionPlan = selectedRole ? 
-          `${selectedRole.subscription.type}_${selectedRole.subscription.price || 'free'}` : 'free';
         
-        console.log('Registration attempt:', { ...formData, subscriptionPlan });
-        
-        if (onSubmit) {
-          await onSubmit({ 
-            ...formData, 
-            subscriptionPlan,
-            countryCode: formData.country 
-          });
-        }
+        const selectedCountry = countries.find(c => c.code === formData.country);
+        await onSubmit({
+          ...formData,
+          subscriptionPlan: selectedRole?.key,
+          countryCode: formData.country,
+          countryName: selectedCountry ? getCountryName(selectedCountry) : undefined
+        });
+      }
 
-        // Analytics tracking for country selection
-        if (formData.country && formData.role) {
-          console.log('Analytics: country_selected', {
-            country_code: formData.country,
-            country_name: getCountryDisplayName(formData.country),
-            role: formData.role
-          });
-        }
-      }
+      // Determine next step based on role and requirements
+      let nextStep: 'verifyEmail' | 'browseEvents' | 'completeProfile' | 'payment' = 'verifyEmail';
       
-      if (!isSignIn) {
-        setSuccess(true);
+      if (isSignIn) {
+        nextStep = 'browseEvents';
+      } else if (selectedRole?.requiresPayment) {
+        nextStep = 'payment';
+      } else if (formData.role === 'medical_personnel') {
+        nextStep = 'completeProfile';
       }
+
+      onSuccess?.(nextStep);
     } catch (error) {
-      console.error('Auth error:', error);
+      console.error('Form submission error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -379,10 +348,7 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
   const handleOAuth = async (provider: 'apple' | 'google' | 'linkedin') => {
     setIsLoading(true);
     try {
-      if (onOAuth) {
-        await onOAuth(provider);
-      }
-      console.log(`OAuth ${provider} clicked`);
+      await onOAuth?.(provider);
     } catch (error) {
       console.error('OAuth error:', error);
     } finally {
@@ -390,227 +356,111 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
     }
   };
 
-  const handleSuccessAction = (action: 'verifyEmail' | 'browseEvents' | 'completeProfile' | 'payment') => {
-    if (onSuccess) {
-      onSuccess(action);
-    }
-    console.log(`Success action: ${action}`);
-  };
+  const CountryCombobox = () => {
+    const [open, setOpen] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
 
-  const updateFormData = (field: keyof FormData, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
-    
-    // Show invite code field for Super Admin role
-    if (field === 'role') {
-      setShowInviteCode(value === 'superAdmin');
-      if (value !== 'superAdmin') {
-        setFormData(prev => ({ ...prev, inviteCode: '' }));
-      }
-    }
+    const filteredCountries = countries.filter(country =>
+      getCountryName(country).toLowerCase().includes(searchValue.toLowerCase())
+    );
 
-    // Update country name for display
-    if (field === 'country') {
-      setFormData(prev => ({ 
-        ...prev, 
-        countryName: getCountryDisplayName(value)
-      }));
-    }
+    const selectedCountry = countries.find(country => country.code === formData.country);
+
+    return (
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className={cn(
+              "w-full justify-between font-normal",
+              errors.country && "border-destructive",
+              !selectedCountry && "text-muted-foreground"
+            )}
+            data-analytics="auth-country-select"
+          >
+            {selectedCountry ? (
+              <span className="flex items-center gap-2">
+                <span className="text-lg">{getCountryFlag(selectedCountry.code)}</span>
+                {getCountryName(selectedCountry)}
+              </span>
+            ) : (
+              t.selectCountry
+            )}
+            <Globe className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-full p-0" align="start">
+          <Command>
+            <CommandInput 
+              placeholder={t.search}
+              value={searchValue}
+              onValueChange={setSearchValue}
+            />
+            <CommandList>
+              <CommandEmpty>No countries found.</CommandEmpty>
+              <CommandGroup>
+                {filteredCountries.map((country) => (
+                <CommandItem
+                    key={country.code}
+                    value={getCountryName(country)}
+                    onSelect={() => {
+                      updateFormData('country', country.code);
+                      setOpen(false);
+                      setSearchValue('');
+                    }}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="text-lg">{getCountryFlag(country.code)}</span>
+                      {getCountryName(country)}
+                    </span>
+                    <Check
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        formData.country === country.code ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    );
   };
 
   const passwordStrength = getPasswordStrength(formData.password);
-  const filteredSpecialties = t.specialties.filter(spec => 
-    spec.toLowerCase().includes(specialtySearch.toLowerCase())
-  );
-
-  if (success) {
-    return (
-      <Card 
-        className={cn(
-          "w-full max-w-md mx-auto backdrop-blur-sm bg-card/80 border-border shadow-medical rounded-medical-md",
-          isRTL && "text-right",
-          className
-        )}
-        dir={isRTL ? 'rtl' : 'ltr'}
-      >
-        <CardContent className="p-lg text-center space-y-lg">
-          <div className="flex justify-center">
-            <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center">
-              <Check className="w-8 h-8 text-success" />
-            </div>
-          </div>
-          <div className="space-y-md">
-            <h3 className="text-heading font-semibold text-medical-xl">{t.success.title}</h3>
-            <p className="text-body text-medical-base">{t.success.subtitle}</p>
-          </div>
-          <div className="space-y-sm">
-            {(() => {
-              const selectedRole = roleOptions.find(r => r.key === formData.role);
-              const requiresPayment = selectedRole?.requiresPayment;
-              
-              if (requiresPayment) {
-                return (
-                  <>
-                    <Button 
-                      onClick={() => handleSuccessAction('payment')}
-                      className="w-full"
-                      data-analytics="auth-signup-payment"
-                    >
-                      Complete Payment Setup
-                    </Button>
-                    <div className="flex gap-sm">
-                      <Button 
-                        variant="outline" 
-                        className="flex-1"
-                        onClick={() => handleSuccessAction('verifyEmail')}
-                        data-analytics="auth-signup-verify-email"
-                      >
-                        {t.success.verifyEmail}
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="flex-1"
-                        onClick={() => handleSuccessAction('browseEvents')}
-                        data-analytics="auth-signup-browse-events"
-                      >
-                        {t.success.browseEvents}
-                      </Button>
-                    </div>
-                  </>
-                );
-              }
-              
-              return (
-                <>
-                  <Button 
-                    onClick={() => handleSuccessAction('verifyEmail')}
-                    className="w-full"
-                    data-analytics="auth-signup-verify-email"
-                  >
-                    {t.success.verifyEmail}
-                  </Button>
-                  <div className="flex gap-sm">
-                    <Button 
-                      variant="outline" 
-                      className="flex-1"
-                      onClick={() => handleSuccessAction('completeProfile')}
-                      data-analytics="auth-signup-complete-profile"
-                    >
-                      {t.success.completeProfile}
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="flex-1"
-                      onClick={() => handleSuccessAction('browseEvents')}
-                      data-analytics="auth-signup-browse-events"
-                    >
-                      {t.success.browseEvents}
-                    </Button>
-                  </div>
-                </>
-              );
-            })()}
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
-    <Card 
-      className={cn(
-        "w-full max-w-md mx-auto backdrop-blur-sm bg-card/80 border-border shadow-medical rounded-medical-md",
-        isRTL && "text-right",
-        className
-      )}
-      dir={isRTL ? 'rtl' : 'ltr'}
-    >
-      <CardHeader className="p-lg pb-md">
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-heading text-medical-2xl font-semibold">
-            EverMedical
-          </CardTitle>
-          <div className="flex items-center gap-xs">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setCurrentLocale(currentLocale === 'en' ? 'ar' : 'en')}
-              className="h-auto p-xs"
-              aria-label={t.language}
-            >
-              <Globe className="w-4 h-4" />
-              <span className="text-medical-sm ml-xs">{currentLocale.toUpperCase()}</span>
-            </Button>
-          </div>
-        </div>
+    <Card className={cn("w-full max-w-md mx-auto", className)} dir={isRTL ? 'rtl' : 'ltr'}>
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl font-bold">
+          {activeTab === 'signup' ? t.joinOurCommunity : t.signInToContinue}
+        </CardTitle>
       </CardHeader>
-
-      <CardContent className="p-lg pt-0">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-lg">
+      <CardContent>
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'signup' | 'signin')}>
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signup" data-analytics="auth-tab-signup">
+            <TabsTrigger 
+              value="signup" 
+              data-analytics="auth-tab-signup"
+            >
               {t.signUp}
             </TabsTrigger>
-            <TabsTrigger value="signin" data-analytics="auth-tab-signin">
+            <TabsTrigger 
+              value="signin"
+              data-analytics="auth-tab-signin"
+            >
               {t.signIn}
             </TabsTrigger>
           </TabsList>
 
-          {/* OAuth Buttons */}
-          <div className="space-y-sm">
-            <div className="grid grid-cols-3 gap-sm">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleOAuth('apple')}
-                disabled={isLoading}
-                className="flex items-center justify-center"
-                data-analytics="auth-oauth-apple"
-              >
-                <Apple className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleOAuth('google')}
-                disabled={isLoading}
-                className="flex items-center justify-center"
-                data-analytics="auth-oauth-google"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24">
-                  <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleOAuth('linkedin')}
-                disabled={isLoading}
-                className="flex items-center justify-center"
-                data-analytics="auth-oauth-linkedin"
-              >
-                <Linkedin className="w-4 h-4" />
-              </Button>
-            </div>
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-border" />
-              </div>
-              <div className="relative flex justify-center text-medical-sm">
-                <span className="bg-card px-md text-muted-foreground">or</span>
-              </div>
-            </div>
-          </div>
-
-          <TabsContent value="signup" className="space-y-lg">
-            <form onSubmit={handleSubmit} className="space-y-lg">
+          <TabsContent value="signup" className="space-y-4">
+            <form onSubmit={(e) => handleSubmit(e, false)} className="space-y-4">
               {/* Full Name */}
-              <div className="space-y-xs">
+              <div className="space-y-2">
                 <Label htmlFor="fullName">{t.fullName} *</Label>
                 <Input
                   id="fullName"
@@ -618,18 +468,19 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                   value={formData.fullName}
                   onChange={(e) => updateFormData('fullName', e.target.value)}
                   className={cn(errors.fullName && "border-destructive")}
-                  disabled={isLoading}
-                  data-analytics="auth-field-name"
+                  required
+                  data-analytics="auth-field-fullname"
                 />
                 {errors.fullName && (
-                  <p className="text-destructive text-medical-sm" role="alert">
+                  <p className="text-sm text-destructive flex items-center gap-1">
+                    <X className="h-3 w-3" />
                     {errors.fullName}
                   </p>
                 )}
               </div>
 
               {/* Email */}
-              <div className="space-y-xs">
+              <div className="space-y-2">
                 <Label htmlFor="email">{t.email} *</Label>
                 <Input
                   id="email"
@@ -637,18 +488,19 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                   value={formData.email}
                   onChange={(e) => updateFormData('email', e.target.value)}
                   className={cn(errors.email && "border-destructive")}
-                  disabled={isLoading}
+                  required
                   data-analytics="auth-field-email"
                 />
                 {errors.email && (
-                  <p className="text-destructive text-medical-sm" role="alert">
+                  <p className="text-sm text-destructive flex items-center gap-1">
+                    <X className="h-3 w-3" />
                     {errors.email}
                   </p>
                 )}
               </div>
 
               {/* Password */}
-              <div className="space-y-xs">
+              <div className="space-y-2">
                 <Label htmlFor="password">{t.password} *</Label>
                 <div className="relative">
                   <Input
@@ -657,7 +509,7 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                     value={formData.password}
                     onChange={(e) => updateFormData('password', e.target.value)}
                     className={cn(errors.password && "border-destructive", "pr-10")}
-                    disabled={isLoading}
+                    required
                     data-analytics="auth-field-password"
                   />
                   <Button
@@ -666,19 +518,19 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
+                    tabIndex={-1}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
                     ) : (
-                      <Eye className="h-4 w-4" />
+                      <Eye className="h-4 w-4 text-muted-foreground" />
                     )}
                   </Button>
                 </div>
                 {formData.password && (
-                  <div className="space-y-xs">
-                    <div className="flex justify-between items-center">
-                      <span className="text-medical-sm text-muted-foreground">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">
                         {t.passwordStrength}
                       </span>
                       <Badge variant={passwordStrength.label === 'weak' ? 'destructive' : 
@@ -695,14 +547,15 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                   </div>
                 )}
                 {errors.password && (
-                  <p className="text-destructive text-medical-sm" role="alert">
+                  <p className="text-sm text-destructive flex items-center gap-1">
+                    <X className="h-3 w-3" />
                     {errors.password}
                   </p>
                 )}
               </div>
 
               {/* Confirm Password */}
-              <div className="space-y-xs">
+              <div className="space-y-2">
                 <Label htmlFor="confirmPassword">{t.confirmPassword} *</Label>
                 <div className="relative">
                   <Input
@@ -711,7 +564,7 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                     value={formData.confirmPassword}
                     onChange={(e) => updateFormData('confirmPassword', e.target.value)}
                     className={cn(errors.confirmPassword && "border-destructive", "pr-10")}
-                    disabled={isLoading}
+                    required
                     data-analytics="auth-field-confirm-password"
                   />
                   <Button
@@ -720,204 +573,162 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    disabled={isLoading}
+                    tabIndex={-1}
                   >
                     {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4" />
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
                     ) : (
-                      <Eye className="h-4 w-4" />
+                      <Eye className="h-4 w-4 text-muted-foreground" />
                     )}
                   </Button>
                 </div>
                 {errors.confirmPassword && (
-                  <p className="text-destructive text-medical-sm" role="alert">
+                  <p className="text-sm text-destructive flex items-center gap-1">
+                    <X className="h-3 w-3" />
                     {errors.confirmPassword}
                   </p>
                 )}
               </div>
 
-              {/* Country & Role */}
-              <div className="grid grid-cols-2 gap-sm">
-                <div className="space-y-xs">
-                  <Label htmlFor="country">{t.country} *</Label>
-                  <Popover open={countryOpen} onOpenChange={setCountryOpen}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={countryOpen}
-                        className={cn(
-                          "w-full justify-between",
-                          !formData.country && "text-muted-foreground",
-                          errors.country && "border-destructive"
-                        )}
-                        disabled={isLoading}
-                        data-analytics="auth-field-country"
-                      >
-                        {formData.country ? getCountryDisplayName(formData.country) : t.selectCountry}
-                        <Globe className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0" align="start">
-                      <Command className="w-full">
-                        <CommandInput 
-                          placeholder={`Search ${currentLocale === 'ar' ? 'بلد' : 'country'}...`}
-                          className="h-9" 
-                        />
-                        <CommandList className="max-h-[200px] overflow-auto">
-                          <CommandEmpty>No country found.</CommandEmpty>
-                          <CommandGroup>
-                            {sortedCountries.map((country) => (
-                              <CommandItem
-                                key={country.code}
-                                value={currentLocale === 'ar' ? country.name_ar : country.name_en}
-                                onSelect={() => {
-                                  updateFormData('country', country.code);
-                                  setCountryOpen(false);
-                                }}
-                                className="cursor-pointer"
-                              >
-                                {currentLocale === 'ar' ? country.name_ar : country.name_en}
-                                <span className="ml-auto text-xs text-muted-foreground">
-                                  {country.code}
-                                </span>
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  {errors.country && (
-                    <p className="text-destructive text-medical-sm" role="alert">
-                      {errors.country}
-                    </p>
-                  )}
-                </div>
-
-                <div className="space-y-xs">
-                  <Label htmlFor="role">{t.role} *</Label>
-                  <Select
-                    value={formData.role}
-                    onValueChange={(value) => updateFormData('role', value)}
-                    disabled={isLoading}
-                  >
-                    <SelectTrigger className={cn(errors.role && "border-destructive")}>
-                      <SelectValue placeholder={t.selectRole} />
-                    </SelectTrigger>
-                    <SelectContent className="z-50">
-                      {roleOptions.map((option) => (
-                        <SelectItem 
-                          key={option.key} 
-                          value={option.key}
-                          disabled={option.restricted && !formData.inviteCode}
-                        >
-                          <div className="flex justify-between items-center w-full">
-                            <span>{option.name}</span>
-                            <Badge variant="secondary" className="ml-2 text-xs">
-                              ({getSubscriptionDisplay(option)})
-                            </Badge>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {errors.role && (
-                    <p className="text-destructive text-medical-sm" role="alert">
-                      {errors.role}
-                    </p>
-                  )}
-                </div>
+              {/* Country */}
+              <div className="space-y-2">
+                <Label htmlFor="country">{t.country} *</Label>
+                <CountryCombobox />
+                {errors.country && (
+                  <p className="text-sm text-destructive flex items-center gap-1">
+                    <X className="h-3 w-3" />
+                    {errors.country}
+                  </p>
+                )}
               </div>
 
-              {/* Invite Code (if Super Admin) */}
-              {showInviteCode && (
-                <div className="space-y-xs">
+              {/* Role */}
+              <div className="space-y-2">
+                <Label htmlFor="role">{t.role} *</Label>
+                <Select 
+                  value={formData.role} 
+                  onValueChange={(value) => updateFormData('role', value)}
+                >
+                  <SelectTrigger 
+                    className={cn(errors.role && "border-destructive")}
+                    data-analytics="auth-role-select"
+                  >
+                    <SelectValue placeholder={t.selectRole} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {roleOptions.map((role) => (
+                      <SelectItem key={role.key} value={role.key}>
+                        <div className="flex items-center justify-between w-full">
+                          <span>{role.name}</span>
+                          {role.requiresPayment && (
+                            <Badge variant="secondary" className="ml-2">
+                              {role.subscription.type === 'yearly' && role.subscription.price === 100 
+                                ? t.subscriptions.yearly100
+                                : role.subscription.type === 'yearly' && role.subscription.price === 1000
+                                ? t.subscriptions.yearly1000
+                                : t.subscriptions.free
+                              }
+                            </Badge>
+                          )}
+                          {role.restricted && (
+                            <Badge variant="outline" className="ml-2">
+                              {t.subscriptions.internal}
+                            </Badge>
+                          )}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.role && (
+                  <p className="text-sm text-destructive flex items-center gap-1">
+                    <X className="h-3 w-3" />
+                    {errors.role}
+                  </p>
+                )}
+              </div>
+
+              {/* Invite Code for Super Admin */}
+              {selectedRole?.restricted && (
+                <div className="space-y-2">
                   <Label htmlFor="inviteCode">{t.inviteCode} *</Label>
                   <Input
                     id="inviteCode"
                     type="text"
-                    value={formData.inviteCode || ''}
+                    value={formData.inviteCode}
                     onChange={(e) => updateFormData('inviteCode', e.target.value)}
+                    placeholder={t.inviteCodePlaceholder}
                     className={cn(errors.inviteCode && "border-destructive")}
-                    disabled={isLoading}
-                    placeholder="Enter your admin invite code"
+                    required
                     data-analytics="auth-field-invite-code"
                   />
                   {errors.inviteCode && (
-                    <p className="text-destructive text-medical-sm" role="alert">
+                    <p className="text-sm text-destructive flex items-center gap-1">
+                      <X className="h-3 w-3" />
                       {errors.inviteCode}
                     </p>
                   )}
                 </div>
               )}
 
-              {/* Specialty (if Medical Personnel) */}
-              {formData.role === 'medicalPersonnel' && (
-                <div className="space-y-xs">
-                  <Label htmlFor="specialty">{t.specialty} *</Label>
-                  <Select
-                    value={formData.specialty}
-                    onValueChange={(value) => updateFormData('specialty', value)}
-                    disabled={isLoading}
-                  >
-                    <SelectTrigger className={cn(errors.specialty && "border-destructive")}>
-                      <SelectValue placeholder={t.specialty} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {t.specialties.map((specialty) => (
-                        <SelectItem key={specialty} value={specialty}>
-                          {specialty}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {errors.specialty && (
-                    <p className="text-destructive text-medical-sm" role="alert">
-                      {errors.specialty}
-                    </p>
-                  )}
-                </div>
-              )}
-
               {/* Phone */}
-              <div className="space-y-xs">
+              <div className="space-y-2">
                 <Label htmlFor="phone">{t.phone}</Label>
                 <Input
                   id="phone"
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => updateFormData('phone', e.target.value)}
-                  disabled={isLoading}
-                  dir={isRTL ? "ltr" : undefined}
                   data-analytics="auth-field-phone"
                 />
               </div>
 
-              {/* Terms Agreement */}
-              <div className="space-y-xs">
-                <div className="flex items-start space-x-2 rtl:space-x-reverse">
-                  <Checkbox
-                    id="agreeToTerms"
-                    checked={formData.agreeToTerms}
-                    onCheckedChange={(checked) => updateFormData('agreeToTerms', checked)}
-                    disabled={isLoading}
-                    className={cn(errors.agreeToTerms && "border-destructive")}
-                    data-analytics="auth-field-terms"
-                  />
-                  <Label 
-                    htmlFor="agreeToTerms" 
-                    className="text-medical-sm leading-relaxed cursor-pointer"
-                  >
-                    {t.agreeToTerms}
-                  </Label>
+              {/* Subscription Summary */}
+              {selectedRole && (
+                <div className="space-y-2">
+                  <Label>{t.summary}</Label>
+                  <div className="p-3 border rounded-lg bg-muted/50">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">{selectedRole.name}</span>
+                      <Badge variant={selectedRole.requiresPayment ? "default" : "secondary"}>
+                        {selectedRole.subscription.type === 'free' 
+                          ? t.subscriptions.free
+                          : selectedRole.subscription.type === 'yearly' && selectedRole.subscription.price === 100
+                          ? t.subscriptions.yearly100
+                          : selectedRole.subscription.type === 'yearly' && selectedRole.subscription.price === 1000
+                          ? t.subscriptions.yearly1000
+                          : t.subscriptions.internal
+                        }
+                      </Badge>
+                    </div>
+                  </div>
                 </div>
-                {errors.agreeToTerms && (
-                  <p className="text-destructive text-medical-sm" role="alert">
-                    {errors.agreeToTerms}
-                  </p>
-                )}
+              )}
+
+              {/* Terms Agreement */}
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="terms"
+                  checked={formData.agreeToTerms}
+                  onCheckedChange={(checked) => updateFormData('agreeToTerms', checked as boolean)}
+                  data-analytics="auth-agree-terms"
+                />
+                <Label 
+                  htmlFor="terms" 
+                  className={cn(
+                    "text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+                    errors.agreeToTerms && "text-destructive"
+                  )}
+                >
+                  {t.agreeToTerms}
+                </Label>
               </div>
+              {errors.agreeToTerms && (
+                <p className="text-sm text-destructive flex items-center gap-1">
+                  <X className="h-3 w-3" />
+                  {errors.agreeToTerms}
+                </p>
+              )}
 
               <Button 
                 type="submit" 
@@ -929,6 +740,61 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                 {t.createAccount}
               </Button>
             </form>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  {t.continueWith}
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              <Button
+                variant="outline"
+                onClick={() => handleOAuth('apple')}
+                disabled={isLoading}
+                data-analytics="auth-oauth-apple"
+              >
+                <Apple className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleOAuth('google')}
+                disabled={isLoading}
+                data-analytics="auth-oauth-google"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24">
+                  <path
+                    fill="currentColor"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                  />
+                </svg>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleOAuth('linkedin')}
+                disabled={isLoading}
+                data-analytics="auth-oauth-linkedin"
+              >
+                <Linkedin className="h-4 w-4" />
+              </Button>
+            </div>
 
             <p className="text-center text-medical-sm text-muted-foreground">
               {t.alreadyHaveAccount}{' '}
@@ -943,10 +809,10 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
             </p>
           </TabsContent>
 
-          <TabsContent value="signin" className="space-y-lg">
-            <form onSubmit={handleSubmit} className="space-y-lg">
+          <TabsContent value="signin" className="space-y-4">
+            <form onSubmit={(e) => handleSubmit(e, true)} className="space-y-4">
               {/* Email */}
-              <div className="space-y-xs">
+              <div className="space-y-2">
                 <Label htmlFor="signin-email">{t.email} *</Label>
                 <Input
                   id="signin-email"
@@ -954,18 +820,19 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                   value={formData.email}
                   onChange={(e) => updateFormData('email', e.target.value)}
                   className={cn(errors.email && "border-destructive")}
-                  disabled={isLoading}
+                  required
                   data-analytics="auth-signin-email"
                 />
                 {errors.email && (
-                  <p className="text-destructive text-medical-sm" role="alert">
+                  <p className="text-sm text-destructive flex items-center gap-1">
+                    <X className="h-3 w-3" />
                     {errors.email}
                   </p>
                 )}
               </div>
 
               {/* Password */}
-              <div className="space-y-xs">
+              <div className="space-y-2">
                 <Label htmlFor="signin-password">{t.password} *</Label>
                 <div className="relative">
                   <Input
@@ -974,7 +841,7 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                     value={formData.password}
                     onChange={(e) => updateFormData('password', e.target.value)}
                     className={cn(errors.password && "border-destructive", "pr-10")}
-                    disabled={isLoading}
+                    required
                     data-analytics="auth-signin-password"
                   />
                   <Button
@@ -983,17 +850,18 @@ export const SignupRegister: React.FC<SignupRegisterProps> = ({
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
+                    tabIndex={-1}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
                     ) : (
-                      <Eye className="h-4 w-4" />
+                      <Eye className="h-4 w-4 text-muted-foreground" />
                     )}
                   </Button>
                 </div>
                 {errors.password && (
-                  <p className="text-destructive text-medical-sm" role="alert">
+                  <p className="text-sm text-destructive flex items-center gap-1">
+                    <X className="h-3 w-3" />
                     {errors.password}
                   </p>
                 )}
