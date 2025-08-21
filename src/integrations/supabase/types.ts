@@ -1756,8 +1756,8 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: {
           access_level: string
-          details: string
-          security_status: string
+          protection_status: string
+          risk_assessment: string
           table_name: string
         }[]
       }
