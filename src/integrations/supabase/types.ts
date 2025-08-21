@@ -1208,6 +1208,15 @@ export type Database = {
           status: string
         }[]
       }
+      validate_public_views_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          access_level: string
+          security_status: string
+          sensitive_fields_check: string
+          view_name: string
+        }[]
+      }
       validate_security_functions: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1235,6 +1244,17 @@ export type Database = {
           check_name: string
           details: string
           status: string
+        }[]
+      }
+      view_security_audit: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          has_sensitive_data: boolean
+          is_security_definer: boolean
+          owner_name: string
+          recommendation: string
+          security_rating: string
+          view_name: string
         }[]
       }
     }
