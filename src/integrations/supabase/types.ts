@@ -1292,6 +1292,22 @@ export type Database = {
           profile_type: string
         }[]
       }
+      get_safe_rfq_display: {
+        Args: { include_sensitive?: boolean; rfq_id: string }
+        Returns: {
+          budget_range_masked: string
+          can_access_full_details: boolean
+          category_id: string
+          created_at: string
+          delivery_location: string
+          description_masked: string
+          id: string
+          is_buyer: boolean
+          status: string
+          title: string
+          updated_at: string
+        }[]
+      }
       get_security_compliance_report: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1411,6 +1427,14 @@ export type Database = {
           security_status: string
           sensitive_fields_check: string
           view_name: string
+        }[]
+      }
+      validate_rfq_security: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          status: string
         }[]
       }
       validate_security_functions: {
