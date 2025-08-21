@@ -177,13 +177,6 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "event_registrations_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "safe_public_profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       event_sources: {
@@ -641,13 +634,6 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "products_supplier_id_fkey"
-            columns: ["supplier_id"]
-            isOneToOne: false
-            referencedRelation: "safe_public_profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       profiles: {
@@ -996,13 +982,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "rfqs_buyer_id_fkey"
-            columns: ["buyer_id"]
-            isOneToOne: false
-            referencedRelation: "safe_public_profiles"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "rfqs_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
@@ -1082,57 +1061,7 @@ export type Database = {
       }
     }
     Views: {
-      safe_public_profiles: {
-        Row: {
-          avatar_url: string | null
-          country: string | null
-          created_at: string | null
-          first_name: string | null
-          id: string | null
-          last_name: string | null
-          organization: string | null
-          primary_specialty_slug: string | null
-          profile_type: string | null
-          specialty: string | null
-          title: string | null
-          user_id: string | null
-          username: string | null
-          verified: boolean | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          country?: string | null
-          created_at?: string | null
-          first_name?: string | null
-          id?: string | null
-          last_name?: string | null
-          organization?: string | null
-          primary_specialty_slug?: string | null
-          profile_type?: string | null
-          specialty?: string | null
-          title?: string | null
-          user_id?: string | null
-          username?: string | null
-          verified?: boolean | null
-        }
-        Update: {
-          avatar_url?: string | null
-          country?: string | null
-          created_at?: string | null
-          first_name?: string | null
-          id?: string | null
-          last_name?: string | null
-          organization?: string | null
-          primary_specialty_slug?: string | null
-          profile_type?: string | null
-          specialty?: string | null
-          title?: string | null
-          user_id?: string | null
-          username?: string | null
-          verified?: boolean | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       audit_public_view_safety: {
