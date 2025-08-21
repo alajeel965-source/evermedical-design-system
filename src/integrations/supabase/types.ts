@@ -1085,6 +1085,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      audit_and_clean_contact_exposure: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          action_taken: string
+          details: string
+          records_affected: number
+        }[]
+      }
       audit_public_view_safety: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1244,6 +1252,24 @@ export type Database = {
           total_saves: number
           total_shares: number
           total_views: number
+        }[]
+      }
+      get_full_organizer_contact: {
+        Args: { event_id: string }
+        Returns: {
+          organizer_email: string
+          organizer_name: string
+          organizer_phone: string
+          organizer_website: string
+        }[]
+      }
+      get_masked_organizer_contact: {
+        Args: { event_id: string }
+        Returns: {
+          contact_available: boolean
+          masked_email: string
+          organizer_name: string
+          organizer_website: string
         }[]
       }
       get_organizer_contact_info: {
@@ -1635,6 +1661,15 @@ export type Database = {
         }[]
       }
       validate_no_pii_exposure: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
+          risk_level: string
+          status: string
+        }[]
+      }
+      validate_organizer_contact_protection: {
         Args: Record<PropertyKey, never>
         Returns: {
           check_name: string
