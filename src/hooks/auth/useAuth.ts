@@ -13,6 +13,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { Analytics } from '@/lib/api';
+import { AuthAnalytics } from '@/lib/analytics';
 import { SecureAuth, InputValidator, SecurityError, ValidationError } from '@/lib/secureApi';
 import { logger } from '@/lib/logger';
 import { AuthUtils } from './authUtils';
@@ -67,13 +68,7 @@ export function useAuth(): UseAuthReturn {
     const errorMessage = error instanceof Error ? error.message : error;
     setError(errorMessage);
     
-    // Log security-relevant auth errors for monitoring
-    Analytics.trackEvent('auth_error', {
-      error: errorMessage,
-      context: context || 'unknown',
-      timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent,
-    });
+    AuthAnalytics.trackError(errorMessage, context);
 
     if (process.env.NODE_ENV === 'development') {
       logger.error('Authentication error', error instanceof Error ? error : new Error(String(error)), { 
@@ -123,11 +118,7 @@ export function useAuth(): UseAuthReturn {
       setUser(session?.user ?? null);
       setError(null);
       
-      // Track session refresh for monitoring
-      Analytics.trackEvent('auth_session_refreshed', {
-        userId: session?.user?.id,
-        timestamp: new Date().toISOString(),
-      });
+      AuthAnalytics.trackSessionRefresh(session?.user?.id || 'unknown');
       
     } catch (error) {
       handleAuthError(error as Error, 'session_refresh');
@@ -148,10 +139,7 @@ export function useAuth(): UseAuthReturn {
         return { success: false, error: errorMessage };
       }
 
-      // Track sign in attempt for security monitoring
-      Analytics.trackEvent('auth_signin_attempt', {
-        timestamp: new Date().toISOString(),
-      });
+      AuthAnalytics.trackSignInAttempt('email');
 
       // Perform authentication
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -164,11 +152,7 @@ export function useAuth(): UseAuthReturn {
         return { success: false, error: error.message };
       }
 
-      // Track successful sign in
-      Analytics.trackEvent('auth_signin_success', {
-        userId: data.user?.id,
-        timestamp: new Date().toISOString(),
-      });
+      AuthAnalytics.trackSignInSuccess(data.user?.id || 'unknown');
 
       return { success: true, data };
 
