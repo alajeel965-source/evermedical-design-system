@@ -53,6 +53,33 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_audit: {
+        Row: {
+          action: string
+          actor: string
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          target: string | null
+        }
+        Insert: {
+          action: string
+          actor: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          target?: string | null
+        }
+        Update: {
+          action?: string
+          actor?: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          target?: string | null
+        }
+        Relationships: []
+      }
       crawl_jobs: {
         Row: {
           completed_at: string | null
@@ -685,8 +712,10 @@ export type Database = {
           id: string
           last_name: string
           organization: string | null
+          password_hash: string | null
           primary_specialty_slug: string | null
           profile_type: string
+          role: Database["public"]["Enums"]["user_role"] | null
           specialty: string | null
           subscription_currency: string | null
           subscription_end_date: string | null
@@ -712,8 +741,10 @@ export type Database = {
           id?: string
           last_name: string
           organization?: string | null
+          password_hash?: string | null
           primary_specialty_slug?: string | null
           profile_type: string
+          role?: Database["public"]["Enums"]["user_role"] | null
           specialty?: string | null
           subscription_currency?: string | null
           subscription_end_date?: string | null
@@ -739,8 +770,10 @@ export type Database = {
           id?: string
           last_name?: string
           organization?: string | null
+          password_hash?: string | null
           primary_specialty_slug?: string | null
           profile_type?: string
+          role?: Database["public"]["Enums"]["user_role"] | null
           specialty?: string | null
           subscription_currency?: string | null
           subscription_end_date?: string | null
@@ -1116,6 +1149,10 @@ export type Database = {
       }
       can_access_profile_data_enhanced: {
         Args: { target_user_id: string }
+        Returns: boolean
+      }
+      can_manage_users: {
+        Args: Record<PropertyKey, never>
         Returns: boolean
       }
       can_see_user_email: {
@@ -1521,6 +1558,10 @@ export type Database = {
           suspicion_score: number
         }[]
       }
+      get_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
       handle_subscription_signup: {
         Args: {
           plan_price?: number
@@ -1543,8 +1584,12 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      is_super_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       is_username_available: {
-        Args: { username_input: string }
+        Args: { check_username: string }
         Returns: boolean
       }
       mask_organizer_contact_info: {
@@ -1620,6 +1665,10 @@ export type Database = {
       sanitize_text_input: {
         Args: { input_text: string }
         Returns: string
+      }
+      validate_admin_password: {
+        Args: { password: string }
+        Returns: boolean
       }
       validate_all_rls_policies: {
         Args: Record<PropertyKey, never>
@@ -1927,6 +1976,16 @@ export type Database = {
         | "medical_sellers_monthly"
         | "medical_sellers_yearly"
         | "medical_personnel"
+      user_role:
+        | "medical_personnel"
+        | "organizer"
+        | "hospital_admin"
+        | "super_admin"
+        | "admin"
+        | "personnel"
+        | "institute"
+        | "seller"
+        | "buyer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2059,6 +2118,17 @@ export const Constants = {
         "medical_sellers_monthly",
         "medical_sellers_yearly",
         "medical_personnel",
+      ],
+      user_role: [
+        "medical_personnel",
+        "organizer",
+        "hospital_admin",
+        "super_admin",
+        "admin",
+        "personnel",
+        "institute",
+        "seller",
+        "buyer",
       ],
     },
   },
