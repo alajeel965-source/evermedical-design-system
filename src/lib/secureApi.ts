@@ -239,7 +239,7 @@ export class SecureProfileService {
 
       // Use secure function for checking availability
       const { data, error } = await supabase.rpc('is_username_available', {
-        username_input: username
+        check_username: username
       });
 
       if (error) {

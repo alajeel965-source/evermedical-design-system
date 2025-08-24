@@ -60,6 +60,9 @@ import SavedRFQs from "./pages/SavedRFQs";
 import BillingHistory from "./pages/BillingHistory";
 import Profile from "./pages/Profile";
 
+// Admin Pages
+import { SuperAdminOnboarding } from "./pages/admin/SuperAdminOnboarding";
+
 // Utility Pages
 import DesignSystem from "./pages/DesignSystem";
 import NotFound from "./pages/NotFound";
@@ -124,6 +127,9 @@ const App: React.FC = () => (
                 <Route path="/company/about" element={<About />} />
                 <Route path="/legal/privacy" element={<Privacy />} />
                 <Route path="/legal/terms" element={<Terms />} />
+                
+                {/* Admin Routes */}
+                <Route path="/admin/onboarding" element={<SuperAdminOnboarding />} />
                 
                 {/* Development Tools */}
                 <Route path="/design-system" element={<DesignSystem />} />
