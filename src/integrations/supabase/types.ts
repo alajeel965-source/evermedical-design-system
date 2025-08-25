@@ -1493,6 +1493,17 @@ export type Database = {
           profile_type: string
         }[]
       }
+      get_safe_public_profile: {
+        Args: { target_user_id: string }
+        Returns: {
+          country: string
+          first_name: string
+          id: string
+          profile_type: string
+          specialty: string
+          verified: boolean
+        }[]
+      }
       get_safe_rfq_display: {
         Args: { include_sensitive?: boolean; rfq_id: string }
         Returns: {
@@ -1837,6 +1848,14 @@ export type Database = {
         Returns: {
           details: string
           security_check: string
+          status: string
+        }[]
+      }
+      validate_profile_security_status: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          details: string
           status: string
         }[]
       }
