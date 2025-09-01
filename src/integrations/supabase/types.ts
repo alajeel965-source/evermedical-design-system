@@ -80,6 +80,66 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_otp_codes: {
+        Row: {
+          code: string
+          created_at: string
+          expires_at: string
+          id: string
+          used: boolean
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          used?: boolean
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          used?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
+      admin_sessions: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          ip_address: unknown | null
+          last_activity: string
+          session_token: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          ip_address?: unknown | null
+          last_activity?: string
+          session_token: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          ip_address?: unknown | null
+          last_activity?: string
+          session_token?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       crawl_jobs: {
         Row: {
           completed_at: string | null
@@ -708,9 +768,12 @@ export type Database = {
           country: string | null
           created_at: string | null
           email: string
+          failed_login_attempts: number
           first_name: string
           id: string
           last_name: string
+          locked_until: string | null
+          mfa_enabled: boolean
           organization: string | null
           password_hash: string | null
           primary_specialty_slug: string | null
@@ -737,9 +800,12 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           email: string
+          failed_login_attempts?: number
           first_name: string
           id?: string
           last_name: string
+          locked_until?: string | null
+          mfa_enabled?: boolean
           organization?: string | null
           password_hash?: string | null
           primary_specialty_slug?: string | null
@@ -766,9 +832,12 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           email?: string
+          failed_login_attempts?: number
           first_name?: string
           id?: string
           last_name?: string
+          locked_until?: string | null
+          mfa_enabled?: boolean
           organization?: string | null
           password_hash?: string | null
           primary_specialty_slug?: string | null
@@ -1189,6 +1258,10 @@ export type Database = {
               time_window: unknown
             }
         Returns: boolean
+      }
+      cleanup_expired_admin_data: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       cleanup_old_access_tracking: {
         Args: Record<PropertyKey, never>
